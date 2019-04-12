@@ -9,9 +9,9 @@
 	--color-gray-light: #424242;
 	--color-gray-dark: #282828;
 
-	--font-size-bread: 2rem;
+	--font-size-bread: 1.8rem;
 	--font-weight-normal: 400;
-	--line-height-bread: 2.5rem;
+	--line-height-bread: 2.3rem;
 
 	--box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.1), 0px 1px 3px 0px rgba(0, 0, 0, 0.05);
 	--border-radius: 20px;
@@ -68,8 +68,8 @@ h6 {
 }
 
 h1 {
-	font-size: 3rem;
-	line-height: 5rem;
+	font-size: 2.5rem;
+	line-height: 4rem;
 }
 
 a,

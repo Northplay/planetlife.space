@@ -1,0 +1,692 @@
+function productElement(ID,place,butText,statePrice) {
+	this.ID = ID;
+	this.place = place;
+	this.statePrice = statePrice;
+	this.butText = butText
+}
+
+function productTier(ID,tierNr,navn,image,description,price,fnct,burgulon) {
+	this.ID = ID;
+	this.navn = navn;
+	this.image = image;
+	this.description = description;
+	this.price = price;
+	this.tierNr = tierNr;
+	this.fnct = fnct;
+	this.burgulon = burgulon;
+}
+
+var allProducts = [];
+var allProductTiers = [];
+var allProductStates = [];
+
+function newProduct(ID,place,butText,statePrice) {
+	var product = new productElement(ID,place,butText,statePrice);
+	allProducts.push(product);
+	//Pushing the initial tier to the state
+	allProductStates.push(0);
+}
+
+function newProductTier(ID,tierNr,navn,image,description,price,fnct,burgulon) {
+	var tier = new productTier(ID,tierNr,navn,image,description,price,fnct,burgulon);
+	allProductTiers.push(tier);
+}
+
+//Use this for creating a button for the product
+function createProduct(ID) {
+	var buttonText;
+	if (checkUpgradability(ID)) {
+		buttonText = "upgrade";
+	} else {
+		buttonText = allProducts[findProductIndex(ID)].butText;
+	}
+	for (var i = 0; i < allProductTiers.length; i++) {
+		if (ID == allProductTiers[i].ID && allProductTiers[i].tierNr == state.productStates[findProductIndex(ID)] + 1) {
+			createBuildButton(
+				allProductTiers[i].navn,
+				allProductTiers[i].image,
+				allProductTiers[i].description,
+				useProduct,
+				ID,
+				buttonText,
+				allProductTiers[i].price,
+				ID
+			);
+		}
+	}
+}
+
+function useProduct(ID) {
+	for (var i = 0; i < allProductTiers.length; i++) {
+		//Finding the next tier for that product
+		if (ID == allProductTiers[i].ID && allProductTiers[i].tierNr == state.productStates[findProductIndex(ID)] + 1) {
+			if (allProductTiers[i].burgulon) {
+				buy(allProductTiers[i].price,true);
+			} else {
+				buy(allProductTiers[i].price);
+			}
+			for (var j = 0; j < allProducts.length; j++) {
+				if (allProducts[j].ID == ID) {
+					if (allProducts[j].statePrice != undefined) {
+						var boughtProduct = allProductTiers[i].price;
+						boughtProduct[4] = true;
+						updateState(allProducts[j].statePrice,boughtProduct);
+					}
+				}				
+			}
+			updateArrayState('productStates',findProductIndex(ID),state.productStates[findProductIndex(ID)] + 1);
+			allProductTiers[i].fnct();
+			return;
+		}
+	}
+}
+
+function findProductIndex(ID) {
+	var productIndex;
+	//Important that the index of the product is always the same in allProducts and state.productStates
+	for (var i = 0; i < allProducts.length; i++) {
+		if (ID == allProducts[i].ID) {
+			productIndex = i;
+		}
+	}
+	return productIndex;
+}
+
+function checkUpgradability(ID) {
+	var hits = 0;
+	for (var i = 0; i < allProductTiers.length; i++) {
+		if (ID == allProductTiers[i].ID) {
+			hits++;
+		}
+	}
+	if (hits > 1) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function findCurProductTierIndexById(ID) {
+	var productTierIndex;
+	for (var i = 0; i < allProductTiers.length; i++) {
+		if (allProductTiers[i].ID == ID) {
+			if (allProductTiers[i].tierNr == state.productStates[findProductIndex(ID)]) {
+				productTierIndex = i; 
+			}
+		}
+	}
+	return productTierIndex;
+}
+
+// CREATE NEW PRODUCTS AND TIERS DOWN HERE OK FINE //
+
+//DEREK'S SKILLS//
+for (var i = 0; i < allSkills.length; i++) {
+	//Dereks skills gets created down here. They are just pulled from the newSkills and newSkillTiers created in derekSkills.js
+	newProduct(allSkills[i].navn,"showSkill" + allSkills[i].navn);
+}
+for (var i = 0; i < allSkillTiers.length; i++) {
+	newProductTier(
+		allSkillTiers[i].owner,
+		allSkillTiers[i].tierNr,
+		allSkillTiers[i].navn,
+		allSkills[findSkillIndexById(allSkillTiers[i].owner)].image,
+		allSkillTiers[i].descr,
+		allSkillTiers[i].price,
+		allSkillTiers[i].fnct
+	);
+}
+
+//DEREK'S DUNGEON SCHOOL//
+newProduct("Derek's Dungeon School","workshop","build","ddsPrice");
+
+newProductTier(
+	"Derek's Dungeon School",
+	1,
+	"Derek's Dungeon School",
+	"dungeonSchool",
+	"Want your Derek to get any better. Education is the only way to go!",
+	state.ddsPrice,
+	goDDS
+);
+
+//DEREK STRENGTH//
+newProduct("Upgrade strength","checkDerek");
+
+for (var i = 1; i < 399; i++) {
+	var newStrength = ((i + 1) * 40);
+	newProductTier(
+		"Upgrade strength",
+		i,
+		"Make Derek STRONGER!",
+		"derekStrength",
+		"Upgrade Derek's strength to <span style='color:#ff0000'>" + newStrength + "</span>. He can throttle more jerks to their doom without getting hurt",
+		[(i * 200),0,(i * 200),0,newStrength],
+		upgradeStrength
+	);
+}
+
+//DEREK BELT//
+newProduct("Upgrade potion belt","checkDerek");
+
+for (var i = 1; i < 399; i++) {
+	newProductTier(
+		"Upgrade potion belt",
+		i,
+		"More spacious potion belt",
+		"derekBelt",
+		"Upgrade Derek's potion belt capacity, so he can carry <span style='color:#ff0000'>" + (i + 1) + "</span> potions. He is gonna need all that juice",
+		[(i * 200),(i * 30),0,0,(i + 1)],
+		upgradeBelt
+	);
+}
+
+//DEREK HEALTH//
+newProduct("Upgrade health","checkDerek");
+
+for (var i = 1; i < 399; i++) {
+	var newHealth = ((i + 1) * 50);
+	newProductTier(
+		"Upgrade health",
+		i,
+		"Pump Derek's health",
+		"derekHealth",
+		"Upgrade Derek's health to <span style='color:#ff0000'>" + newHealth + "</span>. A healthy Derek is a Derek that's still alive. You should know this by now",
+		[0,0,(i * 500),0,newHealth],
+		upgradeHealth
+	);
+}
+
+//COCO PENGUIN//
+newProduct("Automatic Swirly Straw","goCocoPenguin");
+
+for (var i = 1; i < 99; i++) {
+	var purchaseTitle;
+	if (i < 1) {
+		purchaseTitle = "Upgrade";
+	} else {
+		purchaseTitle = "Build";
+	}
+	newProductTier(
+		"Automatic Swirly Straw",
+		i,
+		purchaseTitle + " Automatic Swirly Straw",
+		"swirlyStraw",
+		"The Automatic Swirly Straw will suck <span style='color:#ff0000'>" + i + "</span> coco/sec out of that penguin",
+		[(i * 200),(i * 30),0,0,i],
+		upgradePenguin
+	);
+}
+
+//SVEN UPGRADES//
+newProduct("Sven Upgrade","goSven");
+
+newProductTier(
+	"Sven Upgrade",
+	1,
+	"Performance Enhancing Oil",
+	"sven",
+	"Sven will cut <span style='color:#ff0000'>1</span> wood/sec",
+	[0,200,0,0,1],
+	upgradeSven
+);
+newProductTier(
+	"Sven Upgrade",
+	2,
+	"Perfectly Greased Chain",
+	"sven",
+	"Sven will cut <span style='color:#ff0000'>2</span> wood/sec",
+	[0,400,0,0,2],
+	upgradeSven
+);
+newProductTier(
+	"Sven Upgrade",
+	3,
+	"Agressive Saw Teeth",
+	"sven",
+	"Sven will cut <span style='color:#ff0000'>3</span> wood/sec",
+	[0,800,0,0,3],
+	upgradeSven
+);
+newProductTier(
+	"Sven Upgrade",
+	4,
+	"Super Chop Setting",
+	"sven",
+	"Sven will cut <span style='color:#ff0000'>4</span> wood/sec",
+	[0,1000,0,0,4],
+	upgradeSven
+);
+newProductTier(
+	"Sven Upgrade",
+	5,
+	"Decreased Feeling of Mercy",
+	"sven",
+	"Sven will cut <span style='color:#ff0000'>5</span> wood/sec",
+	[0,1200,0,0,5],
+	upgradeSven
+);
+
+for (var i = 6; i < 99; i++) {
+	newProductTier(
+		"Sven Upgrade",
+		i,
+		"Ultimate Chainsaw Spirit Mk " + (i - 5),
+		"sven",
+		"Sven will cut <span style='color:#ff0000'>" + i + "</span> wood/sec",
+		[0,(i * 200),0,0,i],
+		upgradeSven
+	);
+}
+
+
+//GOLD FISH UPGRADES//
+newProduct("Fish Upgrade","goCreatureTalk");
+
+for (var i = 1; i < 99; i++) {
+	var newFishPurity = (i * 5) + 10; 
+	newProductTier(
+		"Fish Upgrade",
+		i,
+		"Increase Gold Fish Purity",
+		"goldFish",
+		"<span style='color:#ff0000'>" + newFishPurity + "</span> gold per click",
+		[0,0,((i * 5) * 100),0,newFishPurity],
+		upgradeFish
+	);
+}
+
+//VILLA KEY
+newProduct("Villa Key","goDungeonMaster","buy");
+
+newProductTier(
+	"Villa Key",
+	1,
+	"Villa Key",
+	"villaKey",
+	"Exists with the single purpose of opening doors to villas",
+	[9000,0,9000,0,0],
+	buyVillaKey
+);
+
+function buyVillaKey() {
+	updateState("villaKey", true);
+	upgradeAnimation("The key is yours!","villaKey",goSpaceBen);
+}
+
+//DUNGEON MASTER
+newProduct("Dungeon Master","workshop","Summon");
+
+newProductTier(
+	"Dungeon Master",
+	1,
+	"Dungeon Master",
+	"dungeonMaster",
+	"Summons a powerful DM that can help you come up with endless jerk-riddled dungeons",
+	[0,0,1000,0],
+	summonDungeonMaster
+);
+
+function summonDungeonMaster() {
+	updateState('dungeonMasterSummoned', true);
+	upgradeAnimation("Let's play some Dungeons & Dereks!","dungeonMaster",goDungeonMaster);
+}
+
+//ENDLESS DUNGEON
+newProduct("Endless Dungeon","goDungeonMaster","Buy");
+
+newProductTier(
+	"Endless Dungeon",
+	1,
+	"Endless Dungeon",
+	"dungeon",
+	"Creates the longest dungeon ever",
+	[1000,0,0,0],
+	createEndlessDungeon
+);
+
+function createEndlessDungeon() {
+	var endlessDungeon = new dungeonType (
+		"Endless Dungeon",
+		"",
+		1,
+		"dungeon",
+		99,
+		"planet",
+		"dungeonBeating"
+	);
+	yourDungeons.push(endlessDungeon);
+	var newDungeons = state.dungeons;
+	newDungeons.push(endlessDungeon);
+	updateState('dungeons', newDungeons);
+	upgradeAnimation("It's endless!!","dungeon",goPickDungeon);
+}
+
+//ENDLESS COCO DUNGEON
+newProduct("Endless Coco Dungeon","goDungeonMaster","Buy");
+
+newProductTier(
+	"Endless Coco Dungeon",
+	1,
+	"Endless Coco Dungeon",
+	"cocoDungeon",
+	"Creates the longest coco dungeon ever",
+	[0,0,1000,0],
+	createEndlessCocoDungeon
+);
+
+function createEndlessCocoDungeon() {
+	var endlessCocoDungeon = new dungeonType (
+		"Endless Coco Dungeon",
+		"",
+		3,
+		"cocoDungeon",
+		99,
+		"cocoCastle",
+		"cocoDungeonBeating"
+	);
+	yourDungeons.push(endlessCocoDungeon);
+	var newDungeons = state.dungeons;
+	newDungeons.push(endlessCocoDungeon);
+	updateState('dungeons', newDungeons);
+	upgradeAnimation("It's endless!!","cocoDungeon",goCocoDungeons);
+}
+
+//ENDLESS DUNGEON
+newProduct("Endless Monster Dungeon","goDungeonMaster","Buy");
+
+newProductTier(
+	"Endless Monster Dungeon",
+	1,
+	"Endless Monster Dungeon",
+	"monsterDungeon",
+	"Creates the longest monster dungeon ever",
+	[0,1000,0,0],
+	createEndlessMonsterDungeon
+);
+
+function createEndlessMonsterDungeon() {
+	var endlessMonsterDungeon = new dungeonType (
+		"Endless Monster Dungeon",
+		"",
+		5,
+		"monsterDungeon",
+		99,
+		"lochJuice",
+		"monsterDungeonBeating"
+	);
+	yourDungeons.push(endlessMonsterDungeon);
+	var newDungeons = state.dungeons;
+	newDungeons.push(endlessMonsterDungeon);
+	updateState('dungeons', newDungeons);
+	upgradeAnimation("It's endless!!","monsterDungeon",goMonsterDungeon);
+}
+
+//POTION RESEARCH
+newProduct("Potion Research","spaceBen");
+
+for (var i = 1; i < 99; i++) {
+	var healingValue = 50 + (i * 10);
+	newProductTier(
+		"Potion Research",
+		i,
+		"Experimental Potion Research",
+		"potionResearch",
+		"Space Ben will conduct some research into making stronger health potion. For a reasonable price your potions will heal <span style='color:#ff0000'>" + healingValue + " health</span>",
+		[(i * 450),0,0,0],
+		potionResearch
+	);
+}
+
+function potionResearch() {
+	updateState('healthPotionHeal',state.healthPotionHeal + 10);
+	upgradeAnimation("Research SUCCESSFUL!","potionResearch",goSpaceBen);
+}
+
+//VILLA PORTAL
+newProduct("Villa Portal","spaceBen","Buy");
+
+newProductTier(
+	"Villa Portal",
+	1,
+	"Villa Portal",
+	"villaPortal",
+	"Creates a portal that will take you to the villa. Getting tired of clicking tons of buttons? You better invest in this!",
+	[500,500,500,0],
+	createVillaPortal
+);
+
+function createVillaPortal() {
+	updateState('villaPortal', true);
+	upgradeAnimation("Let's go to the Villa! And back again! Quicker!","villaPortal",goSpaceBen);
+}
+
+//BRET'S CROWBAR
+newProduct("Crowbar Upgrade","goBret");
+
+for (var i = 1; i < 10; i++) {
+	newProductTier(
+		"Crowbar Upgrade",
+		i,
+		"Crowbar Upgrade",
+		"crowbar",
+		"Galvanizes the crowbar to get <span style='color:#ff0000'>" + (i + 1) + " coco/sec</span>",
+		[0,(i * 10),0,0,(i + 1)],
+		upgradeCrowbar,
+		true
+	);	
+}
+
+function upgradeCrowbar() {
+	updateState('bCocoPS', state.bCocoPS + 1);
+	upgradeAnimation("Go go go!","crowbar",goBret);
+}
+
+//BAR UPGRADE
+newProduct("Bar Upgrade","goSpaceBar");
+
+for (var i = 1; i < 10; i++) {
+	newProductTier(
+		"Bar Upgrade",
+		i,
+		"Buy a round of drinks",
+		"drinks",
+		"You estimate that this will make the drunkards pay <span style='color:#ff0000'>" + (state.bBarCocoPrice * 5) + " gold</span> for a batch of coco. But they'll propably want even more coco",
+		[0,(i * 50),0,0],
+		upgradeBar,
+		true
+	);
+}
+
+function upgradeBar() {
+	updateState('bBarCocoPrice', state.bBarCocoPrice + 10);
+	updateState('bBarCocoSell', state.bBarCocoSell + 10);
+	upgradeAnimation("Drinks for everyone!!","drinks",goSpaceBar);
+}
+
+//WOOD SYNTHESIZER
+newProduct("Wood Synthesizer","goBurgulonSurface","Build");
+
+newProductTier(
+	"Wood Synthesizer",
+	1,
+	"Wood Synthesizer",
+	"woodSynthesizer",
+	"Your calculations show that this machine will be able to synthesize near perfect wood",
+	[0,50,0,0],
+	buildWoodSynthesizer,
+	true
+);
+
+function buildWoodSynthesizer() {
+	updateState('bWoodSynthesizer', true);
+	updateState('bWoodPS', 1);
+	upgradeAnimation("Time to make some wood!","woodSynthesizer",goWoodSynthesizer);
+}
+
+newProduct("Upgrade Wood Synthesizer","goWoodSynthesizer");
+
+for (var i = 1; i < 10; i++) {
+	newProductTier(
+		"Upgrade Wood Synthesizer",
+		i,
+		"Better Science",
+		"woodSynthesizer",
+		"Better science means <span style='color:#ff0000'>" + (i + 1) + " wood/sec</span>",
+		[0,(i * 100),0,0],
+		upgradeWoodSynthesizer,
+		true
+	);
+}
+
+function upgradeWoodSynthesizer() {
+	updateState('bWoodPS', state.bWoodPS + 1);
+	upgradeAnimation("MORE SCIENCE!","woodSynthesizer",goWoodSynthesizer);
+}
+
+//CELESTIAL SUMMONER
+newProduct("Celestial Summoner","goBurgulonSurface","Build");
+
+newProductTier(
+	"Celestial Summoner",
+	1,
+	"Celestial Summoner",
+	"celestialSummoner",
+	"Your downtrodden algorithms came up with this device to summon your old planet friend. You just really hope it works!",
+	[1000,300,0,0],
+	buildCelestialSummoner,
+	true
+);
+
+function buildCelestialSummoner() {
+	updateState('bCelestialSummoner', true);
+	upgradeAnimation("What a beauty!","celestialSummoner",goCelestialSummoner);
+}
+
+///////////////////
+//SINGLE PRODUCTS//
+///////////////////
+
+function fakeFunction() {
+	console.log("You shouldn't be here");
+}
+
+function singleProduct(ID,image,currency,price,place,fnct,parameter) {
+	this.ID = ID;
+	this.image = image;
+	this.currency = currency;
+	this.price = price;
+	this.place = place;
+	this.fnct = fnct;
+	this.parameter = parameter;
+}
+
+function newSingleProduct(ID,image,currency,price,place,fnct,parameter) {
+	var product = new singleProduct(ID,image,currency,price,place,fnct,parameter);
+	allSingleProducts.push(product);
+}
+
+function createSingleProduct(ID) {
+	for (var i = 0; i < allSingleProducts.length; i++) {
+		if (allSingleProducts[i].ID == ID && !allSingleProducts[i].bought) {
+			createSmallBuildButton(
+				allSingleProducts[i].ID,
+				allSingleProducts[i].image,
+				allSingleProducts[i].ID,
+				useSingleProduct,
+				ID
+			);
+		}
+	}
+}
+
+function useSingleProduct(ID) {
+	for (var i = 0; i < allSingleProducts.length; i++) {
+		if (allSingleProducts[i].ID == ID) {
+			if (allSingleProducts[i].currency == "ghosts") {
+				updateState("ghosts",state.ghosts -= allSingleProducts[i].price);
+			}
+			if (allSingleProducts[i].currency == "coins") {
+				updateState("coins",state.coins -= allSingleProducts[i].price);
+			}
+			if (allSingleProducts[i].currency == "gold") {
+				updateState("gold",state.gold -= allSingleProducts[i].price);
+			}
+			if (allSingleProducts[i].currency == "stardust") {
+				updateState("stardust",state.stardust -= allSingleProducts[i].price);
+			}
+			if (allSingleProducts[i].currency == "coco") {
+				updateState("coco",state.coco -= allSingleProducts[i].price);
+			}
+			allSingleProducts[i].fnct(allSingleProducts[i].parameter);
+		}
+	}
+}
+
+var allSingleProducts = [];
+
+
+//SINGLE PRODUCTS//
+
+//Space phone
+newSingleProduct("Unknown number (1 coin)","phone","coins",1,"goPhone",goCallUnknown);
+newSingleProduct("Stupid number (3 coins)","phone","coins",3,"goPhone",goCallStupid);
+newSingleProduct("Godly number (6 coins)","phone","coins",6,"goPhone",goCallGod);
+
+//Space phone coins
+newSingleProduct("Buy 1 phone coin (1 ghost)","coin","ghosts",1,"goPhone",goBuyCoin);
+
+//Ben Ghost Trade
+newSingleProduct("Buy a ghost (10 gold)","ghost","gold",10,"spaceBen",goBuyGhostBen);
+newSingleProduct("Buy a ghost (50 gold)","ghost","gold",50,"spaceBen",goBuyGhostBen);
+newSingleProduct("Buy a ghost (100 gold)","ghost","gold",100,"spaceBen",goBuyGhostBen);
+newSingleProduct("Buy a ghost (200 gold)","ghost","gold",200,"spaceBen",goBuyGhostBen);
+newSingleProduct("Buy a ghost (400 gold)","ghost","gold",400,"spaceBen",goBuyGhostBen);
+newSingleProduct("Buy a ghost (800 gold)","ghost","gold",800,"spaceBen",goBuyGhostBen);
+newSingleProduct("Buy a ghost (1600 gold)","ghost","gold",1600,"spaceBen",goBuyGhostBen);
+newSingleProduct("Buy a ghost (3200 gold)","ghost","gold",3200,"spaceBen",goBuyGhostBen);
+newSingleProduct("Buy a ghost (6400 gold)","ghost","gold",6400,"spaceBen",goBuyGhostBen);
+newSingleProduct("Buy a ghost (12800 gold)","ghost","gold",12800,"spaceBen",goBuyGhostBen);
+newSingleProduct("Buy a ghost (25600 gold)","ghost","gold",25600,"spaceBen",goBuyGhostBen);
+newSingleProduct("Buy a ghost (51200 gold)","ghost","gold",51200,"spaceBen",goBuyGhostBen);
+
+var allGhostIDs = [
+	"Buy a ghost (10 gold)","Buy a ghost (50 gold)","Buy a ghost (100 gold)",
+	"Buy a ghost (200 gold)","Buy a ghost (400 gold)","Buy a ghost (800 gold)",
+	"Buy a ghost (1600 gold)","Buy a ghost (3200 gold)","Buy a ghost (6400 gold)",
+	"Buy a ghost (12800 gold)","Buy a ghost (25600 gold)","Buy a ghost (51200 gold)"
+];
+
+function goBuyGhostBen() {
+	updateState('ghosts', state.ghosts += 1);
+	updateState('curGhostID', state.curGhostID += 1);
+	upgradeAnimation("Scary!!","ghost",goSpaceBen);
+}
+
+//Loch juice coco feed
+newSingleProduct("Feed creature 400 coco","coco","coco",400,"goLochJuice",goFeedCreature);
+newSingleProduct("Feed creature 800 coco","coco","coco",800,"goLochJuice",goFeedCreature);
+newSingleProduct("Feed creature 1600 coco","coco","coco",1600,"goLochJuice",goFeedCreature);
+newSingleProduct("Feed creature 2300 coco","coco","coco",2300,"goLochJuice",goFeedCreature);
+newSingleProduct("Feed creature 5000 coco","coco","coco",5000,"goLochJuice",goFeedCreature);
+
+var allCreatureIDs = [
+	"Feed creature 400 coco","Feed creature 800 coco","Feed creature 1600 coco",
+	"Feed creature 2300 coco","Feed creature 5000 coco"
+];
+
+function goFeedCreature() {
+	updateState('curCreatureID', state.curCreatureID += 1);
+	upgradeAnimation('Yummy! You got more?',"lochJuiceTongue",goLochJuice);
+}
+
+//ANSWERS
+for (var i = 0; i < allAnswers.length; i++) {
+	newSingleProduct(allAnswers[i].text,"answerCard","ghosts",state.answerPrice,"goSpaceBenAnswers",goBuyAnswer,i);
+}
+
+function goBuyAnswer(nr) {
+	updateState('answerPrice', state.answerPrice += 1);
+	updateArrayState('answerStates', nr, true);
+	upgradeAnimation("Now you have the answer. But for what question?","answerCard",goSpaceBenAnswers);
+}

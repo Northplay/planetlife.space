@@ -35,8 +35,12 @@ const Footer = () => (
 		<Container>
 			<StyledContent as="footer">
 				<div>
-					<Link href="/">
-						<a href="/" title="Northplay" alt="Northplay website">
+					<Link href="https://northplay.co">
+						<a
+							href="https://northplay.co"
+							title="Northplay"
+							alt="Northplay website"
+						>
 							<img src="/static/gifs/northplay.gif" alt="Northplay Bear" />
 						</a>
 					</Link>

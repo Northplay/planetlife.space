@@ -1,0 +1,50 @@
+{
+	"name": "planetlife.space",
+	"version": "1.0.0",
+	"description": "Website for Planet Life",
+	"repository": "https://github.com/northplay/planetlife.space",
+	"author": "Kristian Andersen <kristian@northplay.co>",
+	"license": "ISC",
+	"private": true,
+	"scripts": {
+		"dev": "next",
+		"build": "yarn css:minify && next build",
+		"start": "next start",
+		"lint": "eslint .",
+		"lint:fix": "eslint . --fix",
+		"css:minify": "rm static/*.min.css && cleancss static/reset.css -o static/reset.min.css && cleancss static/global.css -o static/global.min.css",
+		"heroku-postbuild": "yarn build",
+		"deploy": "git push origin master && git push web master"
+	},
+	"engines": {
+		"node": "11.x"
+	},
+	"dependencies": {
+		"babel-plugin-module-resolver": "^3.2.0",
+		"clean-css-cli": "^4.3.0",
+		"next": "^8.0.4",
+		"prop-types": "^15.7.2",
+		"react": "^16.8.6",
+		"react-dom": "^16.8.6",
+		"styled-components": "^4.2.0"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.4.3",
+		"babel-eslint": "^9.0.0",
+		"babel-plugin-add-react-displayname": "^0.0.5",
+		"babel-plugin-inline-react-svg": "^1.1.0",
+		"babel-plugin-styled-components": "^1.10.0",
+		"eslint": "^5.14.1",
+		"eslint-config-airbnb": "^17.1.0",
+		"eslint-config-prettier": "^4.1.0",
+		"eslint-config-wesbos": "0.0.19",
+		"eslint-import-resolver-babel-module": "^5.0.1",
+		"eslint-plugin-html": "^5.0.3",
+		"eslint-plugin-import": "^2.16.0",
+		"eslint-plugin-jsx-a11y": "^6.2.1",
+		"eslint-plugin-prettier": "^3.0.1",
+		"eslint-plugin-react": "^7.12.4",
+		"eslint-plugin-react-hooks": "^1.3.0",
+		"prettier": "^1.16.4"
+	}
+}

@@ -1,0 +1,10 @@
+{
+	"extends": ["wesbos"],
+	"settings": {
+		"import/resolver": {
+			"babel-module": {
+				"root": ["./"]
+			}
+		}
+	}
+}

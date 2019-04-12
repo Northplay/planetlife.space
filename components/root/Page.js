@@ -30,7 +30,7 @@ Page.propTypes = {
 
 Page.defaultProps = {
 	title: 'Planet Life',
-	description: 'A game about friendship adventure and being a planet',
+	description: 'A game about friendship, adventure and being a planet',
 	image: '/static/shareimage.png',
 	canonical: 'https://planetlife.space',
 	withContent: true,

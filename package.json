@@ -12,7 +12,7 @@
 		"start": "next start",
 		"lint": "eslint .",
 		"lint:fix": "eslint . --fix",
-		"css:minify": "rm static/*.min.css && cleancss static/reset.css -o static/reset.min.css && cleancss static/global.css -o static/global.min.css",
+		"css:minify": "rm static/*.min.css && cleancss --source-map static/reset.css -o static/reset.min.css && cleancss --source-map static/global.css -o static/global.min.css",
 		"heroku-postbuild": "yarn build",
 		"deploy": "git push origin master && git push web master"
 	},

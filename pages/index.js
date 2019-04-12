@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
+import Modal from 'react-responsive-modal';
 
 import Page from 'components/root/Page';
 import Button from 'components/shared/Button';
@@ -14,7 +15,7 @@ const Content = styled.div`
 
 	header {
 		img {
-			max-width: 640px;
+			max-width: 500px;
 			margin: 0 auto;
 		}
 	}
@@ -76,101 +77,135 @@ const Content = styled.div`
 	}
 `;
 
-const Index = () => (
-	<Page>
-		<Content>
-			<header>
-				<img src="/static/gifs/header.gif" alt="Planet Life" />
-				<h1>
-					A game about friendship,
-					<br />
-					adventure and being a planet
-				</h1>
-			</header>
-			<Button
-				isLink
-				href="https://itunes.apple.com/us/app/planet-life/id1389159829?ls=1&mt=8&at=1010lwVg&ct=planetlife-site"
+const Index = () => {
+	const [isModalOpen, setModalIsOpen] = useState(false);
+	const [modalContent, setModalContent] = useState(<div />);
+
+	const openModal = content => {
+		setModalContent(content);
+		setModalIsOpen(true);
+	};
+
+	const Screenshot = ({ index, title }) => {
+		const img = (
+			<img
+				src={`/static/screenshots/${index}.png`}
+				alt={`Screenshot ${index}`}
+			/>
+		);
+
+		return (
+			<a
+				href={`/static/screenshots/${index}.png`}
+				title={title}
+				onClick={e => {
+					e.preventDefault();
+
+					openModal(img);
+				}}
 			>
-				<img
-					src="/static/gifs/phone.gif"
-					alt="Telephone"
-					width="90"
-					height="90"
-				/>
-				<span>Download for your Telephone</span>
-			</Button>
-			<div className="links">
-				<Link href="/play">
-					<a href="/play" className="play">
+				{img}
+			</a>
+		);
+	};
+
+	return (
+		<Page>
+			<Content>
+				<header>
+					<img src="/static/gifs/header.gif" alt="Planet Life" />
+					<h1>
+						A game about friendship,
+						<br />
+						adventure and being a planet
+					</h1>
+				</header>
+				<Button
+					isLink
+					href="https://itunes.apple.com/us/app/planet-life/id1389159829?ls=1&mt=8&at=1010lwVg&ct=planetlife-site"
+				>
+					<img
+						src="/static/gifs/phone.gif"
+						alt="Telephone"
+						width="90"
+						height="90"
+					/>
+					<span>Download for your Telephone</span>
+				</Button>
+				<div className="links">
+					<Link href="/play">
+						<a href="/play" className="play">
+							<img
+								src="/static/gifs/playinbrowser.gif"
+								alt="Arcade"
+								width="60"
+								height="60"
+							/>
+							<span>Play In Browser!</span>
+						</a>
+					</Link>
+					<a
+						href="https://www.youtube.com/watch?v=8bLh3u9IckA"
+						className="watch"
+						target="_blank"
+						rel="noopener noreferrer"
+						onClick={e => {
+							e.preventDefault();
+
+							const content = (
+								<div className="video-wrapper">
+									<div className="video-container">
+										<iframe
+											width="853"
+											height="400"
+											src="https://www.youtube.com/embed/8bLh3u9IckA?autoplay=1"
+											frameBorder="0"
+											allowFullScreen
+											title="Youtube Embed Video"
+										/>
+									</div>
+								</div>
+							);
+
+							openModal(content);
+						}}
+					>
 						<img
-							src="/static/gifs/playinbrowser.gif"
+							src="/static/gifs/playtrailer.gif"
 							alt="Arcade"
 							width="60"
 							height="60"
 						/>
-						<span>Play In Browser!</span>
+						<span>Watch Trailer</span>
 					</a>
-				</Link>
-				<a
-					href="https://www.youtube.com/watch?v=8bLh3u9IckA"
-					className="watch"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
+				</div>
+				<div className="behold">
 					<img
-						src="/static/gifs/playtrailer.gif"
-						alt="Arcade"
-						width="60"
-						height="60"
+						src="/static/gifs/remuladin.gif"
+						alt="Remuladin"
+						width="120"
+						height="120"
 					/>
-					<span>Watch Trailer</span>
-				</a>
-			</div>
-			<div className="behold">
-				<img
-					src="/static/gifs/remuladin.gif"
-					alt="Remuladin"
-					width="120"
-					height="120"
-				/>
-				<p>Behold this actual in-game footage</p>
-			</div>
-			<div className="screenshots">
-				<a href="/static/screenshots/1.png" title="Play as a newborn planet!">
-					<img src="/static/screenshots/1.png" alt="Screenshot 1" />
-				</a>
-
-				<a
-					href="/static/screenshots/2.png"
-					title="Build cool stuff on your surface!"
-				>
-					<img src="/static/screenshots/2.png" alt="Screenshot 2" />
-				</a>
-
-				<a href="/static/screenshots/3.png" title="Train your Derek!">
-					<img src="/static/screenshots/3.png" alt="Screenshot 3" />
-				</a>
-
-				<a
-					href="/static/screenshots/4.png"
-					title="Beat tons of jerks in the dungeons!"
-				>
-					<img src="/static/screenshots/4.png" alt="Screenshot 4" />
-				</a>
-
-				<a href="/static/screenshots/5.png" title="Smell the Space Broccoli!">
-					<img src="/static/screenshots/5.png" alt="Screenshot 5" />
-				</a>
-
-				<a
-					href="/static/screenshots/6.png"
-					title="Find new friends in weird dungeons!"
-				>
-					<img src="/static/screenshots/6.png" alt="Screenshot 6" />
-				</a>
-			</div>
-		</Content>
-	</Page>
-);
+					<p>Behold this actual in-game footage</p>
+				</div>
+				<div className="screenshots">
+					<Screenshot index={1} title="Play as a newborn planet!" />
+					<Screenshot index={2} title="Build cool stuff on your surface!" />
+					<Screenshot index={3} title="Train your Derek!" />
+					<Screenshot index={4} title="Beat tons of jerks in the dungeons!" />
+					<Screenshot index={5} title="Smell the Space Broccoli!" />
+					<Screenshot index={6} title="Find new friends in weird dungeons!" />
+				</div>
+			</Content>
+			<Modal
+				open={isModalOpen}
+				onClose={() => setModalIsOpen(false)}
+				classNames={{ modal: 'modal' }}
+			>
+				{modalContent}
+			</Modal>
+		</Page>
+	);
+};
 
 export default Index;

@@ -32,6 +32,7 @@ const Content = styled.div`
 			display: flex;
 			align-items: center;
 			margin: 0 20px;
+			line-height: 3rem;
 
 			&:hover {
 				color: #fff;
@@ -73,6 +74,46 @@ const Content = styled.div`
 
 		a img {
 			max-width: 100%;
+		}
+	}
+
+	@media (max-width: 1100px) {
+		pading: 0 10px;
+	}
+
+	@media (max-width: 520px) {
+		header img {
+			max-width: 90%;
+		}
+
+		a.button,
+		button {
+			margin: 0 10px;
+		}
+
+		.links {
+			flex-wrap: wrap;
+			justify-content: center;
+
+			a {
+				margin: 5px 0;
+			}
+		}
+
+		.behold {
+			flex-wrap: wrap;
+			justify-content: center;
+			text-align: center;
+
+			img {
+				margin: 0 0 25px 0;
+			}
+		}
+
+		.screenshots {
+			grid-template-columns: 1fr;
+
+			padding: 0 20px;
 		}
 	}
 `;

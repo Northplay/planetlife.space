@@ -77,6 +77,12 @@ const Content = styled.div`
 		}
 	}
 
+	@media (max-width: 644px) {
+		.links a:first-child {
+			display: none;
+		}
+	}
+
 	@media (max-width: 1100px) {
 		pading: 0 10px;
 	}

@@ -172,12 +172,25 @@ const Index = () => {
 					href="https://itunes.apple.com/us/app/planet-life/id1389159829?ls=1&mt=8&at=1010lwVg&ct=planetlife-site"
 				>
 					<img
-						src="/static/gifs/phone.gif"
+						src="/static/gifs/apple.gif"
 						alt="Telephone"
 						width="90"
 						height="90"
 					/>
-					<span>Download for your Telephone</span>
+					<span>Download for your iPhone</span>
+				</Button>
+				<br />
+				<Button
+					isLink
+					href="https://play.google.com/store/apps/details?id=co.northplay.planetlife"
+				>
+					<img
+						src="/static/gifs/burger.gif"
+						alt="Telephone"
+						width="90"
+						height="90"
+					/>
+					<span>Download for your Android</span>
 				</Button>
 				<div className="links">
 					<Link href="/play">

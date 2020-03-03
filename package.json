@@ -16,9 +16,6 @@
 		"heroku-postbuild": "yarn build",
 		"deploy": "git push origin master && git push web master"
 	},
-	"engines": {
-		"node": "11.x"
-	},
 	"dependencies": {
 		"babel-plugin-module-resolver": "^3.2.0",
 		"clean-css-cli": "^4.3.0",

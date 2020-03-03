@@ -58,7 +58,11 @@ function goRobot() {
 	createGoButton("Leave Burger on the asteroid","asteroid",goRoot);
 }
 
-var H_BringBurger = "Burger chirps happily as he softly lands on your surface";
+if (hasBridge()) {
+	var H_BringBurger = "Burger chirps happily as he softly lands on your surface.</br>He tells you to enjoy this first FREE part of the game - You are going to learn secrets about freezers, build a school, and even impress a real god.";
+} else {
+	var H_BringBurger = "Burger chirps happily as he softly lands on your surface.";
+}
 
 function bringBurger() {
 	playSound(soundEffect.burger);

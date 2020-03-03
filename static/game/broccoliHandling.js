@@ -8,29 +8,47 @@ function broccoli() {
 		changeScene("","spaceBroccoli");
 	},1500);
 	setTimeout(function() {
-		changeScene("It looks like you have arrived right next to a giant space broccoli. What a marvelous sight!","spaceBroccoli");
-		createGoButton("Check it out","spaceBroccoli",checkBroccoli);
+		changeScene(
+			T(
+				"It looks like you have arrived right next to a giant space broccoli. What a marvelous sight!",
+				"h.broccoliFound"
+			),
+			"spaceBroccoli");
+		createGoButton(T("Check it out","buttons.checkItOut"),"spaceBroccoli",checkBroccoli);
 	},2000);
 }
 
 function checkBroccoli() {
-	changeScene("Amazing! There is a whole world on the surface of the broccoli. Is that Loch Juice? And over there - a castle made entirely of coco. Oh, and could that be the fabled Tall Blue Forest there in the distance?</br></br>We have to discover this new world!","spaceBroccoliClose");
-	createGoButton("Take a closer look","spaceBroccoliClose",burgerNervous);
+	changeScene(
+		T(
+			"Amazing! There is a whole world on the surface of the broccoli. Is that Loch Juice? And over there - a castle made entirely of coco. Oh, and could that be the fabled Tall Blue Forest there in the distance?</br></br>We have to discover this new world!",
+			"h.broccoliClose"
+		),
+		"spaceBroccoliClose");
+	createGoButton(T("Take a closer look","buttons.takeACloserLook"),"spaceBroccoliClose",burgerNervous);
 }
 
 function burgerNervous() {
-	changeScene("You can hear Burger chirping nervously. Maybe he is freaking out about this broccoli place.. He tells you that you just left the coco asteroid and Stupid Looking Planet behind. But you can tell that there is also something else nagging him","burger",burgerNervous);
-	createGoButton("Don't worry Burger!","talk",checkPaywall);
+	changeScene(
+		T(
+			"You can hear Burger chirping nervously. Maybe he is freaking out about this broccoli place.. He tells you that you just left the coco asteroid and Stupid Looking Planet behind. But you can tell that there is also something else nagging him",
+			"h.burgerNervous"
+		),
+		"burger","burgerNervous");
+	createGoButton(T("Don't worry Burger!","buttons.dontWorryBurger!"),"talk",checkPaywall);
 }
 
 function checkPaywall() {
 	if (hasBridge()) {
 		changeScene(
-			"Oh hi there. You must be from outer space.. I assume that since you're a planet and all",
+			T(
+				"Oh hi there. You must be from outer space.. I assume that since you're a planet and all",
+				"h.checkPaywall"
+			),
 			"broccoliWorker",
 			"checkPaywall"
 		);
-		createGoButton("So it seems","talk",goPaywall1);
+		createGoButton(T("So it seems","buttons.soItSeems"),"talk",goPaywall1);
 	} else {
 		updateState("broccoliChapter",true);
 		burgerCaptured();
@@ -39,10 +57,13 @@ function checkPaywall() {
 
 function goPaywall1() {
 	changeScene(
-		"Yeah, so we're having some slight difficulties at the moment.<br/>It seems that the creator of this strange universe wants to make a living from developing games",
+		T(
+			"Yeah, so we're having some slight difficulties at the moment.<br/>It seems that the creator of this strange universe wants to make a living from developing games",
+			"h.paywall1"
+		),
 		"broccoliWorkerHand"
 	);
-	createGoButton("Strange","talk",goPaywall2);
+	createGoButton(T("Strange","buttons.strange"),"talk",goPaywall2);
 }
 
 function goPaywall2() {
@@ -51,90 +72,124 @@ function goPaywall2() {
 		var json = JSON.parse(value);
 		var unlock = json.filter(p => p.identifier === "broccoliWorldUnlock")[0];
 
-		changeScene("So he put down a tax for planets entering the Broccoli Empire. <br/>It's a mere " + unlock.localPrice + "<br/><br/>But I'm sure he'll buy you a beer if you meet him. So in the end you'll probably earn money on this",
+		changeScene(
+			T(
+				"So he put down a tax for planets entering the Broccoli Empire. <br/>It's a mere " + unlock.localPrice + "<br/><br/>But I'm sure he'll buy you a beer if you meet him. So in the end you'll probably earn money on this",
+				"h.paywall2"
+			),
 			"broccoliWorker");
-		createGoButton("Seems fair (" + unlock.localPrice + ")","gold", goPay);
-		createGoButton("Restore Purchase", "binoculars", goRestore);
-		createGoButton("Ehm, this is awkward, but I'm going to pass","talk",goNotPay);
+		createGoButton(T("Seems fair (" + unlock.localPrice + ")","buttons.seemsFair"),"gold", goPay);
+		createGoButton(T("Restore Purchase","buttons.restorePurchases"), "binoculars", goRestore);
+		createGoButton(T("Ehm, this is awkward, but I'm going to pass","buttons.awkwardPass"),"talk",goNotPay);
 	});
 }
 
 function goNotPay() {
 	changeScene(
-		"Ah, I see.. Tough times eh?",
+		T(
+			"Ah, I see.. Tough times eh?",
+			"h.notPay"
+		),
 		"broccoliWorker"
 	);
-	createGoButton("...","planetSad",goNotPay2);
+	createGoButton(T("...","buttons.3dots"),"planetSad",goNotPay2);
 }
 
 function goNotPay2() {
 	changeScene(
-		"Well you can always go back and try to beat the endless dungeon",
+		T(
+			"Well you can always go back and try to beat the endless dungeon",
+			"h.notPay2"
+		),
 		"broccoliWorker"
 	);
-	createGoButton("...","planetSad",goNotPay3);
+	createGoButton(T("...","buttons.3dots"),"planetSad",goNotPay3);
 }
 
 function goNotPay3() {
 	changeScene(
-		"In the meantime, here are some of the things you'll be missing out on:",
+		T(
+			"In the meantime, here are some of the things you'll be missing out on:",
+			"h.notPay3"
+		),
 		"broccoliWorker"
 	);
-	createGoButton("...","planetSad",goNotPay4);
+	createGoButton(T("...","buttons.3dots"),"planetSad",goNotPay4);
 }
 
 function goNotPay4() {
 	changeScene(
-		"A vomitting purple monster",
+		T(
+			"A vomitting purple monster",
+			"h.notPay4"
+		),
 		"lochJuiceVomit"
 	);
-	createGoButton("Really?","talk",goNotPay5);
+	createGoButton(T("Really?","buttons.really?"),"talk",goNotPay5);
 }
 
 function goNotPay5() {
 	changeScene(
-		"Something crazy happening to Burger",
+		T(
+			"Something crazy happening to Burger",
+			"h.notPay5"
+		),
 		"burger"
 	);
 	setTimeout(function() {
 		changeScene(
-			"Something crazy happening to Burger",
+			T(
+				"Something crazy happening to Burger",
+				"h.notPay5"
+			),
 			"burg3r"
 		);
 	},1300);
 	setTimeout(function() {
 		changeScene(
-			"Something crazy happening to Burger",
+			T(
+				"Something crazy happening to Burger",
+				"h.notPay5"
+			),
 			"burger"
 		);
-		createGoButton("But what is it!?","talk",goNotPay6);
+		createGoButton(T("But what is it!?","buttons.butWhatIsIt?"),"talk",goNotPay6);
 	},1500);
 }
 
 function goNotPay6() {
 	changeScene(
-		"And...",
+		T(
+			"And...",
+			"h.notPay6"
+		),
 		"invisibleImg"
 	);
-	createGoButton("And?","talk",goNotPay7);
+	createGoButton(T("And?","buttons.and?"),"talk",goNotPay7);
 }
 
 function goNotPay7() {
 	changeScene(
-		"THIS PENGUIN!!!",
+		T(
+			"THIS PENGUIN!!!",
+			"h.notPay7"
+		),
 		"cocoPenguin"
 	);
-	createGoButton("What, REALLY!?","talk",goNotPay8);
+	createGoButton(T("What, REALLY!?","buttons.whatReally"),"talk",goNotPay8);
 }
 
 function goNotPay8() {
 	updateState("broccoliChapter",false);
 	changeScene(
-		"And that's it. Good luck back in the free solar system",
+		T(
+			"And that's it. Good luck back in the free solar system",
+			"h.notPay8"
+		),
 		"broccoliWorker"
 	);
-	createGoButton("Ok, you might have convinced me","planet",goPaywall2);
-	createGoButton("Back to the free solar system","planetSad",goRoot);
+	createGoButton(T("Ok, you might have convinced me","buttons.maybeConvinced"),"planet",goPaywall2);
+	createGoButton(T("Back to the free solar system","buttons.backToFreeSolarSystem"),"planetSad",goRoot);
 }
 
 function goRestore() {
@@ -194,6 +249,7 @@ function goPay2() {
 }
 
 function burgerCaptured() {
+	updateState('cocoPS',state.cocoPS -= state.strawCocoPS);
 	if (state.burgerDoing == "wood") {
 		updateState("woodPS", state.woodPS - state.burgerWoodPS);
 	} else if (state.burgerDoing == "gold") {
@@ -513,7 +569,7 @@ function goQuizDone3() {
 
 function goBurgerPlanet() {
 	changeScene(
-		"WIFY prompts you to say hello to the new planet - Burgulon 5",
+		"WIFY prompts you to say hello to the new planet - Burgulon!",
 		"burgulon",
 		"goBurgerPlanet"
 	);
@@ -539,7 +595,7 @@ function goWifyGloat() {
 function goPuzzled() {
 	updateState("burgulonCreated", true);
 	changeScene(
-		"You suddenly feel all alone in the universe. You realize that Burger was your best friend.. But this also makes you super intent on finding him! Maybe Remouladin can help you find him?",
+		"You suddenly feel all alone in the universe. You realize that Burger was your best friend.. But this also makes you super intent on finding him! Maybe Remouladin can help you?",
 		"planetSad",
 		"goPuzzled"
 	);
@@ -641,6 +697,9 @@ function goCocoDungeons() {
 			);
 		}
 	}
+	if (state.derekDead) {
+		derekDead();
+	}
 }
 
 function goPhone() {
@@ -681,9 +740,9 @@ function goPhone() {
 		);
 		createGoButton("Back","cocobar",goCocoCastle);
 	}
-	if (state.derekDead) {
-		derekDead();
-	}
+	// if (state.derekDead) {
+	// 	derekDead();
+	// }
 }
 
 function goBuyCoin() {
@@ -824,7 +883,7 @@ function goHearWhisper() {
 		"goHearWhisper"
 	);
 	createGoButton("Back","goldFish",goBowl);
-	createGoButton("What's up?","dungeonSchool",goDDS);
+	createGoButton("What's up?","dungeonSchool",goClassroom);
 }
 
 function clickFish() {
@@ -1014,7 +1073,7 @@ function goRemouladin() {
 	createGoButton("Back","planet",goRoot);
 	createGoButton("Talk","talk",goTalkRemouladin);
 	if (state.burgulonCreated) {
-		createGoButton("Go to Burgulon 5","burgulon",goAboutBurgulon);
+		createGoButton("Go to Burgulon","burgulon",goAboutBurgulon);
 	}
 }
 
@@ -1039,16 +1098,28 @@ function goTalkRemouladin() {
 }
 
 function goAboutBurgulon() {
-	changeScene(
-		"Oh, sorry about your friend. I could totally take you there, but hey, why not earn a few ghosts in the process. It's the hot new thing around this galaxy! So what do you say. <span style='color:#ff0000'>50</span> ghosts for a little interstellar ride? You have <span style='color:#38b200'>" + state.ghosts + "</span> ghosts",
-		"appleWorm",
-		"goAboutBurgulon"
-	);
-	createGoButton("Back","planet",goRoot);
-	createGoButton("I can't afford that","talk",goCantAffordRide);
-	if (state.ghosts >= 50) {
-		createGoButton("Let's go! (50 ghosts)","ghost",goInterstellarRide);
+
+	if (state.wormholePaid) {
+		goInterstellarRide();
+	} else {
+		changeScene(
+			"Oh, sorry about your friend. I could totally take you there, but hey, why not earn a few ghosts in the process. It's the hot new thing around this galaxy! So what do you say. <span style='color:#ff0000'>50</span> ghosts for a little interstellar ride? You have <span style='color:#38b200'>" + state.ghosts + "</span> ghosts",
+			"appleWorm",
+			"goAboutBurgulon"
+		);
+		createGoButton("Back","planet",goRoot);
+		createGoButton("I can't afford that","talk",goCantAffordRide);
+		if (state.ghosts >= 50) {
+			createGoButton("Let's go! (50 ghosts)","ghost",goInterstellarRide);
+		}
 	}
+
+}
+
+function goPayForRide() {
+	updateState("ghosts", state.ghosts -= 50);	
+	updateState('wormholePaid', true);
+	goInterstellarRide();
 }
 
 function goCantAffordRide() {
@@ -1061,7 +1132,6 @@ function goCantAffordRide() {
 }
 
 function goInterstellarRide() {
-	updateState("ghosts", state.ghosts -= 50);
 	changeScene(
 		"Behold! The power of Remouladin",
 		"appleWorm",
@@ -1078,7 +1148,8 @@ function goInterstellarRide() {
 		changeScene("","appleToWormhole");
 	},4000);
 	setTimeout(function() {
-		changeScene("Alright planet guy. Hold on to your continents","appleWormhole");
+		changeScene("Alright planet guy. Hold on to your continents.</br></br>By the way, we won't be coming back here for a while, so this is the last chance to back out","appleWormhole");
+		createGoButton("Ok, I won't go just yet","planet",goRoot);
 		createGoButton("Enter wormhole","wormhole",goEnterWormholeAgain);
 	},5000);
 }
@@ -1124,6 +1195,9 @@ function goSpaceDungeon() {
 			if (state.dungeons[i].navn == "Derekulus X") {
 				createGoButton("Derekulus X","spaceDungeon",goThisDungeon,i);
 			}
+		}
+		if (state.derekDead) {
+			derekDead();
 		}
 	}
 

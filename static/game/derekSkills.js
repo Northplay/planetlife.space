@@ -316,12 +316,21 @@ function showSkill(skillIndex) {
 	}
 	if (skillIndex === derekCheatSequence[derekCheatCount]) {
 		derekCheatCount++;
-		if (derekCheatCount === 4) {
+		if (derekCheatCount === derekCheatSequence.length) {
 			goDerekCheckCheat();
 			derekCheatCount = 0;
 		}
 	} else {
 		derekCheatCount = 0;
+	}
+	if (skillIndex === derekAntiCheatSequence[derekAntiCheatCount]) {
+		derekAntiCheatCount++;
+		if (derekAntiCheatCount === derekAntiCheatSequence.length) {
+			goDerekCheckAntiCheat();
+			derekAntiCheatCount = 0;
+		}
+	} else {
+		derekAntiCheatCount = 0;
 	}
 }
 

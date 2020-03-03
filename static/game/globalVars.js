@@ -96,6 +96,18 @@ var remouladinTalkCount = 0;
 
 var friendTalkCount = 0;
 
+var jerkinsonTalkCount = 0;
+var slopnaxTalkCount = 0;
+var beanieTalkCount = 0;
+var lemonadaTalkCount = 0;
+var sweatsonTalkCount = 0;
+var ancientDerekTalkCount = 0;
+var bananaTalkCount = 0;
+var wisemanTalkCount = 0;
+var brokenRobotTalkCount = 0;
+var babyTalkCount = 0;
+var bartenderTalkCount = 0;
+
 //Ghost trade
 var ghostTradeTick = 0;
 var ghostBuffer = 0;
@@ -104,12 +116,53 @@ var realSellPrice;
 //WIFY QUIZ
 var questionNr = 1;
 
+//ONE EYED DEREKULIAN ROULETTE
+var rouletteBet = 0;
+
+//WOODEN POKER
+var pokerBet = 0;
+var svenCard = 0;
+var svenBet = 0;
+var svenMove = "";
+var svenSymbol = 0;
+var cocobarCard = 0;
+var cocobarBet = 0;
+var cocobarSymbol = 0;
+var yourCard = 0;
+var yourBet = 0;
+var yourMove = "";
+var yourSymbol = 0;
+var yourPokerWood = 0;
+var foldCount = 0;
+var luckySymbol = 0;
+var cardImages = ["pokerCardBroccoli","pokerCardGhost","pokerCardGoldfish"];
+
+//Stanley
+var stanleyTick = 0;
+
+//Spacebar
+var spaceBarTick = 0;
+
+//Mouladin
+var mouladinTalkNr = 0;
+
+var lolliGoals = [
+	0,
+	100,
+	500,
+	800,
+	1200
+];
+
 //Cheat
 var burgerCheatCount = 0;
 var burgerCheat = false;
 var boostCheatCount = 0;
 var derekCheatCount = 0;
-var derekCheatSequence = [2,2,2,0];
+var derekCheatSequence = [2,2,2,0,1,2,0,1,2,0,0,0];
+var derekAntiCheatCount = 0;
+var derekAntiCheatSequence = [0,0,0,2,1,0,2];
+var sweatsonCheatCount = 0;
 
 //Friends
 var friendMeltyface = {
@@ -256,6 +309,7 @@ function fillArrays() {
 		state.skillStates = allSkillStates;
 		state.dungeons = yourDungeons;
 		state.answerStates = allAnswerStates;
+		state.bDerekShipStates = derekShipStates;
 		state.stateInitialized = true;
 	}
 }

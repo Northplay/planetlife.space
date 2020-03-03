@@ -130,6 +130,9 @@ function goRoot() {
 			}
 		}
 	} 
+	if (state.burgulonTime) {
+		goBurgulonSurface();
+	}
 	// if (!state.imgaOver) {
 	// 	goNominated();
 	// }
@@ -146,7 +149,11 @@ function talkBurger() {
 		var gChance = state.goldChance * 100;
 		h += "<br/>Right now Burger has a <span style='color:#ff0000'>" + gChance + "% chance</span> of mining <span style='color:#ff0000'>" + state.burgerGoldPS + " gold/sec</span>"
 	}
-	changeScene(h,"burger","talk_burger");
+	changeScene(
+		h,
+		"burger",
+		"talk_burger"
+	);
 	createGoButton("Back","newSurface",checkWhat);
 	if (!state.cocoPopsAsteroid) {
 		createGoButton("Hear secret","talk",burgerSecret);
@@ -162,6 +169,9 @@ function talkBurger() {
 	}
 	if (state.burgerDoing != "gold") {
 		createGoButton("Dig for gold </br>(" + (state.goldChance * 100) + "% chance/sec)","drill",burgerDoGold);
+	}
+	if (hasBridge() && state.dungeons[0].completed && !state.burgerReview) {
+		createGoButton(T("Hear request","buttons.hearRequest"),"talk",burgerReview);
 	}
 	if (state.burgerLost) {
 		changeScene(
@@ -243,6 +253,41 @@ function burgerGetStardust() {
 	setTimeout(function() {
 		talkBurger();
 	},1000);
+}
+
+function burgerReview() {
+	changeScene(
+		T(
+			"Burger is beating around the bush. You tell him to stop beating your bushes, and get to the point instead",
+			"h.burgerReview"
+		),
+		"burger",
+		"burgerReview"
+	);
+	createGoButton(T("What's up Burger?","buttons.whatsUpBurger"),"talk",burgerReview2);
+}
+
+function burgerReview2() {
+	changeScene(
+		T(
+			"Burger finally gets to the point.</br>He notices that you had a great time beating up those jerks in the dungeon before, and he asks you if you could spare a moment to give the game a rating.</br>Maybe even leave a review if you feel super special today",
+			"h.burgerReview2"
+		),
+		"burger"
+	);
+	createGoButton(T("For sure!","buttons.forSure"),"planet",burgerGoReview);
+	createGoButton(T("Maybe later","buttons.maybeLater"),"burger",talkBurger);
+	createGoButton(T("Nope","buttons.nope"),"talk",burgerDontReview);
+}
+
+function burgerDontReview() {
+	updateState('burgerReview', true);
+	talkBurger();
+}
+
+function burgerGoReview() {
+	updateState('burgerReview', true);
+	goReviewGame();
 }
 
 function slotMachine() {
@@ -515,7 +560,6 @@ function enterWormhole() {
 	playSound(soundEffect.wormHole);
 	changeScene("WOAAH!","wormhole","wormhole");
 	setTimeout(function() {
-		updateState('cocoPS',state.cocoPS -= state.strawCocoPS);
 		broccoli();
 	},5000);
 }
@@ -582,11 +626,11 @@ function enterWormhole() {
 // 	createGoButton("Go back","wormhole",goRoot);
 // }
 
-// function afterDonate() {
-// 	playSound(soundEffect.burger);
-// 	changeScene("Burger chirps happily as you become the star of his solar system. Leave a review on the app store, or write the developer: christian@northplay.co.</br> We would love to hear what you think!","burger","thanksForDonating");
-// 	createGoButton("Cool!","burger",goContinue);
-// }
+function afterDonate() {
+	playSound(soundEffect.burger);
+	changeScene("Burger chirps happily as you become the star of his solar system. Leave a review on the app store, or write the developer: christian@northplay.co.</br> We would love to hear what you think!","burger","thanksForDonating");
+	createGoButton("Cool!","burger",goContinue);
+}
 
 // function goCheckDonate() {
 // 	donateFromEnd = true;

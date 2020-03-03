@@ -44,6 +44,26 @@ var soundEffect = {
 	doorOfRegret: "DoorOfRegret",
 	party: "Party",
 	hi: "Hi",
+	baby: "Baby",
+	babyCry: "BabyCry",
+	ding: "Ding",
+	heavy: "Heavy",
+	house: "House",
+	jack: "Jack",
+	jazz: "Jazz",
+	jerkSquad: "JerkSquad",
+	shock: "Shock",
+	stanley: "Stanley",
+	tadaa: "Tadaa",
+	techno: "Techno",
+	canOpen: "CanOpen",
+	core: "Core",
+	beanie: "Beanie",
+	mouladin: "Mouladin",
+	slopnax: "Slopnax",	
+	bentLords: "BentLords",
+	technoLow: "TechnoLow",
+	mayonada: "Mayonada",
 };
 
 function loadAudioState() {
@@ -164,4 +184,16 @@ function unMuteMusic() {
 	}
 
 	playMusic();
+}
+
+function playRandomPunchSound() {
+	var punches = [soundEffect.punch1,soundEffect.punch2,soundEffect.punch3];
+	var chosenPunch = Math.floor(Math.random() * punches.length);
+	playSound(punches[chosenPunch]);
+}
+
+function playRandomDerekSound() {
+	var punches = [soundEffect.beating,soundEffect.beating2,soundEffect.beating3,soundEffect.beating4,soundEffect.beating5];
+	var chosenPunch = Math.floor(Math.random() * punches.length);
+	playSound(punches[chosenPunch]);
 }

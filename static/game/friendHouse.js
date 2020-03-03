@@ -30,9 +30,55 @@ function hasAnyFriends() {
 }
 
 function goFriend(friend) {
+
 	changeScene(friend.text,friend.image,"goFriend");
 	createGoButton("Back","crawlerHouse",goFriendHouse);
 	createGoButton("Talk","talk",goFriendTalk,friend);
+
+	//Go back to Burgulon
+	if (friend == state.friends[1] && state.bBurgulonUnlocked) {
+		createGoButton("Remember Burgulon","burgulon",goRememberBurgulon);
+	}
+
+	//Sweatson cheat
+	if (friend == state.friends[1]) {
+		sweatsonCheatCount++;
+	} else {
+		sweatsonCheatCount = 0;
+	}
+	if (sweatsonCheatCount >= 5) {
+		changeScene(
+			"Sweatson is sweating bullets. He asks you if you really want to just skip a lot of this epic story to reach the last chapter?</br>I would do it if I was you",
+			"sweatson"
+		);
+		createGoButton("No way!","talk",goFriendHouse);
+		createGoButton("I would do it too","burgulon",goSweatsonCheatCheck);
+		sweatsonCheatCount = 0;
+	}
+
+}
+
+function goSweatsonCheatCheck() {
+	changeScene(
+		"It's cool that you are eager to go meet Burgulon, but you should be aware that you can't go back to the planet for a while",
+		"sweatson"
+	);
+	createGoButton("I'll stay here","talk",goFriendHouse);
+	createGoButton("That's fine. Let's go!","burgulon",goEnterWormholeAgain)
+}
+
+function goRememberBurgulon() {
+	changeScene(
+		"Sweatson reminds how crazy it was being a robot planet. He can take you back there for a while if you want?",
+		"sweatson"
+	);
+	createGoButton("Maybe later","planet",goFriend,"Sweatson");
+	createGoButton("That would be nice","burgulon",goBackToBurgulon);
+}
+
+function goBackToBurgulon() {
+	updateState('burgulonTime', true);
+	goSweatson();
 }
 
 function findFriend(friend) {

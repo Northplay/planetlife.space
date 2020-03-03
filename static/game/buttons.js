@@ -32,12 +32,13 @@ function createIconButton(headline,image,thisID,buttonText,clr,disabled,buttonsD
 		backgroundDiv.className = "buildBackground";
 	} else {
 		backgroundDiv.className = "buttonBackground";
-		fullDiv.addEventListener("touchstart",down);
-		fullDiv.addEventListener("mousedown",down);
-		fullDiv.addEventListener("touchend",up);
-		fullDiv.addEventListener("mouseup",up);
-		fullDiv.addEventListener("touchmove",move);
-		fullDiv.addEventListener("mouseleave",move);
+		// fullDiv.addEventListener("touchstart",down);
+		// fullDiv.addEventListener("mousedown",down);
+		// fullDiv.addEventListener("touchend",up);
+		// fullDiv.addEventListener("mouseup",up);
+		// fullDiv.addEventListener("touchmove",move);
+		// fullDiv.addEventListener("mouseleave",move);
+		fullDiv.addEventListener("click",up);
 	}
 	function down(e) {
 		if (e.srcElement.innerText == "Sound (off)" || e.srcElement.innerText == "Sound (on)" || e.srcElement.innerText == "Music (off)" || e.srcElement.innerText == "Music (on)") {
@@ -80,8 +81,8 @@ function createIconButton(headline,image,thisID,buttonText,clr,disabled,buttonsD
 	document.getElementById(fullDiv.id).appendChild(backgroundDiv);
 }
 
-function createGoButton(headline,image,fnct,parameter) {
-	createIconButton(headline,"images/handling/" + image + ".gif",headline + "But","go here","#FFFFFF",false,"buttons",fnct,parameter);
+function createGoButton(headline,image,fnct,parameter,parameter2) {
+	createIconButton(headline,"images/handling/" + image + ".gif",headline + "But","go here","#FFFFFF",false,"buttons",fnct,parameter,parameter2);
 }
 
 function createSettingsIconButton(headline,image,fnct,parameter) {
@@ -124,12 +125,13 @@ function createBuildButton(headline,image,text,fnct,thisID,buttonText,price,para
 	but.innerHTML = buttonText;
 	but.disabled = true;
 	var clicked = false;
-	but.addEventListener("touchstart",down);
-	but.addEventListener("mousedown",down);
-	but.addEventListener("touchend",up);
-	but.addEventListener("mouseup",up);
-	but.addEventListener("touchmove",move);
-	but.addEventListener("mouseleave",move);
+	// fullDiv.addEventListener("touchstart",down);
+	// fullDiv.addEventListener("mousedown",down);
+	// fullDiv.addEventListener("touchend",up);
+	// fullDiv.addEventListener("mouseup",up);
+	// fullDiv.addEventListener("touchmove",move);
+	// fullDiv.addEventListener("mouseleave",move);
+	fullDiv.addEventListener("click",up);
 	function down(e) {
 		//e.preventDefault();
 		if (!but.disabled) {
@@ -244,12 +246,13 @@ function createSmallBuildButton(text,image,thisID,fnct,parameter) {
 	txt.innerHTML = text;
 	txt.className = 'smallBuildButtonText';
 	var clicked = false;
-	but.addEventListener("touchstart",down);
-	but.addEventListener("mousedown",down);
-	but.addEventListener("touchend",up);
-	but.addEventListener("mouseup",up);
-	but.addEventListener("touchmove",move);
-	but.addEventListener("mouseleave",move);
+	// but.addEventListener("touchstart",down);
+	// but.addEventListener("mousedown",down);
+	// but.addEventListener("touchend",up);
+	// but.addEventListener("mouseup",up);
+	// but.addEventListener("touchmove",move);
+	// but.addEventListener("mouseleave",move);
+	but.addEventListener("click",up);
 	function down(e) {
 		//e.preventDefault();
 		if (!but.disabled) {
@@ -318,12 +321,13 @@ function createSmallIconButton(headline,image,thisID,disabled,buttonsDiv,fnct,pa
 		btn.disabled = true;
 	}
 	var clicked = false;
-	fullDiv.addEventListener("touchstart",down);
-	fullDiv.addEventListener("mousedown",down);
-	fullDiv.addEventListener("touchend",up);
-	fullDiv.addEventListener("mouseup",up);
-	fullDiv.addEventListener("touchmove",move);
-	fullDiv.addEventListener("mouseleave",move);
+	// fullDiv.addEventListener("touchstart",down);
+	// fullDiv.addEventListener("mousedown",down);
+	// fullDiv.addEventListener("touchend",up);
+	// fullDiv.addEventListener("mouseup",up);
+	// fullDiv.addEventListener("touchmove",move);
+	// fullDiv.addEventListener("mouseleave",move);
+	fullDiv.addEventListener("click",up);
 	function down(e) {
 		//e.preventDefault();
 		backgroundDiv.className = "buttonBackgroundPressed";
@@ -373,3 +377,90 @@ function createSettingsButton(text,fnct,parameter) {
 	createSmallIconButton(text,"",text + "But",false,"settings",fnct,parameter);
 }
 
+function createTextButton(headline,image,text,fnct,thisID,buttonText,parameter1) {
+	var fullDiv = document.createElement('div');
+	fullDiv.className = "fullWidth";
+	fullDiv.id = "full" + thisID;
+	fullDiv.style.display = "none";
+	curButtons.push(fullDiv.id);
+	fullDiv.style.marginBottom = "10px";
+	var img = document.createElement('img');
+	img.src = "images/handling/" + image + ".gif";
+	img.className = "buildButtonImage";
+	img.style.marginRight = "20px";
+	var head = document.createElement('h1');
+	head.innerHTML = headline;
+	head.className = "buildButtonHeadline";
+	var iconDiv = document.createElement('div');
+	iconDiv.className = "resIconDiv";
+	iconDiv.style.display = "inline-block";
+	iconDiv.id = "icon" + thisID;
+	iconDiv.style.marginLeft = "10px";
+	iconDiv.style.width = "100%";
+	var fullDiv2 = document.createElement('div');
+	fullDiv2.className = "fullWidth";
+	fullDiv2.id =  "full2" + thisID;
+	fullDiv2.style.marginLeft = "10px";
+	var description = document.createElement('p');
+	description.className = "buildButtonText";
+	description.id = thisID + "-buildButtonDescription";
+	description.innerHTML = text;
+	description.style.marginRight = "20px";
+	var but = document.createElement('button');
+	but.id = thisID;
+	but.className = "buildButton";
+	but.innerHTML = buttonText;
+	var clicked = false;
+	// fullDiv.addEventListener("touchstart",down);
+	// fullDiv.addEventListener("mousedown",down);
+	// fullDiv.addEventListener("touchend",up);
+	// fullDiv.addEventListener("mouseup",up);
+	// fullDiv.addEventListener("touchmove",move);
+	// fullDiv.addEventListener("mouseleave",move);
+	fullDiv.addEventListener("click",up);
+	function down(e) {
+		//e.preventDefault();
+		if (!but.disabled) {
+			but.className = "buildButtonActive";
+			clicked = true;
+		} 
+		playSound(soundEffect.click);
+	 	movedInButton = false;
+	}
+	function up(e) {
+		e.preventDefault();
+		if (!movedInButton) {
+			if (!but.disabled) {
+				fnct(parameter1);	
+			}	
+		}
+		resetButton();
+	}
+	function move(e) {
+		//e.preventDefault();
+		movedInButton = true;
+		if (clicked) {
+			resetButton();
+		}
+	}
+	function resetButton() {
+		if (!but.disabled) {
+			but.className = "buildButton";
+			clicked = false;
+		}
+	}
+	var backgroundDiv = document.createElement('div');
+	backgroundDiv.className = "buildBackground";
+	var br = document.createElement("br");
+	var br2 = document.createElement("br");
+	document.getElementById("buttons").appendChild(fullDiv);
+	document.getElementById("full" + thisID).appendChild(img);
+	document.getElementById("full" + thisID).appendChild(head);
+	document.getElementById("full" + thisID).appendChild(iconDiv);
+	document.getElementById("full" + thisID).appendChild(fullDiv2);
+	document.getElementById("full" + thisID).appendChild(backgroundDiv);
+	document.getElementById("full2" + thisID).appendChild(description);
+	document.getElementById("icon" + thisID).appendChild(but);
+	document.getElementById("buttons").appendChild(br);
+	document.getElementById("buttons").appendChild(br2);
+}

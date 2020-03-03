@@ -270,19 +270,17 @@ function goPickDoor(chooseDoor) {
 		state.dungeons[dNr].image,
 		"goPickDoor"
 	);
-	if (state.dungeons[dNr].curLevel >= 3) {
-		if (state.dungeons[dNr].place == "planet") {
-			createGoButton("Leave this dungeon!","newSurface",exitDungeonSure);
-		}
-		if (state.dungeons[dNr].place == "cocoCastle") {
-			createGoButton("Leave this dungeon!","cocoDungeon",exitDungeonSure);
-		}
-		if (state.dungeons[dNr].place == "lochJuice") {
-			createGoButton("Leave this dungeon!","monsterDungeon",exitDungeonSure);
-		}
-		if (state.dungeons[dNr].place == "space") {
-			createGoButton("Leave this dungeon!","planet",exitDungeonSure);
-		}
+	if (state.dungeons[dNr].place == "planet") {
+		createGoButton("Leave this dungeon!","newSurface",exitDungeonSure);
+	}
+	if (state.dungeons[dNr].place == "cocoCastle") {
+		createGoButton("Leave this dungeon!","cocoDungeon",exitDungeonSure);
+	}
+	if (state.dungeons[dNr].place == "lochJuice") {
+		createGoButton("Leave this dungeon!","monsterDungeon",exitDungeonSure);
+	}
+	if (state.dungeons[dNr].place == "space") {
+		createGoButton("Leave this dungeon!","planet",exitDungeonSure);
 	}
 	if (chooseDoor) {
 		if (state.dungeons[dNr].curLevel == 5) {
@@ -413,11 +411,18 @@ function goFight() {
 
 
 function checkOutcome() {
+	var jerkDam = 0;
 	for (var i = 0; i < jerkCount; i++) {
 		if ((Math.random() * state.derekToughness) < jerkCount) {
-			updateState('derekHealth', state.derekHealth - Math.floor((Math.random() * 4) + 1));
+			jerkDam += Math.floor((Math.random() * 4) + 1);
 		}
 	}
+	updateState('derekHealth', state.derekHealth - jerkDam);
+	// for (var i = 0; i < jerkCount; i++) {
+	// 	if ((Math.random() * state.derekToughness) < jerkCount) {
+	// 		updateState('derekHealth', state.derekHealth - Math.floor((Math.random() * 4) + 1));
+	// 	}
+	// }
 }
 
 function levelSummary() {
@@ -460,7 +465,8 @@ function summary(backFromPresent) {
 		var imgs = ["wood","gold","coco","stardust"];
 		createGoButton("Loot!",imgs[resource],goLoot,resource);
 	} else {
-		createGoButton("Go deeper!",state.dungeons[dNr].image,goPickDoor,true);
+		//createGoButton("Go deeper!",state.dungeons[dNr].image,goPickDoor,true);
+		goPickDoor(true);
 	}
 }
 
@@ -588,7 +594,7 @@ function goDungeonDone() {
 			"Welcome home Derek. You are a real bullman now!<br/><br/>Take a picture of this and send it to christianlaumark@gmail.com<br/><br/>You have earned a reward you crazy crazy person.<br/><br/>Also there is a door here",
 			"derek"
 		);
-		createGoButton("HAhahahaha! I'm crazy!!!","planet",goRoot);
+		//createGoButton("HAhahahaha! I'm crazy!!!","planet",goRoot);
 		createGoButton("Enter door","doorDerek",goHallOfDerek);
 	} else {
 		goDungeonDebrief();
@@ -596,11 +602,7 @@ function goDungeonDone() {
 }
 
 function goHallOfDerek() {
-	openInNewTab('http://christianlaumark.dk/HallOfDerek/');
-	function openInNewTab(url) {
-		  var win = window.open(url, '_blank');
-		  win.focus();
-	}
+	openExternalUrl('http://christianlaumark.dk/HallOfDerek/');
 }
 
 function goReadMessage() {
@@ -668,7 +670,8 @@ function reviveDerek() {
 	updateState('derekHealth', state.derekMaxHealth);
 	buy(state.revivePrice);
 	setTimeout(function() {
-		goPickDungeon();
+		goRoot();
+		//goPickDungeon();
 	},2000);
 }
 

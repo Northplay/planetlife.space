@@ -14,8 +14,9 @@ body {
 	font-family: 'Press Start 2P', cursive;
 	font-size: 10px;
 	line-height: 20px;
-	/* font-smooth:never; */
-	-webkit-font-smoothing: antialised;
+	font-smooth:never;
+/*	-webkit-font-smoothing: none;*/
+	-webkit-font-smoothing: antialiased;
 	margin: 0px;
 }
 
@@ -123,7 +124,7 @@ img {
 	z-index: 1;
 	width: 100%;
 	height: 40px;
-	background-color: #2b2b2b;
+	background-color: #2b2b2b; 
 	float: left;
 	top: 0px;
 	/*padding-left: 10px;*/
@@ -277,7 +278,7 @@ button:disabled.buildButtonActive {
 	width: 60px;
 	margin-left: 5px;
 	margin-bottom: 5px;
-
+	
 	/*kev suggestion*/
 	margin-top: 10px;
 	/*kev*/
@@ -287,7 +288,7 @@ button:disabled.buildButtonActive {
 	margin-top: 25px;
 	margin-left: 10px;
 	font-size: 12px;
-
+	
 	/*kev suggestion*/
 	margin-left: 88px;
 	text-align: left;

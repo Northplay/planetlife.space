@@ -36,7 +36,11 @@ function newProductTier(ID,tierNr,navn,image,description,price,fnct,burgulon) {
 function createProduct(ID) {
 	var buttonText;
 	if (checkUpgradability(ID)) {
-		buttonText = "upgrade";
+		if (allProducts[findProductIndex(ID)].butText == null) {
+			buttonText = "upgrade";
+		} else {
+			buttonText = allProducts[findProductIndex(ID)].butText;
+		}
 	} else {
 		buttonText = allProducts[findProductIndex(ID)].butText;
 	}
@@ -462,16 +466,16 @@ function createVillaPortal() {
 }
 
 //BRET'S CROWBAR
-newProduct("Crowbar Upgrade","goBret");
+newProduct("Crowbar Upgrade","goBret","Upgrade");
 
-for (var i = 1; i < 10; i++) {
+for (var i = 1; i < 99; i++) {
 	newProductTier(
 		"Crowbar Upgrade",
 		i,
 		"Crowbar Upgrade",
 		"crowbar",
 		"Galvanizes the crowbar to get <span style='color:#ff0000'>" + (i + 1) + " coco/sec</span>",
-		[0,(i * 10),0,0,(i + 1)],
+		[Math.floor((i*50) * (1 + (i/8))),0,0,0,(i + 1)],
 		upgradeCrowbar,
 		true
 	);	
@@ -482,8 +486,30 @@ function upgradeCrowbar() {
 	upgradeAnimation("Go go go!","crowbar",goBret);
 }
 
+//OLD BAR UPGRADE
+// newProduct("Bar Upgrade","goSpaceBar");
+
+// for (var i = 1; i < 10; i++) {
+// 	newProductTier(
+// 		"Bar Upgrade",
+// 		i,
+// 		"Buy a round of drinks",
+// 		"drinks",
+// 		"You estimate that this will make the drunkards pay <span style='color:#ff0000'>" + ((i * 10) + 10) + " gold</span> for a batch of coco. But they'll propably want even more coco",
+// 		[0,(i * 50),0,0],
+// 		upgradeBar,
+// 		true
+// 	);
+// }
+
+// function upgradeBar() {
+// 	updateState('bBarCocoPrice', state.bBarCocoPrice + 10);
+// 	updateState('bBarCocoSell', state.bBarCocoSell + 10);
+// 	upgradeAnimation("Drinks for everyone!!","drinks",goSpaceBar);
+// }
+
 //BAR UPGRADE
-newProduct("Bar Upgrade","goSpaceBar");
+newProduct("Bar Upgrade","goSpaceBar","Upgrade");
 
 for (var i = 1; i < 10; i++) {
 	newProductTier(
@@ -491,21 +517,22 @@ for (var i = 1; i < 10; i++) {
 		i,
 		"Buy a round of drinks",
 		"drinks",
-		"You estimate that this will make the drunkards pay <span style='color:#ff0000'>" + (state.bBarCocoPrice * 5) + " gold</span> for a batch of coco. But they'll propably want even more coco",
-		[0,(i * 50),0,0],
+		"It's easier to sell to happy customers. Will give you more gold every 10 seconds",
+		[0,Math.floor((i*50) * (1 + (i/4))),0,0],
 		upgradeBar,
 		true
 	);
 }
 
 function upgradeBar() {
-	updateState('bBarCocoPrice', state.bBarCocoPrice + 10);
-	updateState('bBarCocoSell', state.bBarCocoSell + 10);
+	//updateState('bBarCocoPrice', state.bBarCocoPrice + 10);
+	//updateState('bBarCocoSell', state.bBarCocoSell + 10);
+	updateState('bSpaceBarRate', state.bSpaceBarRate + 0.5);
 	upgradeAnimation("Drinks for everyone!!","drinks",goSpaceBar);
 }
 
 //WOOD SYNTHESIZER
-newProduct("Wood Synthesizer","goBurgulonSurface","Build");
+newProduct("Wood Synthesizer","bretAncientSecret","Build");
 
 newProductTier(
 	"Wood Synthesizer",
@@ -513,7 +540,7 @@ newProductTier(
 	"Wood Synthesizer",
 	"woodSynthesizer",
 	"Your calculations show that this machine will be able to synthesize near perfect wood",
-	[0,50,0,0],
+	[0,100,0,0],
 	buildWoodSynthesizer,
 	true
 );
@@ -524,16 +551,16 @@ function buildWoodSynthesizer() {
 	upgradeAnimation("Time to make some wood!","woodSynthesizer",goWoodSynthesizer);
 }
 
-newProduct("Upgrade Wood Synthesizer","goWoodSynthesizer");
+newProduct("Upgrade Wood Synthesizer","goWoodSynthesizer","Upgrade");
 
-for (var i = 1; i < 10; i++) {
+for (var i = 1; i < 99; i++) {
 	newProductTier(
 		"Upgrade Wood Synthesizer",
 		i,
 		"Better Science",
 		"woodSynthesizer",
 		"Better science means <span style='color:#ff0000'>" + (i + 1) + " wood/sec</span>",
-		[0,(i * 100),0,0],
+		[0,Math.floor((i * 20) * (1 + (i/8))),((i * 200) * (1 + (i/8))),0],
 		upgradeWoodSynthesizer,
 		true
 	);
@@ -552,8 +579,8 @@ newProductTier(
 	1,
 	"Celestial Summoner",
 	"celestialSummoner",
-	"Your downtrodden algorithms came up with this device to summon your old planet friend. You just really hope it works!",
-	[1000,300,0,0],
+	"Is there life out there? Maybe a special celestial buddy just for you. This device can help you summon just that!",
+	[800,100,800,0],
 	buildCelestialSummoner,
 	true
 );
@@ -561,6 +588,253 @@ newProductTier(
 function buildCelestialSummoner() {
 	updateState('bCelestialSummoner', true);
 	upgradeAnimation("What a beauty!","celestialSummoner",goCelestialSummoner);
+}
+
+newProduct("Recharge Celestial Summoner","goCelestialSummoner","Recharge");
+
+newProductTier(
+	"Recharge Celestial Summoner",
+	1,
+	"Recharge Celestial Summoner",
+	"celestialSummoner",
+	"Maybe next time you'll find something more interesting than an old bar",
+	[1000,200,1000,0],
+	rechargeCelestialSummoner,
+	true
+);
+
+newProductTier(
+	"Recharge Celestial Summoner",
+	2,
+	"Recharge Celestial Summoner Again",
+	"celestialSummoner",
+	"Hopefully this won't blow up in your face again. Or everyone elses face",
+	[1200,300,1200,0],
+	rechargeCelestialSummoner,
+	true
+);
+
+function rechargeCelestialSummoner() {
+	updateState('bCelestialSummonerCharged', true);
+	upgradeAnimation("Here we go again!","celestialSummoner",goCelestialSummoner);
+}
+
+//JERK CLUB
+newProduct("Jerk Club","createJerkClub","Build");
+
+newProductTier(
+	"Jerk Club",
+	1,
+	"Jerk Club",
+	"jerkClub",
+	"A jammed little club for jerks to gather and be cool together in their own way",
+	[500,0,0,0],
+	buildJerkClub,
+	true
+);
+
+function buildJerkClub() {
+	updateState('bJerkClub', true);
+	upgradeAnimation("Come hither jerks from around the universe!","jerkClub",goJerkClub);
+}
+
+//JERK UPGRADES
+newProduct("Jerk Attack Power","goJerkClub","Upgrade");
+
+for (var i = 1; i < 99; i++) {
+	newProductTier(
+		"Jerk Attack Power",
+		i,
+		"Jerk Attack Power",
+		"derekStrength",
+		"Teaches your jerks how to punch really hard (Increases you attack power to " + ((i * 10) + 100) + "%)",
+		[Math.floor((i*200) * (1 + (i/4))),0,0,0],
+		upgradeAttackPower,
+		true
+	);
+}
+
+function upgradeAttackPower() {
+	playSound(soundEffect.punch1);
+	updateState('bJerkAttackPower', (state.bJerkAttackPower + 0.1));
+	upgradeAnimation("Punch those dereks!","derekStrength",goJerkClub);
+}
+
+newProduct("Jerk Muffin Power","goJerkClub","Upgrade");
+
+for (var i = 1; i < 99; i++) {
+	newProductTier(
+		"Jerk Muffin Power",
+		i,
+		"Jerk Muffin Power",
+		"muffin",
+		"Teaches your jerks how to bake real muffins!</br>(Increase your muffin production to " + ((i * 10) + 100) + "%)",
+		[0,0,Math.floor((i*200) * (1 + (i/4))),0],
+		upgradeMuffinPower,
+		true
+	);
+}
+
+function upgradeMuffinPower() {
+	playSound(soundEffect.ding);
+	updateState('bJerkMuffinPower', (state.bJerkMuffinPower + 0.1));
+	upgradeAnimation("Muffin power!","muffin",goJerkClub);
+}
+
+//CORE UPGRADES
+newProduct("Bean Appetite","goVisitBaby","Upgrade");
+
+for (var i = 1; i < 3; i++) {
+	newProductTier(
+		"Bean Appetite",
+		i,
+		"Bean Appetite",
+		"beanHuge",
+		"Gets more stardust out of each bean you throw in there",
+		[0,Math.floor((i*10000) * (1 + (i/4))),Math.floor(i * 500),0,0],
+		upgradeCoreAppetite,
+		true
+	);
+}
+
+function upgradeCoreAppetite() {
+	updateState('bCoreLevel',state.bCoreLevel + 1);
+	upgradeAnimation("Hungry for beans?","beanHuge",goVisitBaby);
+}
+
+newProduct("Stardust Capacity","goVisitBaby","Upgrade");
+
+for (var i = 1; i < 30; i++) {
+	newProductTier(
+		"Stardust Capacity",
+		i,
+		"Stardust Capacity",
+		"stardust",
+		"Increases the stardust capacity of your core to " + ((i * 100) + 50),
+		[Math.floor((i*500) * (1 + (i/8))),0,Math.floor(i * 100),0],
+		upgradeCoreCapacity,
+		true
+	);
+}
+
+function upgradeCoreCapacity() {
+	updateState('bCoreCapacity', state.bCoreCapacity + 100);
+	//removeJerkPrice = state.bCoreCapacity / 10;
+	upgradeAnimation("You're a star!","stardust",goVisitBaby);
+}
+
+//JERK CANS
+
+newProduct("Cool Jerk Cans","goJerkClub","Invent");
+
+newProductTier(
+	"Cool Jerk Cans",
+	1,
+	"Cool Jerk Cans",
+	"canOfJerksCool",
+	"Invent cool jerk cans. Has even better jerks!",
+	[0,300,1000,0],
+	inventCoolJerkCans,
+	true
+);
+
+function inventCoolJerkCans() {
+	updateState('bJerkCanCool', true);
+	upgradeAnimation("Cool!","canOfJerksCool",goJerkClub);
+}
+
+newProduct("Fantastic Jerk Cans","goJerkClub","Invent");
+
+newProductTier(
+	"Fantastic Jerk Cans",
+	1,
+	"Fantastic Jerk Cans",
+	"canOfJerksFantastic",
+	"Invent fantastic jerk cans. Has the most fantastic jerks!",
+	[0,5000,10000,0],
+	inventFantasticJerkCans,
+	true
+);
+
+function inventFantasticJerkCans() {
+	updateState('bJerkCanFantastic', true);
+	upgradeAnimation("Fantastic!","canOfJerksFantastic",goJerkClub);
+}
+
+
+//COCO INFUSED STARDUST
+
+newProduct("Coco Infused Stardust","goDerekFormula","Infuse");
+
+newProductTier(
+	"Coco Infused Stardust",
+	1,
+	"Coco Infused Stardust",
+	"cocoStardust",
+	"Infuses the stardust in your core with coco",
+	[0,0,50000,0],
+	infuseStardust,
+	true
+);
+
+function infuseStardust() {
+	updateState('bDerekProgress', 2);
+	updateState('bCoreState', 'coreBrown');
+	upgradeAnimation("Stardust infused!","cocoStardust",goStardustInfused);
+}
+
+function goStardustInfused() {
+	changeScene(
+		"Your core is sizzling with coco. This new stardust in you is dangerous!</br>Jack won't know what's coming for him",
+		"coreBrown"
+	);
+	createGoButton("Here we go!","talk",goCore);
+}
+
+//DEREK SUMMONING DEVICE
+
+newProduct("Derek Summoning Device","goSellOven","Invest");
+
+newProductTier(
+	"Derek Summoning Device",
+	1,
+	"Derek Summoning Device",
+	"derekSummoningDevice",
+	"Is this just an oven for baking muffins?",
+	[0,1000,0,0],
+	inventDerekSummoningDevice,
+	true
+);
+
+function inventDerekSummoningDevice() {
+	updateState('bDerekSummoningDevice', true);
+	changeScene(
+		"Who wouldn't get summoned by this devine smell?",
+		"derekSummoningDevice"
+	);
+	createGoButton("Mmmmh!","derekSummoningDevice",goDerekSummoningDevice);
+}
+
+//SPACE BEN MEGA UPGRADE
+
+newProduct("Upgrade Shop","newSpaceBen","Upgrade");
+
+newProductTier(
+	"Upgrade Shop",
+	1,
+	"Upgrade Shop",
+	"space_ben",
+	"Space Ben can sell you resources in much bigger quantities. It's going to be great!",
+	[0,0,0,3000],
+	upgradeSpaceBen,
+	true
+);
+
+function upgradeSpaceBen() {
+	updateState('bSpaceBenUpgraded', true);
+	var newSpaceBenPrices = [250,250,250,0];
+	updateState('bSpaceBenPrices', newSpaceBenPrices);
+	upgradeAnimation("Now we're talking!","space_ben",goBurgSpaceBen);
 }
 
 ///////////////////
@@ -617,6 +891,21 @@ function useSingleProduct(ID) {
 			}
 			if (allSingleProducts[i].currency == "coco") {
 				updateState("coco",state.coco -= allSingleProducts[i].price);
+			}
+			if (allSingleProducts[i].currency == "bCoco") {
+				updateState("bCoco",state.bCoco -= allSingleProducts[i].price);
+			}
+			if (allSingleProducts[i].currency == "bGold") {
+				updateState("bGold",state.bGold -= allSingleProducts[i].price);
+			}
+			if (allSingleProducts[i].currency == "bStardust") {
+				updateState("bStardust",state.bStardust -= allSingleProducts[i].price);
+			}
+			if (allSingleProducts[i].currency == "bWood") {
+				updateState("bWood",state.bWood -= allSingleProducts[i].price);
+			}
+			if (allSingleProducts[i].currency == "bSpaceRings") {
+				updateState("bSpaceRings",state.bSpaceRings -= allSingleProducts[i].price);
 			}
 			allSingleProducts[i].fnct(allSingleProducts[i].parameter);
 		}
@@ -689,4 +978,114 @@ function goBuyAnswer(nr) {
 	updateState('answerPrice', state.answerPrice += 1);
 	updateArrayState('answerStates', nr, true);
 	upgradeAnimation("Now you have the answer. But for what question?","answerCard",goSpaceBenAnswers);
+}
+
+newSingleProduct("Give 20 coco as a present","coco","bCoco",20,"goBeanie",goGiveBeanieCoco);
+newSingleProduct("Give 50 gold as a present","gold","bGold",50,"goBeanie",goGiveBeanieGold);
+
+//CANNED JERKS
+newSingleProduct("Standard Jerk Can (10 space rings)","canOfJerksRegular","bSpaceRings",10,"goJerkClub",goBuyJerk,0);
+newSingleProduct("Cool Jerk Can (100 space rings)","canOfJerksCool","bSpaceRings",100,"goJerkClub",goBuyJerk,1);
+newSingleProduct("Fantastic Jerk Can (800 space rings)","canOfJerksFantastic","bSpaceRings",800,"goJerkClub",goBuyJerk,2);
+
+function goBuyJerk(tier) {
+	var images = ["canOfJerksRegular","canOfJerksCool","canOfJerksFantastic"];
+	var descriptions = [
+		"Just a regular old can of jerks",
+		"Cool jerks!",
+		"This can of jerks is FAN-TASTIC!"
+	];
+	var lowerRarityCaps = [0,2,4];
+	changeScene(descriptions[tier],images[tier],"boughtAJerk");
+	// createGoButton("Open",images[tier],pickJerkByRarity,lowerRarityCaps[tier]);
+	createGoButton("Open",images[tier],openCan,lowerRarityCaps[tier]);
+}
+
+// newSingleProduct("Fuel with wood (200)","wood","bWood",200,"goCore",goFuelWood);
+
+// function goFuelWood() {
+// 	if (state.bCoreStardust < 100) {
+// 		var newInc = Math.floor(state.bCoreStardustIncrement + state.bCoreStardustIncrement);
+// 		updateState('bCoreStardustIncrement', newInc);
+// 	} else {
+// 		var newInc = Math.floor(state.bCoreStardustIncrement - (state.bCoreStardustIncrement / 4));
+// 		updateState('bCoreStardustIncrement', newInc);
+// 	}
+
+// 	console.log("more stardust " + state.bCoreStardustIncrement);
+// 	updateState('bCoreStardust', state.bCoreStardust + state.bCoreStardustIncrement);
+// 	//shortUpgradeAnimation("You bought a ghost!","ghost",goGhostTrade);
+// 	playSound(soundEffect.explosion);
+// 	shortUpgradeAnimation("Bye bye wood!","explosion",goCore);
+// }
+
+//ONE EYED DEREKULIAN ROULETTE
+newSingleProduct("Bet 50 gold","gold","bGold",50,"goRoulette",goPlayRoulette,50);
+newSingleProduct("Bet 500 gold","gold","bGold",500,"goRoulette",goPlayRoulette,500);
+newSingleProduct("Bet 1000 gold","gold","bGold",1000,"goRoulette",goPlayRoulette,1000);
+
+//WOODEN POKER
+newSingleProduct("Buy in for 1000 wood","wood","bWood",1000,"goPoker",initializePoker,1000);
+newSingleProduct("Buy in for 2500 wood","wood","bWood",2500,"goPoker",initializePoker,2500);
+newSingleProduct("Buy in for 5000 wood","wood","bWood",5000,"goPoker",initializePoker,5000);
+
+//BEANS
+newSingleProduct("Tiny Bean (100 coco)","beanTiny","bCoco",100,"goBeanShop",buyBean,"Tiny");
+newSingleProduct("Tiny Bean (100 wood)","beanTiny","bWood",100,"goBeanShop",buyBean,"Tiny");
+newSingleProduct("Tiny Bean (20 gold)","beanTiny","bGold",20,"goBeanShop",buyBean,"Tiny");
+newSingleProduct("Average Bean (500 coco)","beanAverage","bCoco",500,"goBeanShop",buyBean,"Average");
+newSingleProduct("Average Bean (500 wood)","beanAverage","bWood",500,"goBeanShop",buyBean,"Average");
+newSingleProduct("Average Bean (150 gold)","beanAverage","bGold",150,"goBeanShop",buyBean,"Average");
+newSingleProduct("Huge Bean (1000 coco)","beanHuge","bCoco",1000,"goBeanShop",buyBean,"Huge");
+newSingleProduct("Huge Bean (1000 wood)","beanHuge","bWood",1000,"goBeanShop",buyBean,"Huge");
+newSingleProduct("Huge Bean (300 gold)","beanHuge","bGold",300,"goBeanShop",buyBean,"Huge");
+
+newSingleProduct("Reroll Bean Prices (5 stardust)","stardust","bStardust",5,"goBeanShop",rerollBeanPrices);
+
+//newSingleProduct("Buy Tiny Bean (200 coco)","beanTiny","bCoco",200,"goBeanie",buyTinyBean);
+
+
+
+//GARDEN BOYS
+newSingleProduct("Put stardust in the mailbox (5 stardust)","stardust","bStardust",5,"goAnybodyHome",wakeGardenBoys);
+
+newSingleProduct("Hire Lil' Gnomey (10 stardust)","stardust","bStardust",10,"goGardenBoys",goHireGnome,15);
+newSingleProduct("Hire Cat Paws Calvin (50 stardust)","stardust","bStardust",50,"goGardenBoys",goHireGnome,30);
+newSingleProduct("Hire Tip Toe Tyler (300 stardust)","stardust","bStardust",300,"goGardenBoys",goHireGnome,60);
+
+
+//SPACE RADIO
+newSingleProduct("Friend House Music (200 gold)","crawlerHouse","bGold",200,"goSpaceRadio",goStartRadio,0);
+newSingleProduct("Jerk Techno (800 gold)","bret","bGold",800,"goSpaceRadio",goStartRadio,1);
+newSingleProduct("Gnomish Heavy Metal (2000 gold)","lilGnomey","bGold",2000,"goSpaceRadio",goStartRadio,2);
+newSingleProduct("Beanie's Impro Jazz (10000 gold)","beanieBean","bGold",10000,"goSpaceRadio",goStartRadio,3);
+
+
+//DEREK SUMMONING DEVICE
+var muffinValues = [50,100,150,200,250,300,350,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2200,2300,2500];
+
+for (var i = 0; i < muffinValues.length; i++) {
+	newSingleProduct(
+		"Bake " + muffinValues[i] + " muffins (" + muffinValues[i] + " gold)",
+		"muffin",
+		"bGold",
+		muffinValues[i],
+		"goDerekSummoningDevice",
+		bakeADerek,
+		i
+	);
+}
+
+newSingleProduct("30 Space Rings (100 stardust)","spaceRing","bStardust",100,"newSpaceBen",goBuySpaceRings,30);
+newSingleProduct("300 Space Rings (1000 stardust)","spaceRing","bStardust",1000,"newSpaceBen",goBuySpaceRings,300);
+
+function goBuySpaceRings(amount) {
+	updateState('bSpaceRings', state.bSpaceRings + amount);
+	changeScene(
+		"A bunch of used space rings",
+		"spaceRing"
+	);
+	setTimeout(function(){
+		goBurgSpaceBen();
+	},800);
 }

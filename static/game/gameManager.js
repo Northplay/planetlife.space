@@ -93,9 +93,9 @@ function sekund() {
 		buttonDisableCheck([0,0,0,10],"cocoStardustBut");
 	}
 
-	if (place == "goSpaceBar") {
-		buttonDisableCheck([0,0,state.bBarCocoSell,0],"barCocoSellBut",true);
-	}
+	// if (place == "goSpaceBar") {
+	// 	buttonDisableCheck([0,0,state.bBarCocoSell,0],"barCocoSellBut",true);
+	// }
 
 	//Checking place for all products
 
@@ -146,6 +146,29 @@ function sekund() {
 		buttonSmallDisableCheck("stardust",state.ghostPrice,"buyGhostBut");
 	}
 
+	//Stanleys Stardust
+	if (state.bStanley && place != "goStanley") {
+		if (state.bStanleyStardust < 30) {
+			if (stanleyTick > 5) {
+				updateState('bStanleyStardust', state.bStanleyStardust + 1);
+				stanleyTick = 0;
+			}
+			stanleyTick++;
+		}
+	}
+
+	//Spacebars drug dealing
+	if (state.bSpaceBarCoco > 0) {
+		if (spaceBarTick >= 10) {
+			// console.log("earned " + Math.round(state.bSpaceBarRate * (state.bSpaceBarCoco / 500)) + " gold");
+			updateState('bSpaceBarGold', state.bSpaceBarGold + (Math.round(state.bSpaceBarRate * (state.bSpaceBarCoco / 500)) + 1));
+			spaceBarTick = 0;
+		}
+		updateState('bSpaceBarCoco', state.bSpaceBarCoco - (Math.round(state.bSpaceBarCoco / 500) + 1));
+		// console.log("consumed " + Math.round(state.bSpaceBarCoco / 500) + " coco");
+		spaceBarTick++;
+	}
+
 }
 
 function oldPriceCheck() {
@@ -176,13 +199,16 @@ function oldPriceCheck() {
 
 function draw() {
 	if (!state.burgulonTime) {
-		document.getElementById("wood").innerHTML = state.wood;
-		document.getElementById("gold").innerHTML = state.gold;
-		document.getElementById("coco").innerHTML = state.coco;
-		document.getElementById("stardust").innerHTML = state.stardust;
+		//var string = (count > 1000 ? round(count / 100) / 10 + "k" : count.toString());
+
+		document.getElementById("wood").innerHTML = countToKString(state.wood);
+		document.getElementById("gold").innerHTML = countToKString(state.gold);
+		document.getElementById("coco").innerHTML = countToKString(state.coco);
+		document.getElementById("stardust").innerHTML = countToKString(state.stardust);
 		document.getElementById("woodSec").innerHTML = "+" + state.woodPS + "/s";
 		document.getElementById("goldSec").innerHTML = "+" + state.goldPS + "/s";
 		document.getElementById("cocoSec").innerHTML = "+" + state.cocoPS + "/s";
+		document.getElementById("ringCounter").style.display = "none";
 		if (state.cocoDungeonsFound) {
 			document.getElementById("ghostCounter").style.display = "inline";
 			document.getElementById("ghostCount").innerHTML = state.ghosts;
@@ -190,14 +216,28 @@ function draw() {
 			document.getElementById("ghostCounter").style.display = "none";
 		}
 	} else {
-		document.getElementById("wood").innerHTML = state.bWood;
-		document.getElementById("gold").innerHTML = state.bGold;
-		document.getElementById("coco").innerHTML = state.bCoco;
-		document.getElementById("stardust").innerHTML = state.bStardust;
+		if (state.bLollipops > 0) {
+			document.getElementById("ringCounter").style.display = "inline";
+			document.getElementById("ringCount").innerHTML = state.bLollipops;
+		} else {
+			document.getElementById("ringCounter").style.display = "none";
+		}
+		document.getElementById("wood").innerHTML = countToKString(state.bWood);
+		document.getElementById("gold").innerHTML = countToKString(state.bGold);
+		document.getElementById("coco").innerHTML = countToKString(state.bCoco);
+		document.getElementById("stardust").innerHTML = countToKString(state.bStardust);
 		document.getElementById("woodSec").innerHTML = "+" + state.bWoodPS + "/s";
 		document.getElementById("goldSec").innerHTML = "+" + state.bGoldPS + "/s";
 		document.getElementById("cocoSec").innerHTML = "+" + state.bCocoPS + "/s";
 		document.getElementById("ghostCounter").style.display = "none";
+	}
+}
+
+function countToKString(count) {
+	if (count > 1000) {
+		return Math.floor(count / 100) / 10 + "K";
+	} else {
+		return count;
 	}
 }
 
@@ -255,6 +295,14 @@ function showButtons() {
 
 function testSvin() {
 	console.log("svinet kører");
+}
+
+function T(def, key) {
+	if (translations == undefined || translations[key] == null) {
+		return def;
+	} else {
+		return translations[key];
+	}
 }
 
 function newHandling(handling) {
@@ -378,6 +426,18 @@ function smallAffordCheck(currency,price) {
 	if (currency == "bCoco" && state.bCoco >= price) {
 		affordable = true;
 	}
+	if (currency == "bGold" && state.bGold >= price) {
+		affordable = true;
+	}
+	if (currency == "bWood" && state.bWood >= price) {
+		affordable = true;
+	}
+	if (currency == "bStardust" && state.bStardust >= price) {
+		affordable = true;
+	}
+	if (currency == "bSpaceRings" && state.bSpaceRings >= price) {
+		affordable = true;
+	}
 	return affordable;
 }
 
@@ -440,7 +500,7 @@ function boost() {
 	updateState("wood", state.wood += 9000);
 	updateState("gold", state.gold += 5000);
 	updateState("coco", state.coco += 9000);
-	updateState("stardust", state.stardust + 400);
+	updateState("stardust", state.stardust + 5);
 }
 
 function burgerBoost() {
@@ -538,10 +598,86 @@ function goDerekCheat() {
 	updateArrayState("skillStates", 1, 98);
 	updateArrayState("skillStates", 2, 98);
 	updateArrayState("skillStates", 3, 98);
+	updateArrayState('productStates', 0, 98);
+	updateArrayState('productStates', 1, 98);
+	updateArrayState('productStates', 2, 98);
+	updateArrayState('productStates', 3, 98);
 	updateState("derekHealth", 15999);
 	updateState("derekMaxHealth", 15999);
 	updateState("derekToughness", 15999);
 	updateState("healthPotionCapacity", 399);
 	updateState("healthPotions", 399);
 	updateState("healthPotionHeal", 1040);
+}
+
+function goDerekCheckAntiCheat() {
+	changeScene(
+		"Derek seems to have found a way into his inner door of regret. Maybe this is a way to become less nuclear.. Wanna give it a try?",
+		"doorOfRegret",
+		"derekAntiCheat"
+	);
+	createGoButton("Let's do this","doorOfRegret",goDerekAntiCheat);
+	createGoButton("No thanks","talk",goDDS);
+}
+
+function goSetDerekAntiCheat() {
+	upgradeAnimation("...","doorOfRegret",goDerekAntiCheat);
+}
+
+function goDerekAntiCheat() {
+	playSound(soundEffect.derek);
+	changeScene(
+		"Derek enters his inner door of regret. He immediatly becomes less nuclear",
+		"derek"
+	);
+	createGoButton("Cool!","derek",goDDS);
+
+	if (state.skillStates[0] > 20) {
+		updateArrayState("skillStates", 0, state.skillStates[0] - 20);
+	} else {
+		updateArrayState("skillStates", 0, 1);
+	}
+	if (state.skillStates[1] > 20) {
+		updateArrayState("skillStates", 1, state.skillStates[1] - 20);
+	} else {
+		updateArrayState("skillStates", 1, 1);
+	}
+	if (state.skillStates[2] > 20) {
+		updateArrayState("skillStates", 2, state.skillStates[2] - 20);
+	} else {
+		updateArrayState("skillStates", 2, 1);
+	}
+	if (state.skillStates[3] > 20) {
+		updateArrayState("skillStates", 3, state.skillStates[3] - 20);
+	} else {
+		updateArrayState("skillStates", 3, 1);
+	}
+	if (state.productStates[0] > 20) {
+		updateArrayState("productStates", 0, state.productStates[0] - 20);
+	} else {
+		updateArrayState("productStates", 0, 1);
+	}
+	if (state.productStates[1] > 20) {
+		updateArrayState("productStates", 1, state.productStates[1] - 20);
+	} else {
+		updateArrayState("productStates", 1, 1);
+	}
+	if (state.productStates[2] > 20) {
+		updateArrayState("productStates", 2, state.productStates[2] - 20);
+	} else {
+		updateArrayState("productStates", 2, 1);
+	}
+	if (state.productStates[3] > 20) {
+		updateArrayState("productStates", 3, state.productStates[3] - 20);
+	} else {
+		updateArrayState("productStates", 3, 1);
+	}
+	updateState("derekHealth", (state.productStates[7] + 1) * 50);
+	updateState("derekMaxHealth", (state.productStates[7] + 1) * 50);
+	updateState("derekToughness", (state.productStates[5] + 1) * 40);
+	updateState("healthPotionCapacity", state.productStates[6] + 1);
+	if (state.healthPotions > state.healthPotionCapacity) {
+		updateState('healthPotions', state.healthPotionCapacity);
+	}
+	updateState("healthPotionHeal", 50 + (state.productStates[16] * 10));
 }

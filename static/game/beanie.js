@@ -471,7 +471,7 @@ function checkMouladinUpgrades() {
 function goGiveLollipops(amount) {
 	changeScene(
 		"You give Mouladin your <span style='color:#ff0000'>" + amount + " lollipops.</span></br>He smiles slightly with a soft hum",
-		"lollipop" 
+		"Lollipop" 
 	);
 	updateState('bMouladinLollipops', state.bMouladinLollipops + amount);
 	updateState('bLollipops', state.bLollipops - amount);

@@ -50,7 +50,7 @@ function drawJerksFromPile(amount) {
 
 function goRefreshJerks() {
 	playSound(soundEffect.heal);
-	updateState('bCoco', state.bCoco - jerkRefreshCost);
+	// updateState('bCoco', state.bCoco - jerkRefreshCost);
 	refresh_pile = false;
 	var j = state.jerkPile;
 	var amount_loaded = 0;
@@ -199,8 +199,13 @@ function goChooseJerk() {
 		}
 		if (refresh_pile) {
 			jerkRefreshCost = Math.floor(state.bCoco * 0.20);
-			changeScene("Looks like your pile of jerks is empty. Feed them <span style='color:#ff0000'>" + jerkRefreshCost + " coco</span> to freshen them up for a new round of beating?","bret");
-			createGoButton("Feed jerks (" + jerkRefreshCost + " coco)","coco",goRefreshJerks);
+			// changeScene("Looks like your pile of jerks is empty. Feed them <span style='color:#ff0000'>" + jerkRefreshCost + " coco</span> to freshen them up for a new round of beating?","bret");
+			// createGoButton("Feed jerks (" + jerkRefreshCost + " coco)","coco",goRefreshJerks);
+			changeScene(
+				"Your whole jerk pile has been beaten up!</br>But <span style='color:#16fa05'>these jerks never give up!</span> In a flash they are ready to fight for you again!",
+				"jerkSquad"
+			);
+			createGoButton("Go go jerks!","jerkSquad",goRefreshJerks);
 		}
 	} else {
 		//Derek wins
@@ -397,7 +402,7 @@ function goLootLollies(rings) {
 	updateState('bLollipops', state.bLollipops + lolliAmount);
 	changeScene(
 		"Look! Your jerks give you <span style='color:#ff0000'>" + lolliAmount + " lollipops</span>, for being so nice to them.</br>Do they really like getting beaten up like this all the time?",
-		"lollipop"
+		"Lollipop"
 	);
 	if (bossBattle == "" || bossBattle == 1 || bossBattle == 2 || bossBattle == 3 || bossBattle == 0) {
 		// if (state.bDoubleRings) {

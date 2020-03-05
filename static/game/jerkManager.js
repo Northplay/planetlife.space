@@ -1,3 +1,4 @@
+
 function jerk(navn,ID,image,actionCost,description,buttonDescription,rarity,attack,parameter,loaded,exhausted,removed) {
 	this.navn = navn;
 	this.ID = ID;
@@ -99,12 +100,12 @@ newJerk(
 newJerk(
 	"Tiny Jerkomancer",
 	"jerkomancer",
-	0,
-	"Draws 1 new jerk",
+	1,
+	"Draws 2 new jerks",
 	"Summon!",
 	3,
 	"draw jerk",
-	1
+	2
 );
 
 newJerk(
@@ -319,12 +320,12 @@ newJerk(
 newJerk(
 	"Ninja Jerk",
 	"jerkNinja",
-	0,
+	1,
 	"Deals 10 damage (increased further by attack power)",
 	"Fight!",
 	3,
 	"deal damage",
-	10
+	15
 );
 
 newJerk(

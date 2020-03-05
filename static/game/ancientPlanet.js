@@ -414,9 +414,9 @@ function dungeonLollies(level) {
 	updateState('bLollipops', state.bLollipops + lollipopAmount);
 	changeScene(
 		"The gnome hands you <span style='color:#ff0000'>" + lollipopAmount + " lollipop(s).</span> He doesn't say why",
-		"lollipop"
+		"Lollipop"
 	);
-	createGoButton("Nice!","lollipop",goAncientPlanet);
+	createGoButton("Nice!","Lollipop",goAncientPlanet);
 }
 
 

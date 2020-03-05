@@ -118,23 +118,40 @@ function goCheckoutJerk(nr) {
 	createGoButton("Remove (1) " + allJerks[nr].navn + " (" + state.bRemoveJerkPrice + " stardust)","stardust",goRemoveJerk,nr);
 }
 
+function countJerksInPile() {
+	var count = 0;
+	for (var i = 0; i < state.jerkPile.length; i++) {
+		if (!state.jerkPile[i].removed) {
+			count++;
+		}
+	}
+	return count;
+}
+
 function goRemoveJerk(nr) {
-	if (state.bStardust >= state.bRemoveJerkPrice) {
-		changeScene(
-			"Are you sure you want to remove poor " + allJerks[nr].navn + " from your squad?",
-			allJerks[nr].image,
-		);
-		createGoButton("No","no",goJerkClub);
-		createGoButton("Yes","yes",goRemoveJerkConfirmed,nr);
+	if (countJerksInPile() > 10) {
+		if (state.bStardust >= state.bRemoveJerkPrice) {
+			changeScene(
+				"Are you sure you want to remove poor " + allJerks[nr].navn + " from your squad?",
+				allJerks[nr].image,
+			);
+			createGoButton("No","no",goJerkClub);
+			createGoButton("Yes","yes",goRemoveJerkConfirmed,nr);
+		} else {
+			changeScene(
+				"You <span style='color:#ff0000'>don't have enough stardust</span> to get rid of this jerk",
+				allJerks[nr].image
+			);
+			createGoButton("Back","jerkSquad",goJerkSquad);
+		}
 	} else {
 		changeScene(
-			"You don't have enough stardust to get rid of this jerk",
-			allJerks[nr].image
+			"You need to have <span style='color:#ff0000'>at least 10 jerks in your jerk squad,</span> or they will become terribly lonely",
+			"jerkSquad"
 		);
 		createGoButton("Back","jerkSquad",goJerkSquad);
 	}
 }
-
 
 function goRemoveJerkConfirmed(nr) {
 	playSound(soundEffect.cry);

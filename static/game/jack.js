@@ -463,9 +463,9 @@ function goDefeatMayonada2() {
 	updateState('bMinionsKilled', 3);
 	changeScene(
 		"In the husk of Mayonadas space lemon, you find <span style='color:#ff0000'>400 lollipops.</span> You are so happy that you don't even wonder how they got there",
-		"lollipop"
+		"Lollipop"
 	);
-	createGoButton("Sweet!","lollipop",goMeetLemonada);
+	createGoButton("Sweet!","Lollipop",goMeetLemonada);
 }
 
 function goMeetLemonada() {

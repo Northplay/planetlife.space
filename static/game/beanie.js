@@ -435,7 +435,7 @@ function goMouladin() {
 	}
 	createGoButton("Back","beanieImagination",goBeanieImagination);
 	if (state.bMouladinProgress >= 5) {
-		createGoButton("Trade <span style='color:#ff0000'>" + state.bLollipops + " lollipops</span> for <span style='color:#00fff7'>" + (state.bLollipops * 4) + " stardust</span>","stardust",goTradeLollies);	
+		createGoButton("Trade <span style='color:#ff0000'>" + state.bLollipops + " lollipops</span> for <span style='color:#00fff7'>" + (state.bLollipops * 10) + " stardust</span>","stardust",goTradeLollies);	
 	} 
 	if (state.bMouladinUpgradePoints > 0) {
 		createGoButton("Feel a strange sensation","burgulon",goMouladinUpgrade,true);

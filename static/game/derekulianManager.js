@@ -526,7 +526,7 @@ newDerekShip(
 	"Oh my! It's The Mother Cow! It's the Derekulian flagsship. Look like they are getting serious about getting that stardust from you now.",
 	7,
 	1200,
-	150,
+	200,
 	["Football Derek","Gamedevrek","Broccoli Derek","Chefrek","Cleaning Derek","King Derek","DEREK OF DOOM"],
 	false,
 	goDefeatMotherCow
@@ -537,8 +537,8 @@ newDerekShip(
 	"spaceDungeon",
 	"What's this!? It looks like it's the home planet of the Dereks - Derekulus X!",
 	21,
-	2500,
-	200,
+	3000,
+	500,
 	[
 		"Sleepy Derek","Tiny Derek","Homeless Derek","Gnomerek","Upside Downrek","Paper Derek","Doreka",
 		"Derek Four Eyes","Coco Derek","Jerek","Dogrek","Green Derek","DJ Derek","Crazy Derek",

@@ -1,8 +1,12 @@
 
 function goJerkClub() {
 	if (state.bJerkStarted) {
+		var squadFullText = "";
+		if (countJerksInPile() == 50) {
+			squadFullText = "</br><span style='color:#ff0000'>There are 50 jerks in your squad. It's completely packed!! You need to remove some if you want to buy new jerks</span>";
+		}
 		changeScene(
-			"To be honest, it's not a nice smell in here. But spirits are high, and the jerks are having a blast.</br>The bartender is selling Canned Jerks.</br>You have <span style='color:#ffc800'>" + state.bSpaceRings + " space rings</span>",
+			"To be honest, it's not a nice smell in here. But spirits are high, and the jerks are having a blast.</br>The bartender is selling Canned Jerks.</br>You have <span style='color:#ffc800'>" + state.bSpaceRings + " space rings</span>" + squadFullText,
 			"jerkClub",
 			"goJerkClub"
 		);	
@@ -18,14 +22,56 @@ function goJerkClub() {
 			createGoButton("Derek Summoning Device","derekSummoningDevice",goDerekSummoningDevice);
 		}
 		createGoButton("Jerk Squad","jerkSquad",goJerkSquad);
-		createSingleProduct("Standard Jerk Can (10 space rings)");
+		if (countJerksInPile() < 50) {
+			createSingleProduct("Standard Jerk Can (10 space rings)");
+		} else {
+			createIconButton(
+				"Standard Jerk Can (10 space rings)",
+				"images/handling/canOfJerksRegular.gif",
+				"standardCanOfJerksBut",
+				"",
+				"#8c1d1d",
+				true,
+				"buttons",
+				stardustExchange,
+				0
+			);	
+		}
 		if (state.bJerkCanCool) {
-			createSingleProduct("Cool Jerk Can (100 space rings)");
+			if (countJerksInPile() < 50) {
+				createSingleProduct("Cool Jerk Can (100 space rings)");
+			} else {
+				createIconButton(
+					"Cool Jerk Can (100 space rings)",
+					"images/handling/canOfJerksCool.gif",
+					"coolCanOfJerksBut",
+					"",
+					"#8c1d1d",
+					true,
+					"buttons",
+					stardustExchange,
+					0
+				);
+			}
 		} else if (state.bSpaceBen) {
 			createProduct("Cool Jerk Cans");
 		}
 		if (state.bJerkCanFantastic) {
-			createSingleProduct("Fantastic Jerk Can (800 space rings)");
+			if (countJerksInPile() < 50) {
+				createSingleProduct("Fantastic Jerk Can (800 space rings)");
+			} else {
+				createIconButton(
+					"Fantastic Jerk Can (800 space rings)",
+					"images/handling/canOfJerksFantastic.gif",
+					"fantasticCanOfJerksBut",
+					"",
+					"#8c1d1d",
+					true,
+					"buttons",
+					stardustExchange,
+					0
+				);
+			}
 		} else if (state.bBentProgress > 0) {
 			createProduct("Fantastic Jerk Cans");
 		}
@@ -156,7 +202,9 @@ function goRemoveJerk(nr) {
 function goRemoveJerkConfirmed(nr) {
 	playSound(soundEffect.cry);
 	updateState('bStardust', state.bStardust - state.bRemoveJerkPrice);
-	updateState('bRemoveJerkPrice', state.bRemoveJerkPrice + 5);
+	if (state.bRemoveJerkPrice < 500) {
+		updateState('bRemoveJerkPrice', state.bRemoveJerkPrice + 5);
+	}
 	var replies = [
 		"Poor " + allJerks[nr].navn + " left crying. It's not easy being a jerk",
 		allJerks[nr].navn + " realizes what a jerk he has been, and leaves the squad",
@@ -271,7 +319,7 @@ function goTalkBananaman() {
 		"Banana Man offers you a banana, but you are a planet",
 		"You ask him if he has any super powers. He snaps his fingers and pull out a banana from his costume. You wonder where he gets all his bananas from",
 		"He shows you the banana dance. It must be incredibly hard to perform those moves while in a banana costume, but it seems like second nature to him. This guy has talent after all",
-		"You ask him about his time with the Derekulians. He looks pale.</br>Apparently they would they would use him to throw at each other as a prank. Sounds pretty mean",
+		"You ask him about his time with the Derekulians. He looks pale.</br>Apparently they would use him to throw at each other as a prank. Sounds pretty mean",
 	];
 	changeScene(
 		bananaTalks[bananaTalkCount],

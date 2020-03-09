@@ -81,7 +81,20 @@ function goContinue() {
 		changeScene("","planet","continue");
 		createButton("Continue",goRoot);		
 	}
-
+	//Merging to chapter 3
+	if (state.productStates.length < allProductStates.length) {
+		console.log("state.productStates was old and short. Now it's going to get fixed");
+		var oldProductStates = state.productStates;
+		var newProductStates = allProductStates;
+		for (var i = 0; i < oldProductStates.length; i++) {
+			newProductStates[i] = oldProductStates[i];
+		}
+		updateState('productStates', newProductStates);
+	}
+	if (state.bDerekShipStates.length < derekShipStates.length) {
+		console.log("Filling up the derekShipStates array");
+		state.bDerekShipStates = derekShipStates;
+	}
 }
 
 function goRoot() {

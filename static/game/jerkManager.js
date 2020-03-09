@@ -321,7 +321,7 @@ newJerk(
 	"Ninja Jerk",
 	"jerkNinja",
 	1,
-	"Deals 10 damage (increased further by attack power)",
+	"Deals 15 damage (increased further by attack power)",
 	"Fight!",
 	3,
 	"deal damage",

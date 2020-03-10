@@ -244,11 +244,22 @@ function buy(list,burgulon) {
 function upgradeAnimation(text,image,fnct,parameter) {
 	changeScene("BAM!","explosion","upgradeAnimation");
 	playSound(soundEffect.explosion);
-	setTimeout(function() {
-		changeArt(image);
-		newHandling(text);
-	},500);
-	setTimeout(function() {
-		fnct(parameter);
-	},2000);
+	if (state.impatientMode) {
+		setTimeout(function() {
+			changeArt(image);
+			newHandling(text);
+		},50);
+		setTimeout(function() {
+			fnct(parameter);
+		},100);
+	} else {
+		setTimeout(function() {
+			changeArt(image);
+			newHandling(text);
+		},500);
+		setTimeout(function() {
+			fnct(parameter);
+		},2000);
+	}
+
 }

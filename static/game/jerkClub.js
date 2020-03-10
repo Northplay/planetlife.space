@@ -2,7 +2,7 @@
 function goJerkClub() {
 	if (state.bJerkStarted) {
 		var squadFullText = "";
-		if (countJerksInPile() == 50) {
+		if (countJerksInPile() >= 50) {
 			squadFullText = "</br><span style='color:#ff0000'>There are 50 jerks in your squad. It's completely packed!! You need to remove some if you want to buy new jerks</span>";
 		}
 		changeScene(
@@ -353,7 +353,7 @@ function goWisemanTalk() {
 	];
 	changeScene(
 		wisemanTalks[wisemanTalkCount],
-		"jerkWiseman"
+		"jerkWiseMan"
 	);
 	createGoButton("Back","jerkWiseman",goVisitWiseman);
 	if (wisemanTalkCount < wisemanTalks.length - 1) {

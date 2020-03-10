@@ -552,11 +552,16 @@ function attackDerek(ID) {
 
 	jerkActions -= actionCost;
 
-	changeScene(
-		h,
-		image
-	);	
-	createGoButton("OK!","derekStrength",beatUpJerk,ID);
+	if (state.impatientMode) {
+		beatUpJerk();
+	} else {
+		changeScene(
+			h,
+			image
+		);	
+		createGoButton("OK!","derekStrength",beatUpJerk,ID);	
+	}
+
 }
 
 function beatUpJerk() {
@@ -586,17 +591,22 @@ function beatUpJerk() {
 	if (curDerekulianHealth <= 0) {
 		goDerekDead();
 	} else {
-		changeScene(
-			"Slam!",
-			"derekStrength"
-		);
-		setTimeout(function() {
+		if (state.impatientMode) {
+			goChooseJerk();
+		} else {
 			changeScene(
-				jerkDeathDescriptions[Math.floor(Math.random() * jerkDeathDescriptions.length)],
-				derekArray[curDerekIndex].image
+				"Slam!",
+				"derekStrength"
 			);
-			createGoButton("Auch!",derekArray[curDerekIndex].image,goChooseJerk);
-		},500);
+			setTimeout(function() {
+				changeScene(
+					jerkDeathDescriptions[Math.floor(Math.random() * jerkDeathDescriptions.length)],
+					derekArray[curDerekIndex].image
+				);
+				createGoButton("Auch!",derekArray[curDerekIndex].image,goChooseJerk);
+			},500);	
+		}
+
 	}
 
 }

@@ -81,6 +81,16 @@ function goContinue() {
 		changeScene("","planet","continue");
 		createButton("Continue",goRoot);		
 	}
+	//Impatien mode
+
+	if (state.impatientMode) {
+		delay = 1;
+		buttonDelay = 10;
+	} else {
+		delay = 10;
+		buttonDelay = 40;
+	}
+
 	//Merging to chapter 3
 	if (state.productStates.length < allProductStates.length) {
 		console.log("state.productStates was old and short. Now it's going to get fixed");

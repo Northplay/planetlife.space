@@ -129,6 +129,7 @@ var initialState = {
 	healthPotionHeal: 50,
 	healthPotions: 0,
 	imgaOver: true,
+	impatientMode: false,
 	jerkPile: [],
 	lochJuiceVomit: false,
 	monsterDungeons: false,
@@ -174,7 +175,7 @@ var initialState = {
 	wormFoundAgain: false,
 	wormholePaid: false,
 	wormOut: false,
-	version: 6,
+	version: 7,
 };
 
 var state = initialState;
@@ -373,6 +374,15 @@ var stateMigrations = [
 		added: [
 			{ key: 'wormholePaid', value: false },
 			{ key: 'bSpaceBenUpgrade', value: false },
+		],
+		removed: [],
+		updated: [],
+	},
+	{
+		from: 6,
+		to: 7,
+		added: [
+			{ key: 'impatientMode', value: false },
 		],
 		removed: [],
 		updated: [],

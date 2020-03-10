@@ -56,7 +56,11 @@ function introduction() {
 }
 
 function exploreAsteroid() {
-	delay = 10;
+	if (state.impatientMode) {
+		delay = 1;
+	} else {
+		delay = 10;
+	}
 	skipAllowed = true;
 	toggleResIcons();
 	changeScene("There's something out there in the distance","planet","introduction");
@@ -116,7 +120,11 @@ function goBecomeBurgulon4() {
 
 function goBecomeBurgulon5() {
 	updateState('burgulonTime', true);
-	delay = 10;
+	if (state.impatientMode) {
+		delay = 1;
+	} else {
+		delay = 10;
+	}
 	skipAllowed = true;
 	toggleResIcons();
 	changeScene("Why don't you go take a look around?","burgulon");

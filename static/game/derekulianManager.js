@@ -415,7 +415,7 @@ function finishDerek() {
 			"Your jerks are victorious!</br>The Derekulians send you angry radio messages, that can't be translated into words.</br>You have beaten <span style='color:#ff0000'>" + state.bDerekShipStates[curDerekShip] + "/" + allDerekShips[curDerekShip].levels + " Derekulians</span> on the ship",
 			allDerekShips[curDerekShip].image
 		);
-		createGoButton("Stay away from my stardust!","talk",goNewGalaxy);
+		createGoButton("Stay away from my stardust!","talk",goSpaceRadio);
 	} else {
 		allDerekShips[curDerekShip].reward();
 	}

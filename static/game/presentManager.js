@@ -25,23 +25,29 @@ function newPresent(navn,image) {
 
 function goOpenPresent(arrayNr) {
 	yourPresents[arrayNr].enabled = false;
+	var giftDelays = [];
+	if (state.impatientMode) {
+		giftDelays = [50,100];
+	} else {
+		giftDelays = [1500,2000];
+	}
 	changeScene("Let's open this bad boy",yourPresents[arrayNr].image);
 	setTimeout(function() {
 		playSound(soundEffect.explosion);
 		changeScene("GIFT EXPLOSION!!!","explosion");
-	},1500);
+	},giftDelays[0]);
 	setTimeout(function() {
 		var prize = pickPrize(yourPresents[arrayNr]);
 		changeScene("You get " + prize.navn + "!! Yay",prize.img);
 		if (place == "newPresent") {
 			createButton("Well well",slotMachine);
 		} else if (place == "dungeonSummary") {
-			createButton("Well well",backFromPresent,true);
+			createGoButton("Well well","talk",backFromPresent,true);
 		} else {
-			createButton("Well well",backFromGift);
+			createButton("Well well","talk",backFromGift);
 		}
 		
-	},2000);
+	},giftDelays[1]);
 }
 
 var prizes = [];

@@ -335,7 +335,7 @@ function goLootRings() {
 	var lootedRings = Math.round(derekulianHealth * ringMultiplier);
 	updateState('bSpaceRings', state.bSpaceRings + lootedRings);
 	changeScene(
-		"You collect <span style='color:#ffd500'>" + lootedRings + " space rings</span> from the dead Derekulian",
+		"You collect <span style='color:#ffd500'>" + lootedRings + " space rings</span> from the defeated enemy",
 		"spaceRing"
 	);
 	if (state.bDoubleRings) {
@@ -423,7 +423,7 @@ function goLootLollies(rings) {
 		createGoButton("Alright!","talk",goDefeatOgDerek);
 		//goDefeatOgDerek();
 	} else if (bossBattle == "randomDerek") {
-		createGoButton("Alright!","talk",goNewGalaxy);
+		createGoButton("Alright!","talk",goDerekSummoningDevice);
 	}
 	//createGoButton("Alright!","talk",finishDerek);
 }

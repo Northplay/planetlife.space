@@ -366,47 +366,56 @@ function goEnterDoor() {
 function goFight() {
 	skipAllowed = false;
 	checkOutcome();
-	var beatingSounds = [soundEffect.beating,soundEffect.beating2,soundEffect.beating3,soundEffect.beating4,soundEffect.beating5];
-	var randomSound = Math.floor(Math.random() * beatingSounds.length);
-	playSound(beatingSounds[randomSound]);
-	changeScene("AV!",state.dungeons[dNr].imageFighting);
-	setTimeout(function() {
-		playSound(soundEffect.punch1);
-		newHandling("UF!");
-	},100);
-	setTimeout(function() {
-		playSound(soundEffect.punch2);
-		newHandling("%#!*@");
-	},200);
-	setTimeout(function() {
-		playSound(soundEffect.punch4);
-		newHandling("HELP!");
-	},300);
-	setTimeout(function() {
-		playSound(soundEffect.punch3);
-		newHandling("!!!");
-	},400);
-	setTimeout(function() {
-		playSound(soundEffect.punch2);
-		newHandling("WHAT!?");
-	},500);
-	setTimeout(function() {
-		playSound(soundEffect.punch1);
-		newHandling("OH NO!");
-	},600);
-	setTimeout(function() {
-		playSound(soundEffect.punch4);
-		newHandling("URGH!");
-	},700);
-	setTimeout(function() {
-		playSound(soundEffect.punch3);
-		changeScene("...",state.dungeons[dNr].image);
-	},800);
-	setTimeout(function() {
-		changeScene("...",state.dungeons[dNr].image);
-		createGoButton("Derek?","derek",levelSummary);
-		skipAllowed = true;
-	},1300);
+	if (state.impatientMode) {
+
+		levelSummary();
+
+	} else {
+
+		var beatingSounds = [soundEffect.beating,soundEffect.beating2,soundEffect.beating3,soundEffect.beating4,soundEffect.beating5];
+		var randomSound = Math.floor(Math.random() * beatingSounds.length);
+		playSound(beatingSounds[randomSound]);
+		changeScene("AV!",state.dungeons[dNr].imageFighting);
+		setTimeout(function() {
+			playSound(soundEffect.punch1);
+			newHandling("UF!");
+		},100);
+		setTimeout(function() {
+			playSound(soundEffect.punch2);
+			newHandling("%#!*@");
+		},200);
+		setTimeout(function() {
+			playSound(soundEffect.punch4);
+			newHandling("HELP!");
+		},300);
+		setTimeout(function() {
+			playSound(soundEffect.punch3);
+			newHandling("!!!");
+		},400);
+		setTimeout(function() {
+			playSound(soundEffect.punch2);
+			newHandling("WHAT!?");
+		},500);
+		setTimeout(function() {
+			playSound(soundEffect.punch1);
+			newHandling("OH NO!");
+		},600);
+		setTimeout(function() {
+			playSound(soundEffect.punch4);
+			newHandling("URGH!");
+		},700);
+		setTimeout(function() {
+			playSound(soundEffect.punch3);
+			changeScene("...",state.dungeons[dNr].image);
+		},800);
+		setTimeout(function() {
+			changeScene("...",state.dungeons[dNr].image);
+			createGoButton("Derek?","derek",levelSummary);
+			skipAllowed = true;
+		},1300);
+
+	}
+
 }
 
 

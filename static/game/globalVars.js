@@ -27,13 +27,22 @@ var donateFromEnd = false;
 //Handling print out
 var cutHandling = "";
 var cutCount = 0;
-var delay = 10;
+var delay;
+
 var handlingUncut = "";
 
 //Buttons print out
 var curButtons = [];
 var curButtonCount = 0;
-var buttonDelay = 40;
+var buttonDelay;
+
+if (state.impatientMode) {
+	delay = 1;
+	buttonDelay = 10;
+} else {
+	delay = 10;
+	buttonDelay = 40;
+}
 
 //Workshop upgrades
 var axe01 = [10,0,0,0,2];

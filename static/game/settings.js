@@ -35,14 +35,19 @@ function goSettings() {
 	document.getElementById("settingsHandling").innerHTML = "";
 	createSettingsIconButton(T("Back","buttons.back"),"planet",toggleSettings);
 	if (audioSettings.isSFXMuted) {
-		createSettingsIconButton(T("Sound (off)","settings.sound.off"),"explosion",toggleSounds);
+		createSettingsIconButton(T("Sound (off)","settings.sound.off"),"doorShhh",toggleSounds);
 	} else {
 		createSettingsIconButton(T("Sound (on)","settings.sound.on"),"explosion",toggleSounds);
 	}
 	if (audioSettings.isMusicMuted) {
 		createSettingsIconButton(T("Music (off)","settings.music.off"),"universe",toggleMusic);
 	} else {
-		createSettingsIconButton(T("Music (on)","settings.music.on"),"universe",toggleMusic);
+		createSettingsIconButton(T("Music (on)","settings.music.on"),"spaceRadio",toggleMusic);
+	}
+	if (state.impatientMode) {
+		createSettingsIconButton("Impatient mode (on)","derekDoom",toggleImpatientMode);
+	} else {
+		createSettingsIconButton("Impatient mode (off)","derek",toggleImpatientMode);
 	}
 	createSettingsIconButton(T("About","settings.about"),"northplay",goAbout);
 	if (burgerCheat) {
@@ -52,6 +57,19 @@ function goSettings() {
 		createSettingsIconButton(T("Donate","settings.donate"),"burger",goDonate);
 	}
 	createSettingsIconButton(T("Start over","settings.startOver"),"newSurface",goStartOver);
+}
+
+function toggleImpatientMode() {
+	if (state.impatientMode) {
+		updateState('impatientMode', false);
+		delay = 10;
+		buttonDelay = 40;
+	} else {
+		updateState('impatientMode', true);
+		delay = 1;
+		buttonDelay = 10;
+	}
+	goSettings();
 }
 
 function goSpaceFarts() {

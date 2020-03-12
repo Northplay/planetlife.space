@@ -107,7 +107,8 @@ function goUseBean(bean) {
 	}
 	updateState('bCoreStardust',state.bCoreStardust + stardustGenerated);
 	var newBeans = state.bMyBeans;
-	newBeans[bean].used = true;
+	newBeans.splice(bean,1);
+	// newBeans[bean].used = true;
 	updateState('bMyBeans',newBeans);
 	changeScene(
 		"You throw a bean into your core.</br>Your core grows even brighter as it generates <span style='color:#00fff7'>" + stardustGenerated + " stardust!</span></br>" + h,

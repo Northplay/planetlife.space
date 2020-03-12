@@ -56,6 +56,8 @@ function goSettings() {
 	if (hasBridge()) {
 		createSettingsIconButton(T("Donate","settings.donate"),"burger",goDonate);
 	}
+	createSettingsIconButton(T("Export savegame","settings.export"),"derekPaper",goExport);
+	createSettingsImportButton(T("Import savegame","settings.import"),"doorShortcut",goImportConfirm);
 	createSettingsIconButton(T("Start over","settings.startOver"),"newSurface",goStartOver);
 }
 
@@ -203,6 +205,43 @@ function goDonate() {
 	call.catch(function(error) {
 		alert(error);
 	});
+}
+
+function goExport() {
+	var data = encodeState(state);
+	var uri = "data:application/octet-stream;charset=utf-8;base64," + data;
+	
+	var link = document.createElement('a');
+	link.setAttribute("download", "save.planet");
+	link.setAttribute("href", uri);
+	document.body.appendChild(link);
+	link.click();
+	document.body.removeChild(document.body.lastChild);
+}
+
+function goImportConfirm(event) {
+	var file = event.target.files[0];
+	if (file == null) { return; }
+
+	clearSettingsScene();
+	document.getElementById("settingsHeadline").innerHTML = "Import Savegame";
+	document.getElementById("settingsArt").src="images/handling/doorShortcut.gif";
+	document.getElementById("settingsHandling").innerHTML = "Are you sure you want to import a savegame from a .planet file?</br>It will remove all your progress in your current savegame";
+	createSettingsIconButton("No","no",goSettings);
+	createSettingsIconButton("Yes","yes",() => goImport(file));
+}
+
+function goImport(file) {
+	var reader = new FileReader();
+	reader.onload = function(e) {
+		var contents = e.target.result;
+		state = JSON.parse(contents);
+		saveState();
+		console.info("Saved");
+	};
+	
+	reader.readAsText(file);
+	location.reload();
 }
 
 function goStartOver() {

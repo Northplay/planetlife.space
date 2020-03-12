@@ -55,7 +55,8 @@ function pickJerkByRarity(lowerCap) {
 	for (var i = 0; i < allJerks.length; i++) {
 		var j = allJerks[i];
 		if (j.rarity > lowerCap) {
-			var jerkScore = (j.rarity/4) + (Math.random() * j.rarity);
+			var jerkScore = (j.rarity/7) + (Math.random() * j.rarity);
+			// var jerkScore = (j.rarity/4) + (Math.random() * j.rarity);
 			jerkPoints.push(jerkScore);
 		} else {
 			jerkPoints.push(null);
@@ -66,10 +67,12 @@ function pickJerkByRarity(lowerCap) {
 	for (var i = 0; i < jerkPoints.length; i++) {
 		if (jerkPoints[i] < highscore && jerkPoints[i] != null) {
 			highscore = jerkPoints[i];
+			console.log("i: " + allJerks[i].navn + " - HS: " + highscore);
 			magicNumber = i;
 		}
 	}
 	console.log("You got a: " + allJerks[magicNumber].navn);
+	console.log(highscore);
 	return magicNumber;
 	// newJerkToPile(allJerks[magicNumber].navn);
 	// upgradeAnimation("It's a brand new " + allJerks[magicNumber].navn,allJerks[magicNumber].image,goJerkClub);
@@ -233,7 +236,7 @@ newJerk(
 	"Jerk Coach",
 	"jerkCoach",
 	1,
-	"Makes your jerks 20% stronger!",
+	"Makes your jerks 50% stronger!",
 	"Train!",
 	3,
 	"increase strength multiplier",
@@ -244,7 +247,7 @@ newJerk(
 	"Intense Jerk Coach",
 	"jerkIntenseCoach",
 	2,
-	"Makes your jerks 50% stronger!",
+	"Makes your jerks 100% stronger!",
 	"TRAIN!",
 	6,
 	"increase strength multiplier",
@@ -343,7 +346,7 @@ newJerk(
 	"Jerk Thrower",
 	"jerkThrower",
 	1,
-	"Throws all your ready jerks at enemy and deals 5 damage for each jerk (increased further by attack power)",
+	"Throws all your ready jerks at enemy and deals 8 damage for each jerk (increased further by attack power)",
 	"Throw!",
 	1,
 	"throw jerks",
@@ -414,6 +417,162 @@ newJerk(
 	5,
 	"bake muffins",
 	8
+);
+
+//LEGENDARY JERKS
+
+newJerk(
+	"<span style='color:#ea00ff'>LE</span><span style='color:#ffd900'>GE</span><span style='color:#00ff08'>ND</span><span style='color:#00d9ff'>ARY</span> Time Jerk",
+	"jerkTimeLEGENDARY",
+	3,
+	"Increases your actions per turn by 3",
+	"Warp time!",
+	15,
+	"extra action pr turn",
+	3
+);
+
+newJerk(
+	"<span style='color:#ea00ff'>LE</span><span style='color:#ffd900'>GE</span><span style='color:#00ff08'>ND</span><span style='color:#00d9ff'>ARY</span> Juggler Jerk",
+	"jerkJugglerLEGENDARY",
+	0,
+	"Gets you 3 extra action and draws 3 jerk",
+	"Juggle!",
+	15,
+	"legendaryJuggle",
+	3
+);
+
+newJerk(
+	"<span style='color:#ea00ff'>LE</span><span style='color:#ffd900'>GE</span><span style='color:#00ff08'>ND</span><span style='color:#00d9ff'>ARY</span> Jerk Coach",
+	"jerkCoachLEGENDARY",
+	2,
+	"Makes your jerks 300% stronger!",
+	"TRAIN!",
+	15,
+	"increase strength multiplier",
+	3.0
+);
+
+newJerk(
+	"<span style='color:#ea00ff'>LE</span><span style='color:#ffd900'>GE</span><span style='color:#00ff08'>ND</span><span style='color:#00d9ff'>ARY</span> Jerk Manager",
+	"jerkManagerLEGENDARY",
+	1,
+	"Increases muffin productivity",
+	"Manage!",
+	15,
+	"increase muffin multiplier",
+	6.0
+);
+
+newJerk(
+	"<span style='color:#ea00ff'>LE</span><span style='color:#ffd900'>GE</span><span style='color:#00ff08'>ND</span><span style='color:#00d9ff'>ARY</span> Jerk Baker",
+	"jerkBakerGiantLEGENDARY",
+	3,
+	"Bakes 120 muffins (increased further by muffin power)",
+	"Bake!",
+	15,
+	"bake muffins",
+	120
+);
+
+newJerk(
+	"<span style='color:#ea00ff'>LE</span><span style='color:#ffd900'>GE</span><span style='color:#00ff08'>ND</span><span style='color:#00d9ff'>ARY</span> Jerk",
+	"jerkGiantLEGENDARY",
+	3,
+	"Deals 120 damage (increased further by attack power)",
+	"Eliminate!",
+	15,
+	"deal damage",
+	120
+);
+
+newJerk(
+	"<span style='color:#ea00ff'>LE</span><span style='color:#ffd900'>GE</span><span style='color:#00ff08'>ND</span><span style='color:#00d9ff'>ARY</span> Jerkomancer",
+	"jerkomancerLEGENDARY",
+	0,
+	"Draws 6 new jerks",
+	"Summon!",
+	15,
+	"draw jerk",
+	6
+);
+
+newJerk(
+	"<span style='color:#ea00ff'>LE</span><span style='color:#ffd900'>GE</span><span style='color:#00ff08'>ND</span><span style='color:#00d9ff'>ARY</span> Cheating Jerk",
+	"jerkCheatingLEGENDARY",
+	0,
+	"Gets you 6 more actions this turn",
+	"Cheat!",
+	15,
+	"change actions",
+	6
+);
+
+newJerk(
+	"<span style='color:#ea00ff'>LE</span><span style='color:#ffd900'>GE</span><span style='color:#00ff08'>ND</span><span style='color:#00d9ff'>ARY</span> Vengeful Jerk",
+	"jerkVengefulLEGENDARY",
+	2,
+	"Deals 10 damage per beaten up jerk (increased further by attack power)",
+	"Fight!",
+	15,
+	"deals damage pr beaten jerk",
+	10
+);
+
+newJerk(
+	"<span style='color:#ea00ff'>LE</span><span style='color:#ffd900'>GE</span><span style='color:#00ff08'>ND</span><span style='color:#00d9ff'>ARY</span> Cannibal Jerk",
+	"jerkCannibalLEGENDARY",
+	1,
+	"Bakes all your ready jerks into 9 muffins each (increased further by muffin power)",
+	"Bake!",
+	15,
+	"cannibal",
+	9
+);
+
+newJerk(
+	"<span style='color:#ea00ff'>LE</span><span style='color:#ffd900'>GE</span><span style='color:#00ff08'>ND</span><span style='color:#00d9ff'>ARY</span> Jerk Thrower",
+	"jerkThrowerLEGENDARY",
+	1,
+	"Throws all your ready jerks at enemy and deals 30 damage for each jerk (increased further by attack power)",
+	"Throw!",
+	15,
+	"throw jerks",
+	30
+);
+
+newJerk(
+	"<span style='color:#ea00ff'>LE</span><span style='color:#ffd900'>GE</span><span style='color:#00ff08'>ND</span><span style='color:#00d9ff'>ARY</span> Pack Leader Jerk",
+	"jerkPackLeaderLEGENDARY",
+	3,
+	"Deals 6 damage for each jerk in your pile (increased further by attack power)",
+	"Fight!",
+	15,
+	"damage pr jerk",
+	6
+);
+
+newJerk(
+	"<span style='color:#ea00ff'>LE</span><span style='color:#ffd900'>GE</span><span style='color:#00ff08'>ND</span><span style='color:#00d9ff'>ARY</span> Angry Fat Kid Jerk",
+	"jerkFatKidLEGENDARY",
+	3,
+	"Deals 3 damage for each muffin baked (increased further by attack power)",
+	"Fat!",
+	14,
+	"damage pr muffin",
+	3
+);
+
+newJerk(
+	"<span style='color:#ea00ff'>LE</span><span style='color:#ffd900'>GE</span><span style='color:#00ff08'>ND</span><span style='color:#00d9ff'>ARY</span> Mean Jerk",
+	"jerkMeanLEGENDARY",
+	2,
+	"Deals 60 damage (increased further by attack power). Does double damage when the enemy is below 50% health",
+	"Fight!",
+	15,
+	"double damage",
+	60
 );
 
 function attackDerek(ID) {
@@ -497,9 +656,14 @@ function attackDerek(ID) {
 		jerkActions += amount;
 		h = "Before you know it theres a new jerk ready to fight, and you got another jerk action. Amazing juggler.";
 	}
+	if (attack == "legendaryJuggle") {
+		drawJerksFromPile(amount);
+		jerkActions += amount;
+		h = "Before you know it theres 3 new jerks ready to fight, and you got 3 more jerk actions. Amazing LEGENDARY juggler.";
+	}
 	if (attack == "extra action pr turn") {
 		extraActions += amount;
-		h = "Time is warped and that's pretty good apparently. You now have an extra action every turn";
+		h = "Time is warped and that's pretty good apparently. You now have " + amount + " extra action every turn";
 	}
 	if (attack == "deals damage pr beaten jerk") {
 		amount = Math.round(((beatenJerksInPile(state.jerkPile) * amount) * strengthMultiplier) * state.bJerkAttackPower);
@@ -665,8 +829,11 @@ function describeJerk(type,amount) {
 	if (type == "juggle") {
 		return "Get 1 extra action and draw 1 jerk";
 	}
+	if (type == "legendaryJuggle") {
+		return "Get 3 extra actions and draw 3 jerks";
+	}
 	if (type == "extra action pr turn") {
-		return "Increases your actions per turn by 1";
+		return "Increases your actions per turn by " + amount;
 	}
 	if (type == "deals damage pr beaten jerk") {
 		return "Deals " + Math.round(((beatenJerksInPile(state.jerkPile) * amount) * strengthMultiplier) * state.bJerkAttackPower) + " damage (3 for each beaten up jerk)";

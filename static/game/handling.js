@@ -81,7 +81,8 @@ function goContinue() {
 		changeScene("","planet","continue");
 		createButton("Continue",goRoot);		
 	}
-	//Impatien mode
+	
+	//Impatient mode
 
 	if (state.impatientMode) {
 		delay = 1;
@@ -105,7 +106,39 @@ function goContinue() {
 		console.log("Filling up the derekShipStates array");
 		state.bDerekShipStates = derekShipStates;
 	}
+
+	//Remove used jerks and beans
+	removeUsedBeans();
+	cleanUpRemovedJerks();
+
 }
+
+function removeUsedBeans() {
+	// Check for used beans
+	var mb = state.bMyBeans;
+	for (var i = 0; i < mb.length; i++) {
+		if (mb[i].used) {
+			console.log("Removed bean " + i);
+			mb.splice(i,1);
+			i--;
+		}
+	}
+	updateState('bMyBeans', mb);
+}
+
+function cleanUpRemovedJerks() {
+	// Check for removed jerks
+	var mb = state.jerkPile;
+	for (var i = 0; i < mb.length; i++) {
+		if (mb[i].removed) {
+			console.log("Removed jerk " + i);
+			mb.splice(i,1);
+			i--;
+		}
+	}
+	updateState('jerkPile', mb);
+}
+
 
 function goRoot() {
 	audioSettings.shouldPlayMusic = true;
@@ -126,7 +159,11 @@ function goRoot() {
 				createGoButton("Apple","apple",apple2);
 			}
 		}
-		createGoButton("Asteroid","asteroid",goAsteroid);
+		if (!state.pickedRobot) {
+			createGoButton("Explore","binoculars",exploreAsteroid);
+		} else {
+			createGoButton("Asteroid","asteroid",goAsteroid);
+		}
 		if (state.workshopPrice[4] && !state.shopFound) {
 			createGoButton("Explore","binoculars",findShop);
 		}	

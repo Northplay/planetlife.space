@@ -837,6 +837,26 @@ function upgradeSpaceBen() {
 	upgradeAnimation("Now we're talking!","space_ben",goBurgSpaceBen);
 }
 
+newProduct("Upgrade Beanies Imagination","goBeanieUpgradeJerks","Upgrade");
+
+newProductTier(
+	"Upgrade Beanies Imagination",
+	1,
+	"Upgrade Beanies Imagination",
+	"beanieImagination",
+	"With a better imagination, Beanie can imagine <span style='color:#ea00ff'>LE</span><span style='color:#ffd900'>GE</span><span style='color:#00ff08'>ND</span><span style='color:#00d9ff'>ARY</span> jerks for you",
+	[0,0,0,10000],
+	upgradeBeanieImagination,
+	true
+);
+
+function upgradeBeanieImagination() {
+	playSound(soundEffect.buy);
+	playSound(soundEffect.beanie);
+	updateState('bBeanieImaginationUpgrade', true);
+	upgradeAnimation("Beanie can come up with ANYTHING!","beanieImagination",goBeanieImagineJerks);
+}
+
 ///////////////////
 //SINGLE PRODUCTS//
 ///////////////////
@@ -984,9 +1004,9 @@ newSingleProduct("Give 20 coco as a present","coco","bCoco",20,"goBeanie",goGive
 newSingleProduct("Give 50 gold as a present","gold","bGold",50,"goBeanie",goGiveBeanieGold);
 
 //CANNED JERKS
-newSingleProduct("Standard Jerk Can (10 space rings)","canOfJerksRegular","bSpaceRings",10,"goJerkClub",goBuyJerk,0);
-newSingleProduct("Cool Jerk Can (100 space rings)","canOfJerksCool","bSpaceRings",100,"goJerkClub",goBuyJerk,1);
-newSingleProduct("Fantastic Jerk Can (800 space rings)","canOfJerksFantastic","bSpaceRings",800,"goJerkClub",goBuyJerk,2);
+newSingleProduct("Standard Jerk Can (10 space rings)","canOfJerksRegular","bSpaceRings",10,"goBuyJerkCans",goBuyJerk,0);
+newSingleProduct("Cool Jerk Can (100 space rings)","canOfJerksCool","bSpaceRings",100,"goBuyJerkCans",goBuyJerk,1);
+newSingleProduct("Fantastic Jerk Can (800 space rings)","canOfJerksFantastic","bSpaceRings",800,"goBuyJerkCans",goBuyJerk,2);
 
 function goBuyJerk(tier) {
 	var images = ["canOfJerksRegular","canOfJerksCool","canOfJerksFantastic"];
@@ -998,7 +1018,11 @@ function goBuyJerk(tier) {
 	var lowerRarityCaps = [0,2,4];
 	changeScene(descriptions[tier],images[tier],"boughtAJerk");
 	// createGoButton("Open",images[tier],pickJerkByRarity,lowerRarityCaps[tier]);
-	createGoButton("Open",images[tier],openCan,lowerRarityCaps[tier]);
+	if (state.impatientMode) {
+		openCan(lowerRarityCaps[tier]);
+	} else {
+		createGoButton("Open",images[tier],openCan,lowerRarityCaps[tier]);
+	}
 }
 
 // newSingleProduct("Fuel with wood (200)","wood","bWood",200,"goCore",goFuelWood);
@@ -1042,7 +1066,7 @@ newSingleProduct("Huge Bean (300 gold)","beanHuge","bGold",300,"goBeanShop",buyB
 
 newSingleProduct("20 random beans (20000 wood)","beanRandom","bWood",15000,"goBeanShop",buyBeanPack);
 newSingleProduct("20 random beans (20000 coco)","beanRandom","bCoco",15000,"goBeanShop",buyBeanPack);
-newSingleProduct("20 random beans (8000 gold)","beanRandom","bGold",5000,"goBeanShop",buyBeanPack);
+newSingleProduct("20 random beans (8000 gold)","beanRandom","bGold",8000,"goBeanShop",buyBeanPack);
 
 newSingleProduct("Reroll Bean Prices (5 stardust)","stardust","bStardust",5,"goBeanShop",rerollBeanPrices);
 
@@ -1093,3 +1117,5 @@ function goBuySpaceRings(amount) {
 		goBurgSpaceBen();
 	},800);
 }
+
+newSingleProduct("Imagine <span style='color:#ea00ff'>LE</span><span style='color:#ffd900'>GE</span><span style='color:#00ff08'>ND</span><span style='color:#00d9ff'>ARY</span> jerks (25000 space rings)","spaceRing","bSpaceRings",25000,"legendaryJerks",goImagineLegendaryJerks);

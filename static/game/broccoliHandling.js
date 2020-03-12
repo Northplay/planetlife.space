@@ -38,17 +38,30 @@ function burgerNervous() {
 	createGoButton(T("Don't worry Burger!","buttons.dontWorryBurger!"),"talk",checkPaywall);
 }
 
+// function checkPaywall() {
+// 	if (hasBridge()) {
+// 		changeScene(
+// 			T(
+// 				"Oh hi there. You must be from outer space.. I assume that since you're a planet and all",
+// 				"h.checkPaywall"
+// 			),
+// 			"broccoliWorker",
+// 			"checkPaywall"
+// 		);
+// 		createGoButton(T("So it seems","buttons.soItSeems"),"talk",goPaywall1);
+// 	} else {
+// 		updateState("broccoliChapter",true);
+// 		burgerCaptured();
+// 	}
+// }
+
 function checkPaywall() {
 	if (hasBridge()) {
 		changeScene(
-			T(
-				"Oh hi there. You must be from outer space.. I assume that since you're a planet and all",
-				"h.checkPaywall"
-			),
-			"broccoliWorker",
-			"checkPaywall"
+			"Oh hi there! It's me Bob the Bottle again.</br>It seems like you're finished with Chapter 1. Well done!</br></br>Let's get you back to the menu so you can get started on <span style='color:#ffea00'>Chapter 2</span>",
+			"bobBottle"
 		);
-		createGoButton(T("So it seems","buttons.soItSeems"),"talk",goPaywall1);
+		createGoButton("Thanks!","talk",goStartMenu2);
 	} else {
 		updateState("broccoliChapter",true);
 		burgerCaptured();

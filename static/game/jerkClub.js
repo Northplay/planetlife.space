@@ -1,79 +1,26 @@
 
 function goJerkClub() {
 	if (state.bJerkStarted) {
-		var squadFullText = "";
-		if (countJerksInPile() >= 50) {
-			squadFullText = "</br><span style='color:#ff0000'>There are 50 jerks in your squad. It's completely packed!! You need to remove some if you want to buy new jerks</span>";
-		}
 		changeScene(
-			"To be honest, it's not a nice smell in here. But spirits are high, and the jerks are having a blast.</br>The bartender is selling Canned Jerks.</br>You have <span style='color:#ffc800'>" + state.bSpaceRings + " space rings</span>" + squadFullText,
+			"To be honest, it's not a nice smell in here. But spirits are high, and the jerks are having a blast",
 			"jerkClub",
 			"goJerkClub"
 		);	
 		createGoButton("Back","burgulonSurface",goBurgulonSurface);
+		createGoButton("Jerk Squad","jerkSquad",goJerkSquad);
+		if (state.bDerekSummoningDevice) {
+			createGoButton("Derek Summoning Device","derekSummoningDevice",goDerekSummoningDevice);
+		}
+		createGoButton("Buy jerk cans","jerkBartender",goBuyJerkCans);
+		if (state.bBeanieImaginationUpgrade) {
+			createGoButton("Talk to Beanie","beanieBean",goBeanieImagineJerks);
+		}
 		if (state.bDerekProgress == 1) {
 			createGoButton("Derek","derek",goJerkDerek);
 		}
 		createGoButton("Backstage","jerkClubBackstage",goJerkBackstage);
 		if (!state.bDerekSummoningDevice && state.bDerekShipStates[0] > 0) {
 			createGoButton("Talk to Bartender","jerkBartender",goSellOven);
-		}
-		if (state.bDerekSummoningDevice) {
-			createGoButton("Derek Summoning Device","derekSummoningDevice",goDerekSummoningDevice);
-		}
-		createGoButton("Jerk Squad","jerkSquad",goJerkSquad);
-		if (countJerksInPile() < 50) {
-			createSingleProduct("Standard Jerk Can (10 space rings)");
-		} else {
-			createIconButton(
-				"Standard Jerk Can (10 space rings)",
-				"images/handling/canOfJerksRegular.gif",
-				"standardCanOfJerksBut",
-				"",
-				"#8c1d1d",
-				true,
-				"buttons",
-				stardustExchange,
-				0
-			);	
-		}
-		if (state.bJerkCanCool) {
-			if (countJerksInPile() < 50) {
-				createSingleProduct("Cool Jerk Can (100 space rings)");
-			} else {
-				createIconButton(
-					"Cool Jerk Can (100 space rings)",
-					"images/handling/canOfJerksCool.gif",
-					"coolCanOfJerksBut",
-					"",
-					"#8c1d1d",
-					true,
-					"buttons",
-					stardustExchange,
-					0
-				);
-			}
-		} else if (state.bSpaceBen) {
-			createProduct("Cool Jerk Cans");
-		}
-		if (state.bJerkCanFantastic) {
-			if (countJerksInPile() < 50) {
-				createSingleProduct("Fantastic Jerk Can (800 space rings)");
-			} else {
-				createIconButton(
-					"Fantastic Jerk Can (800 space rings)",
-					"images/handling/canOfJerksFantastic.gif",
-					"fantasticCanOfJerksBut",
-					"",
-					"#8c1d1d",
-					true,
-					"buttons",
-					stardustExchange,
-					0
-				);
-			}
-		} else if (state.bBentProgress > 0) {
-			createProduct("Fantastic Jerk Cans");
 		}
 		createProduct("Jerk Attack Power");
 		createProduct("Jerk Muffin Power");
@@ -85,6 +32,75 @@ function goJerkClub() {
 		);
 		createGoButton("Back","burgulonSurface",goBurgulonSurface);
 		createGoButton("Talk to bartender","talk",goBartenderTalk);
+	}
+}
+
+function goBuyJerkCans() {
+
+	var squadFullText = "";
+	if (countJerksInPile() >= 50) {
+		squadFullText = "</br><span style='color:#ff0000'>There are 50 jerks in your squad. It's completely packed!! You need to remove some if you want to buy new jerks</span>";
+	}
+
+	changeScene(
+		"The bartender is selling Canned Jerks.</br>You have <span style='color:#ffc800'>" + state.bSpaceRings + " space rings</span>" + squadFullText,
+		"jerkBartender",
+		"goBuyJerkCans"
+	);
+	createGoButton("Back","jerkClub",goJerkClub);
+
+	if (countJerksInPile() < 50) {
+		createSingleProduct("Standard Jerk Can (10 space rings)");
+	} else {
+		createIconButton(
+			"Standard Jerk Can (10 space rings)",
+			"images/handling/canOfJerksRegular.gif",
+			"standardCanOfJerksBut",
+			"",
+			"#8c1d1d",
+			true,
+			"buttons",
+			stardustExchange,
+			0
+		);	
+	}
+	if (state.bJerkCanCool) {
+		if (countJerksInPile() < 50) {
+			createSingleProduct("Cool Jerk Can (100 space rings)");
+		} else {
+			createIconButton(
+				"Cool Jerk Can (100 space rings)",
+				"images/handling/canOfJerksCool.gif",
+				"coolCanOfJerksBut",
+				"",
+				"#8c1d1d",
+				true,
+				"buttons",
+				stardustExchange,
+				0
+			);
+		}
+	} else if (state.bSpaceBen) {
+		createProduct("Cool Jerk Cans");
+	}
+	if (state.bJerkCanFantastic) {
+		if (countJerksInPile() < 50) {
+			createSingleProduct("Fantastic Jerk Can (800 space rings)");
+		} else {
+			createIconButton(
+				"Fantastic Jerk Can (800 space rings)",
+				"images/handling/canOfJerksFantastic.gif",
+				"fantasticCanOfJerksBut",
+				"",
+				"#8c1d1d",
+				true,
+				"buttons",
+				stardustExchange,
+				0
+			);
+		}
+	} else if (state.bBentProgress > 0) {
+		createProduct("Fantastic Jerk Cans");
 	}
 }
 
@@ -133,7 +149,7 @@ function goJerkSquad() {
 	playSound(soundEffect.jerkSquad);
 	var jp = state.jerkPile;
 	changeScene(
-		"These are the toughest jerks stardust can buy.</br>They'll protect your shining core from invaders. Or they'll try at least. These are jerks after all.</br>Your jerks have an <span style='color:#ff0000'>attack power of " + Math.round(state.bJerkAttackPower * 100) + "%</span> and a <span style='color:#fca903'>muffin power of " + Math.round(state.bJerkMuffinPower * 100) + "%</span>",
+		"These are the toughest jerks stardust can buy.</br>They'll protect your shining core from invaders. Or they'll try at least. These are jerks after all.</br>Your <span style='color:#00fff7'>" + countJerksInPile() + "</span> jerks have an <span style='color:#ff0000'>attack power of " + Math.round(state.bJerkAttackPower * 100) + "%</span> and a <span style='color:#fca903'>muffin power of " + Math.round(state.bJerkMuffinPower * 100) + "%</span>",
 		"jerkSquad",
 		"goJerkSquad"
 	);
@@ -146,7 +162,7 @@ function goJerkSquad() {
 			}
 		}
 		if (x > 0) {
-			createGoButton("(" + x + ") " + allJerks[i].navn, allJerks[i].image, goCheckoutJerk, i);
+			createGoButton(x + "x " + allJerks[i].navn, allJerks[i].image, goCheckoutJerk, i);
 		}
 	}
 }
@@ -247,18 +263,22 @@ function openCan(rarity) {
 		"Two jerks pop out:</br>A <span style='color:#2fde10'>" + openedJerks[0].navn + "</span></br>and a <span style='color:#2fde10'>" + openedJerks[1].navn + "</span></br>Which one do you want on your squad?",
 		"jerkBartender"
 	);
-	createGoButton("I don't want any of these jerks!","no",goJerkClub);
-	createGoButton(openedJerks[0].navn + " <span style='color:#ffea00'>(" + openedJerks[0].actionCost + " actions)</span>" + "</br><span style='color:#8a8a8a'>" + openedJerks[0].description + "</span>",openedJerks[0].image,pickAJerk,openedJerks[0]);
-	createGoButton(openedJerks[1].navn + " <span style='color:#ffea00'>(" + openedJerks[1].actionCost + " actions)</span>" + "</br><span style='color:#8a8a8a'>" + openedJerks[1].description + "</span>",openedJerks[1].image,pickAJerk,openedJerks[1]);
+	createGoButton("I don't want any of these jerks!","no",goBuyJerkCans);
+	createGoButton(openedJerks[0].navn + " <span style='color:#ffea00'>(" + openedJerks[0].actionCost + " actions)</span>" + "</br><span style='color:#8a8a8a'>" + openedJerks[0].description + "</span>",openedJerks[0].image,pickAJerk,openedJerks[0],false);
+	createGoButton(openedJerks[1].navn + " <span style='color:#ffea00'>(" + openedJerks[1].actionCost + " actions)</span>" + "</br><span style='color:#8a8a8a'>" + openedJerks[1].description + "</span>",openedJerks[1].image,pickAJerk,openedJerks[1],false);
 }	
 
-function pickAJerk(jerk) {
+function pickAJerk(jerk,beanie) {
 	newJerkToPile(jerk.navn);
 	changeScene(
 		"You get a new " + jerk.navn + " on your squad!",
 		jerk.image
 	);
-	createGoButton("What a jerk!",jerk.image,goJerkClub);
+	if (beanie) {
+		createGoButton("What a jerk!",jerk.image,goBeanieImagineJerks);
+	} else {
+		createGoButton("What a jerk!",jerk.image,goBuyJerkCans);
+	}
 }
 
 function goJerkBackstage() {

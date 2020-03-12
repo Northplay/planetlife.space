@@ -179,7 +179,84 @@ function goBeanieBean() {
 		"beanieBean"
 	);
 	createGoButton("Back","beanieImagination",goBeanieImagination);
+	if (!state.bBeanieImaginationUpgrade) {
+		createGoButton("What can you do with your imagination?","talk",goBeanieBuyJerkUpgrade);		
+	}
 	createGoButton("Talk","talk",goBeanieBeanTalk);
+}
+
+function goBeanieBuyJerkUpgrade() {
+	changeScene(
+		"Beanie tells you that her imagination could become much more powerful. If she digested enough stardust she might even be able to imagine <span style='color:#ea00ff'>LE</span><span style='color:#ffd900'>GE</span><span style='color:#00ff08'>ND</span><span style='color:#00d9ff'>ARY</span> jerks for you",
+		"beanieBean",
+		"goBeanieUpgradeJerks"
+	);
+	createGoButton("Back","beanieBean",goBeanieBean);
+	createProduct("Upgrade Beanies Imagination");
+}
+
+function goBeanieImagineJerks() {
+	var squadFullText = "";
+	if (countJerksInPile() >= 50) {
+		squadFullText = "</br><span style='color:#ff0000'>There are 50 jerks in your squad. It's completely packed!! You need to remove some if you want to buy new jerks</span>";
+	}
+	changeScene(
+		"Beanie tells you that she could try to imagine some <span style='color:#ea00ff'>LE</span><span style='color:#ffd900'>GE</span><span style='color:#00ff08'>ND</span><span style='color:#00d9ff'>ARY</span> jerks for you. But she says there's a 50/50 chance of success.</br>She will need some space rings to fuel her imagination.</br>You have <span style='color:#ffc800'>" + state.bSpaceRings + " space rings</span>" + squadFullText,
+		"beanieBean",
+		"legendaryJerks"
+	);
+	createGoButton("Back","jerkClub",goJerkClub);
+
+	if (countJerksInPile() < 50) {
+		createSingleProduct("Imagine <span style='color:#ea00ff'>LE</span><span style='color:#ffd900'>GE</span><span style='color:#00ff08'>ND</span><span style='color:#00d9ff'>ARY</span> jerks (25000 space rings)");
+	} else {
+		createIconButton(
+			"Imagine <span style='color:#ea00ff'>LE</span><span style='color:#ffd900'>GE</span><span style='color:#00ff08'>ND</span><span style='color:#00d9ff'>ARY</span> jerks (25000 space rings)",
+			"images/handling/spaceRing.gif",
+			"legendaryJerksBut",
+			"",
+			"#8c1d1d",
+			true,
+			"buttons",
+			goBeanieImagineJerks,
+			0
+		);	
+	}
+}
+
+function goImagineLegendaryJerks() {
+	if (Math.random() >= 0.5) {
+
+		var rarity = 10;
+		playSound(soundEffect.cheer);
+		playSound(soundEffect.canOpen);
+		var openedJerks;
+		pickTwoJerks();
+		while (openedJerks[0].navn == openedJerks[1].navn) {
+			pickTwoJerks();
+		}
+		function pickTwoJerks() {
+			openedJerks = [allJerks[pickJerkByRarity(rarity)],allJerks[pickJerkByRarity(rarity)]];
+		}
+		//console.log(openedJerks[0].navn + " hej hej hej " + openedJerks[1].navn);
+		changeScene(
+			"Two <span style='color:#ea00ff'>LE</span><span style='color:#ffd900'>GE</span><span style='color:#00ff08'>ND</span><span style='color:#00d9ff'>ARY</span> jerks pop out:</br>A <span style='color:#2fde10'>" + openedJerks[0].navn + "</span></br>and a <span style='color:#2fde10'>" + openedJerks[1].navn + "</span></br>Which one do you want on your squad?",
+			"beanieBean"
+		);
+		createGoButton("I don't want any of these jerks!","no",goBeanieImagineJerks);
+		createGoButton(openedJerks[0].navn + " <span style='color:#ffea00'>(" + openedJerks[0].actionCost + " actions)</span>" + "</br><span style='color:#8a8a8a'>" + openedJerks[0].description + "</span>",openedJerks[0].image,pickAJerk,openedJerks[0],true);
+		createGoButton(openedJerks[1].navn + " <span style='color:#ffea00'>(" + openedJerks[1].actionCost + " actions)</span>" + "</br><span style='color:#8a8a8a'>" + openedJerks[1].description + "</span>",openedJerks[1].image,pickAJerk,openedJerks[1],true);
+	
+	} else {
+
+		playSound(soundEffect.loose);
+		changeScene(
+			"Looks like Beanie couldn't come up with any <span style='color:#ea00ff'>LE</span><span style='color:#ffd900'>GE</span><span style='color:#00ff08'>ND</span><span style='color:#00d9ff'>ARY</span> jerks",
+			"no"
+		);
+		createGoButton("Pokkers!","talk",goBeanieImagineJerks);
+	
+	}
 }
 
 function goBeanieBeanTalk() {

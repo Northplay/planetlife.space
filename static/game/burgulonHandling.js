@@ -824,7 +824,7 @@ function goBurgSpaceBen() {
 			);			
 		}
 		createSingleProduct("30 Space Rings (100 stardust)");
-
+		
 	}
 
 	createProduct("Upgrade Shop");

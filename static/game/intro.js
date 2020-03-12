@@ -51,18 +51,19 @@ function introduction() {
 	}
 	function introduction3() {
 		changeScene("Why don't you go take a look?","planet","introduction");
-		createGoButton("Explore","binoculars",exploreAsteroid);
+		// createGoButton("Explore","binoculars",exploreAsteroid);
+		createGoButton("Yes!","talk",goStartMenu);
 	}
 }
 
 function exploreAsteroid() {
-	if (state.impatientMode) {
-		delay = 1;
-	} else {
-		delay = 10;
-	}
-	skipAllowed = true;
-	toggleResIcons();
+	// if (state.impatientMode) {
+	// 	delay = 1;
+	// } else {
+	// 	delay = 10;
+	// }
+	// skipAllowed = true;
+	// toggleResIcons();
 	changeScene("There's something out there in the distance","planet","introduction");
 	createGoButton("Asteroid","asteroid",goAsteroid);
 }

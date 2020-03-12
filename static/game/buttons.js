@@ -53,7 +53,7 @@ function createIconButton(headline,image,thisID,buttonText,clr,disabled,buttonsD
 	function up(e) {
 		//e.preventDefault();
 		if (!movedInButton) {
-			fnct(parameter1,parameter2,parameter3);
+			if (fnct != null) { fnct(parameter1,parameter2,parameter3); }
 		}
 		resetButton();
 	}
@@ -88,6 +88,16 @@ function createGoButton(headline,image,fnct,parameter,parameter2) {
 function createSettingsIconButton(headline,image,fnct,parameter) {
 	var id = headline.split(' ').join('_') + 'But';
 	createIconButton(headline,"images/handling/" + image + ".gif",id,"go here","#FFFFFF",false,"settingsButtons",fnct,parameter);
+}
+
+function createSettingsImportButton(headline,image,fnct,parameter) {
+	var id = headline.split(' ').join('_') + 'But';
+	createIconButton(headline,"images/handling/" + image + ".gif",id,"go here","#FFFFFF",false,"settingsButtons",() => { fileSelector.click(); },parameter);
+	
+	var fileSelector = document.createElement('input');
+	fileSelector.setAttribute('type', 'file');
+	fileSelector.setAttribute('accept', '.planet');
+	fileSelector.onchange = fnct;
 }
 
 function createBuildButton(headline,image,text,fnct,thisID,buttonText,price,parameter1) {
@@ -163,30 +173,23 @@ function createBuildButton(headline,image,text,fnct,thisID,buttonText,price,para
 			clicked = false;
 		}
 	}
-	var img1 = document.createElement('img');
-	var img2 = document.createElement('img');
-	var img3 = document.createElement('img');
-	var img4 = document.createElement('img');
-	img1.src = "images/icons/wood.png";
-	img1.className = "resIcon";
-	img2.src = "images/icons/gold.png";
-	img2.className = "resIcon";
-	img3.src = "images/icons/coco.png";
-	img3.className = "resIcon";
-	img4.src = "images/icons/stardust.png";
-	img4.className = "resIcon";
-	var p1 = document.createElement('p');
-	var p2 = document.createElement('p');
-	var p3 = document.createElement('p');
-	var p4 = document.createElement('p');
-	p1.className = "buildButtonText";
-	p2.className = "buildButtonText";
-	p3.className = "buildButtonText";
-	p4.className = "buildButtonText";
-	p1.innerHTML = price[0];
-	p2.innerHTML = price[1];
-	p3.innerHTML = price[2];
-	p4.innerHTML = price[3];
+	
+	function showResource(name, amount) {
+		var img = document.createElement('img');
+		img.src = "images/icons/" + name + ".png";
+		img.className = "resIcon";
+		img.style.display = (amount == 0 ? "none" : "inline-block");
+		
+		var p = document.createElement('p');
+		p.className = "buildButtonText";
+		p.style.display = (amount == 0 ? "none" : "inline-block");
+		
+		p.innerHTML = amount.toLocaleString();
+		
+		document.getElementById("icon" + thisID).appendChild(img);
+		document.getElementById("icon" + thisID).appendChild(p);
+	}
+	
 	var backgroundDiv = document.createElement('div');
 	backgroundDiv.className = "buildBackground";
 	var br = document.createElement("br");
@@ -199,30 +202,12 @@ function createBuildButton(headline,image,text,fnct,thisID,buttonText,price,para
 	document.getElementById("full" + thisID).appendChild(backgroundDiv);
 	document.getElementById("full2" + thisID).appendChild(description);
 	document.getElementById("icon" + thisID).appendChild(but);
-	// if (p1.innerHTML != 0) {
-	// 	document.getElementById("icon" + thisID).appendChild(img1);
-	// 	document.getElementById("icon" + thisID).appendChild(p1);
-	// }
-	// if (p2.innerHTML != 0) {
-	// 	document.getElementById("icon" + thisID).appendChild(img2);
-	// 	document.getElementById("icon" + thisID).appendChild(p2);
-	// }
-	// if (p3.innerHTML != 0) {
-	// 	document.getElementById("icon" + thisID).appendChild(img3);
-	// 	document.getElementById("icon" + thisID).appendChild(p3);
-	// }
-	// if (p4.innerHTML != 0) {
-	// 	document.getElementById("icon" + thisID).appendChild(img4);
-	// 	document.getElementById("icon" + thisID).appendChild(p4);
-	// }
-	document.getElementById("icon" + thisID).appendChild(img1);
-	document.getElementById("icon" + thisID).appendChild(p1);
-	document.getElementById("icon" + thisID).appendChild(img2);
-	document.getElementById("icon" + thisID).appendChild(p2);
-	document.getElementById("icon" + thisID).appendChild(img3);
-	document.getElementById("icon" + thisID).appendChild(p3);
-	document.getElementById("icon" + thisID).appendChild(img4);
-	document.getElementById("icon" + thisID).appendChild(p4);
+	
+	showResource("wood", price[0]);
+	showResource("gold", price[1]);
+	showResource("coco", price[2]);
+	showResource("stardust", price[3]);
+	
 	document.getElementById("buttons").appendChild(br);
 	document.getElementById("buttons").appendChild(br2);
 }

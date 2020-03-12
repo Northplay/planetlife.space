@@ -8,6 +8,7 @@ var initialState = {
 	bBarCocoSell: 30,
 	bBurgulonUnlocked: false,
 	bMyBeans: [],
+	bBeanieImaginationUpgrade: false,
 	bBeanieProgress: 0,
 	bBeanShop: false,
 	bBentProgress: 0,
@@ -175,7 +176,7 @@ var initialState = {
 	wormFoundAgain: false,
 	wormholePaid: false,
 	wormOut: false,
-	version: 7,
+	version: 8,
 };
 
 var state = initialState;
@@ -387,6 +388,15 @@ var stateMigrations = [
 		removed: [],
 		updated: [],
 	},
+	{
+		from: 7,
+		to: 8,
+		added: [
+			{ key: 'bBeanieImaginationUpgrade', value: false },
+		],
+		removed: [],
+		updated: [],
+	},
 	// {
 	// 	from: 2,
 	// 	to: 3,
@@ -479,13 +489,15 @@ function loadFromLocalStorage(onComplete) {
 }
 
 function updateState(key, value) {
-	if (stateQueue.paused) {
-		return;
-	}
+	if (stateQueue.paused) { return; }
 
 	state[key] = value;
-	var encoded = encodeState(state);
+	saveState();
+}
 
+function saveState() {
+	var encoded = encodeState(state);
+	
 	if (hasBridge()) {
 		BridgeCommander.call('updateState', encoded);
 	} else if (hasLocalStorage()) {
@@ -520,4 +532,30 @@ function runMigration(currentState, migration) {
 	state.version = migration.to;
 
 	return state;
+}
+
+function removeUsedBeans() {
+	// Check for used beans
+	var mb = state.bMyBeans;
+	for (var i = 0; i < mb.length; i++) {
+		if (mb[i].used) {
+			console.log("Removed bean " + i);
+			mb.splice(i,1);
+			i--;
+		}
+	}
+	updateState('bMyBeans', mb);
+}
+
+function cleanUpRemovedJerks() {
+	// Check for removed jerks
+	var mb = state.jerkPile;
+	for (var i = 0; i < mb.length; i++) {
+		if (mb[i].removed) {
+			console.log("Removed jerk " + i);
+			mb.splice(i,1);
+			i--;
+		}
+	}
+	updateState('jerkPile', mb);
 }

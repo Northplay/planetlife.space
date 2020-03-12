@@ -335,9 +335,13 @@ function showSkill(skillIndex) {
 }
 
 function skillUpgraded(skillIndex) {
-	changeScene("Skill upgraded!","explosion","skillUpgraded");
-	setTimeout(function() {
-		changeScene("Skill upgraded!",allSkills[skillIndex].image,"skillUpgraded");
-		createGoButton("Cool!",allSkills[skillIndex].image,showSkill,skillIndex);
-	},500);
+	if (state.impatientMode) {
+		showSkill(skillIndex);
+	} else {
+		changeScene("Skill upgraded!","explosion","skillUpgraded");
+		setTimeout(function() {
+			changeScene("Skill upgraded!",allSkills[skillIndex].image,"skillUpgraded");
+			createGoButton("Cool!",allSkills[skillIndex].image,showSkill,skillIndex);
+		},500);
+	}
 }

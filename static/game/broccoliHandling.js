@@ -38,6 +38,14 @@ function burgerNervous() {
 	createGoButton(T("Don't worry Burger!","buttons.dontWorryBurger!"),"talk",checkPaywall);
 }
 
+function stoppedByBob() {
+	changeScene(
+		"Oh hi there! It's me Bob the Bottle again.</br>It seems like you're finished with <span style='color:#16fa05'>Chapter 1.</span> Well done!</br></br>Let's get you back to the menu so you can get started on <span style='color:#ffea00'>Chapter 2</span>",
+		"bobBottle"
+	);
+	createGoButton("Ok!","talk",goStartMenu2);
+}
+
 // function checkPaywall() {
 // 	if (hasBridge()) {
 // 		changeScene(
@@ -56,12 +64,19 @@ function burgerNervous() {
 // }
 
 function checkPaywall() {
+
+	// changeScene(
+	// 	"Wait.. Somebody's coming",
+	// 	"invisibleImg"
+	// );
+	// createGoButton("Who's there?","talk",stoppedByBob);
+
 	if (hasBridge()) {
 		changeScene(
-			"Oh hi there! It's me Bob the Bottle again.</br>It seems like you're finished with Chapter 1. Well done!</br></br>Let's get you back to the menu so you can get started on <span style='color:#ffea00'>Chapter 2</span>",
-			"bobBottle"
+			"Wait.. Somebody's coming",
+			"invisibleImg"
 		);
-		createGoButton("Thanks!","talk",goStartMenu2);
+		createGoButton("Who's there?","talk",stoppedByBob);
 	} else {
 		updateState("broccoliChapter",true);
 		burgerCaptured();
@@ -130,80 +145,80 @@ function goNotPay3() {
 	createGoButton(T("...","buttons.3dots"),"planetSad",goNotPay4);
 }
 
-function goNotPay4() {
-	changeScene(
-		T(
-			"A vomitting purple monster",
-			"h.notPay4"
-		),
-		"lochJuiceVomit"
-	);
-	createGoButton(T("Really?","buttons.really?"),"talk",goNotPay5);
-}
+// function goNotPay4() {
+// 	changeScene(
+// 		T(
+// 			"A vomitting purple monster",
+// 			"h.notPay4"
+// 		),
+// 		"lochJuiceVomit"
+// 	);
+// 	createGoButton(T("Really?","buttons.really?"),"talk",goNotPay5);
+// }
 
-function goNotPay5() {
-	changeScene(
-		T(
-			"Something crazy happening to Burger",
-			"h.notPay5"
-		),
-		"burger"
-	);
-	setTimeout(function() {
-		changeScene(
-			T(
-				"Something crazy happening to Burger",
-				"h.notPay5"
-			),
-			"burg3r"
-		);
-	},1300);
-	setTimeout(function() {
-		changeScene(
-			T(
-				"Something crazy happening to Burger",
-				"h.notPay5"
-			),
-			"burger"
-		);
-		createGoButton(T("But what is it!?","buttons.butWhatIsIt?"),"talk",goNotPay6);
-	},1500);
-}
+// function goNotPay5() {
+// 	changeScene(
+// 		T(
+// 			"Something crazy happening to Burger",
+// 			"h.notPay5"
+// 		),
+// 		"burger"
+// 	);
+// 	setTimeout(function() {
+// 		changeScene(
+// 			T(
+// 				"Something crazy happening to Burger",
+// 				"h.notPay5"
+// 			),
+// 			"burg3r"
+// 		);
+// 	},1300);
+// 	setTimeout(function() {
+// 		changeScene(
+// 			T(
+// 				"Something crazy happening to Burger",
+// 				"h.notPay5"
+// 			),
+// 			"burger"
+// 		);
+// 		createGoButton(T("But what is it!?","buttons.butWhatIsIt?"),"talk",goNotPay6);
+// 	},1500);
+// }
 
-function goNotPay6() {
-	changeScene(
-		T(
-			"And...",
-			"h.notPay6"
-		),
-		"invisibleImg"
-	);
-	createGoButton(T("And?","buttons.and?"),"talk",goNotPay7);
-}
+// function goNotPay6() {
+// 	changeScene(
+// 		T(
+// 			"And...",
+// 			"h.notPay6"
+// 		),
+// 		"invisibleImg"
+// 	);
+// 	createGoButton(T("And?","buttons.and?"),"talk",goNotPay7);
+// }
 
-function goNotPay7() {
-	changeScene(
-		T(
-			"THIS PENGUIN!!!",
-			"h.notPay7"
-		),
-		"cocoPenguin"
-	);
-	createGoButton(T("What, REALLY!?","buttons.whatReally"),"talk",goNotPay8);
-}
+// function goNotPay7() {
+// 	changeScene(
+// 		T(
+// 			"THIS PENGUIN!!!",
+// 			"h.notPay7"
+// 		),
+// 		"cocoPenguin"
+// 	);
+// 	createGoButton(T("What, REALLY!?","buttons.whatReally"),"talk",goNotPay8);
+// }
 
-function goNotPay8() {
-	updateState("broccoliChapter",false);
-	changeScene(
-		T(
-			"And that's it. Good luck back in the free solar system",
-			"h.notPay8"
-		),
-		"broccoliWorker"
-	);
-	createGoButton(T("Ok, you might have convinced me","buttons.maybeConvinced"),"planet",goPaywall2);
-	createGoButton(T("Back to the free solar system","buttons.backToFreeSolarSystem"),"planetSad",goRoot);
-}
+// function goNotPay8() {
+// 	updateState("broccoliChapter",false);
+// 	changeScene(
+// 		T(
+// 			"And that's it. Good luck back in the free solar system",
+// 			"h.notPay8"
+// 		),
+// 		"broccoliWorker"
+// 	);
+// 	createGoButton(T("Ok, you might have convinced me","buttons.maybeConvinced"),"planet",goPaywall2);
+// 	createGoButton(T("Back to the free solar system","buttons.backToFreeSolarSystem"),"planetSad",goRoot);
+// }
 
 function goRestore() {
 	document.getElementById("loading_container").innerHTML = "<div class=\"blocking-loader\"></div>";

@@ -1,7 +1,7 @@
 var isGamePaused = false;
 var mobile = false;
 
-var H_Handling1 = 
+var H_Handling1 =
 "You are a beautiful little planet, hanging out in a cosy little solar system";
 
 var curHandling = H_Handling1;
@@ -294,19 +294,23 @@ var friendBroccula = {
 }
 
 function resetState() {
+	let newState = initialState;
 	stateQueue.paused = true;
-	state = initialState;
+	newState = initialState;
 	fillArrays();
-	var encoded = encodeState(state);
+	var encoded = encodeState(newState);
 
 	if (hasBridge()) {
+		BridgeCommander.call('resetState');
 		BridgeCommander.call('updateState', encoded);
 	} else if (hasLocalStorage()) {
+		localStorage.removeItem('state');
 		localStorage.setItem('state', encoded);
 	}
 
+	state = newState;
 	stateQueue.paused = false;
-	
+
 }
 
 function fillArrays() {
@@ -385,5 +389,5 @@ function checkAncientState() {
 	if (state.productStates[7] === 0 && state.derekMaxHealth > 50) {
 		var newUpgradeNr = state.derekMaxHealth / 50;
 		updateArrayState('productStates', 7, newUpgradeNr);
-	} 
+	}
 }

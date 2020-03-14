@@ -1,43 +1,49 @@
 function goStartMenu() {
 	// changeScene(
 	// 	"</br></br>Welcome to <span style='color:#16fa05'>PLANET LIFE!</span></br></br>Let's get started",
-	// 	"PlanetLifeTitle"
+	// 	"PlanetLifeTitle",
+	// 	"goStartMenu"
 	// );
-	// createGoButton("Chapter 1 (free)","planet",goStartChapter1);
-	// createIconButton(
-	// 	"Chapter 2 & 3 (2.99$)",
-	// 	"images/handling/broccoli.gif",
-	// 	"chapter23but",
-	// 	"",
-	// 	"#9e9e9e",
-	// 	true,
-	// 	"buttons",
-	// 	stardustExchange,
-	// 	0
-	// );
+	// createProduct("Chapter 1");
+	// createProduct("Unlock Chapter 2");
+	// createProduct("Unlock Chapter 3");
+	// createProduct("Unlock Chapter 2 & 3");
 	// createGoButton("Tell me more about this game","bobBottle",goExplainGame);
 
+	// if (hasBridge()) {
+	// 	changeScene(
+	// 		"</br></br>Welcome to PLANET LIFE!</br></br>Let's get started",
+	// 		"PlanetLifeTitle",
+	// 		"goStartMenu"
+	// 	);
+	// createProduct("Chapter 1");
+	// createProduct("Chapter 2");
+	// createProduct("Chapter 3");
+	// createProduct("Unlock Chapter 2 & 3");
+	// createGoButton("Tell me more about this game","bobBottle",goExplainGame);
+	// } else {
+	// 	goStartChapter1();
+	// }
+
 	if (hasBridge()) {
-		changeScene(
-			"</br></br>Welcome to PLANET LIFE!</br></br>Let's get started",
-			"PlanetLifeTitle"
-		);
-		createGoButton("Chapter 1 (free)","planet",goStartChapter1);
-		createIconButton(
-			"Chapter 2 & 3 (2.99$)",
-			"images/handling/broccoli.gif",
-			"chapter23but",
-			"",
-			"#9e9e9e",
-			true,
-			"buttons",
-			stardustExchange,
-			0
-		);
-		createGoButton("Tell me more about this game","bobBottle",goExplainGame);
+		goFirstStartMenu();
 	} else {
 		goStartChapter1();
 	}
+	
+}
+
+function goFirstStartMenu() {
+	changeScene(
+		"</br></br>Welcome to <span style='color:#16fa05'>PLANET LIFE!</span></br></br>Let's get started",
+		"PlanetLifeTitle",
+		"goStartMenu"
+	);
+	createProduct("Chapter 1");
+	createProduct("Unlock Chapter 2");
+	createProduct("Unlock Chapter 3");
+	createProduct("Unlock Chapter 2 & 3");
+	createGoButton("Tell me more about this game","bobBottle",goExplainGame);	
 }
 
 function goExplainGame() {
@@ -195,7 +201,8 @@ function goStartChapter1() {
 function goStartMenu2() {
 	changeScene(
 		"",
-		"PlanetLifeTitle"
+		"PlanetLifeTitle",
+		"goStartMenu"
 	);
 	createIconButton(
 		"Chapter 1 (completed)",
@@ -208,8 +215,10 @@ function goStartMenu2() {
 		stardustExchange,
 		0
 	);
-	// createGoButton("Chapter 1 (completed)","planet",goRoot);
-	createGoButton("Unlock Chapter 2 & 3 (2.99$)","broccoli",goPay);
+	// screateGoButton("Unlock Chapter 2 & 3 (2.99$)","broccoli",goPay);
+	createProduct("Unlock Chapter 2");
+	createProduct("Unlock Chapter 3");
+	createProduct("Unlock Chapter 2 & 3");
 	createGoButton("What do I get for my money?","talk",goTeaseGame);
 	createGoButton("Go back to free solar system","planet",goRoot);
 }
@@ -398,3 +407,39 @@ function goTeaseLastChapter9() {
 // 	createGoButton(T("Ok, you might have convinced me","buttons.maybeConvinced"),"planet",goPaywall2);
 // 	createGoButton(T("Back to the free solar system","buttons.backToFreeSolarSystem"),"planetSad",goRoot);
 // }
+
+
+function goStartMenu3() {
+	changeScene(
+		"",
+		"PlanetLifeTitle",
+		"goStartMenu"
+	);
+	createIconButton(
+		"Chapter 1 (completed)",
+		"images/handling/planet.gif",
+		"chapter23but",
+		"",
+		"#9e9e9e",
+		true,
+		"buttons",
+		stardustExchange,
+		0
+	);
+	createIconButton(
+		"Chapter 2 (completed)",
+		"images/handling/spaceBroccoli.gif",
+		"chapter23242but",
+		"",
+		"#9e9e9e",
+		true,
+		"buttons",
+		stardustExchange,
+		0
+	);
+	// screateGoButton("Unlock Chapter 2 & 3 (2.99$)","broccoli",goPay);
+	createProduct("Unlock Chapter 3");
+	// createProduct("Unlock Chapter 2 & 3");
+	createGoButton("What do I get for my money?","talk",goTeaseLastChapter2);
+	createGoButton("Go back to the Broccoli Empire","spaceBroccoli",goRoot);
+}

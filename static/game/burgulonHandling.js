@@ -1,3 +1,23 @@
+function checkLastPaywall() {
+	if (hasBridge()) {
+		changeScene(
+			"Wait.. Who's there?",
+			"invisibleImg"
+		);
+		createGoButton("Who is it?","talk",goStoppedByBob2);
+	} else {
+		goNewBeginning();
+	}
+}
+
+function goStoppedByBob2() {
+	changeScene(
+		"Hey, it's Bob the Bottle again!</br>Looks like you're all done with <span style='color:#ffea00'>Chapter 2.</span> Way to go!</br>Let's get you to the menu so you can get going on the last chapter!",
+		"bobBottle"
+	);
+	createGoButton("Ok!","talk",goStartMenu3);
+}
+
 function goNewBeginning() {
 	updateState('burgulonTime', true);
 	updateState('bBurgulonUnlocked', true);

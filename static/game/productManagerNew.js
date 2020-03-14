@@ -725,7 +725,7 @@ function upgradeCoreCapacity() {
 
 //JERK CANS
 
-newProduct("Cool Jerk Cans","goJerkClub","Invent");
+newProduct("Cool Jerk Cans","goBuyJerkCans","Invent");
 
 newProductTier(
 	"Cool Jerk Cans",
@@ -743,7 +743,7 @@ function inventCoolJerkCans() {
 	upgradeAnimation("Cool!","canOfJerksCool",goJerkClub);
 }
 
-newProduct("Fantastic Jerk Cans","goJerkClub","Invent");
+newProduct("Fantastic Jerk Cans","goBuyJerkCans","Invent");
 
 newProductTier(
 	"Fantastic Jerk Cans",
@@ -856,6 +856,109 @@ function upgradeBeanieImagination() {
 	updateState('bBeanieImaginationUpgrade', true);
 	upgradeAnimation("Beanie can come up with ANYTHING!","beanieImagination",goBeanieImagineJerks);
 }
+
+//IAP
+newProduct("Unlock Chapter 2","goStartMenu","Buy (price)");
+
+newProductTier(
+	"Unlock Chapter 2",
+	1,
+	"Unlock Chapter 2",
+	"planetLifeAnimated",
+	"- More than 4 hours of new gameplay</br>- More dungeons</br>- More endless dungeons</br>- New friends and characters to meet</br>- A vicious quiz",
+	[0,0,0,0],
+	buyChapter2,
+	false
+);
+
+function buyChapter2() {
+	if (state.pickedRobot) {
+		goPay();	
+	} else {
+		changeScene(
+			"Uuuh! Looks like you are eager to play <span style='color:#ffea00'>Chapter 2</span>, but you need to complete Chapter 1 first",
+			"bobBottle"
+		);
+		createGoButton("Ok!","talk",goFirstStartMenu);
+	}	
+}
+
+newProduct("Unlock Chapter 3","goStartMenu","Buy (price)");
+
+newProductTier(
+	"Unlock Chapter 3",
+	1,
+	"Unlock Chapter 3",
+	"planetLifeAnimated",
+	"- More than 8 hours of new gameplay</br>- Deckbuilding!</br>- A new kind of dungeon</br>- A lot more friends</br>- New characters to meet</br>- Boss fights</br>- A proper ending to the space adventure",
+	[0,0,0,0],
+	buyChapter3,
+	false
+);
+
+function buyChapter3() {
+	if (state.burgulonCreated) {
+		//Make a go pay for chapter 3
+		goNewBeginning();
+	} else {
+		if (state.pickedRobot) {
+			changeScene(
+				"Uuuh! Looks like you are eager to play <span style='color:#00fff7'>Chapter 3</span>, but you need to complete Chapter 2 first",
+				"bobBottle"
+			);
+			createGoButton("Ok!","talk",goStartMenu2);
+		} else {
+			changeScene(
+				"Uuuh! Looks like you are eager to play <span style='color:#00fff7'>Chapter 3</span>, but you need to complete Chapter 1 & 2 first",
+				"bobBottle"
+			);
+			createGoButton("Ok!","talk",goFirstStartMenu);
+		}
+
+	}
+}
+
+newProduct("Unlock Chapter 2 & 3","goStartMenu","Buy (price)");
+
+newProductTier(
+	"Unlock Chapter 2 & 3",
+	1,
+	"Unlock Chapter 2 & 3",
+	"burger",
+	"- More than 12 hours of new gameplay</br>- Everything from chapter 2 & 3",
+	[0,0,0,0],
+	buyBothChapters,
+	false
+);
+
+
+function buyBothChapters() {
+	if (state.pickedRobot) {
+		//TODO make a go pay for both chapters
+		goPay();
+	} else {
+		changeScene(
+			"Uuuh! Looks like you are eager to play Chapter 2 & 3, but you need to complete Chapter 1 first",
+			"bobBottle"
+		);
+		createGoButton("Ok!","talk",gFirstoStartMenu);
+	}
+}
+
+newProduct("Chapter 1","goStartMenu","Play (free)");
+
+newProductTier(
+	"Chapter 1",
+	1,
+	"Chapter 1",
+	"planet",
+	"- More than 2 hours free of gameplay</br>- New friends to meet</br>- Dungeons to explore</br>- An endless dungeon",
+	[0,0,0,0],
+	goStartChapter1,
+	false
+);
+
+
 
 ///////////////////
 //SINGLE PRODUCTS//

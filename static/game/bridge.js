@@ -1,12 +1,14 @@
 (function () {
-
-    if (typeof webkit === "undefined") {
-        return;
-    }
+	if (typeof webkit !== "undefined") {
+		var channel = webkit.messageHandlers["__SWIFT_BRIDGE_COMMANDER"];
+	} else if (typeof __SWIFT_BRIDGE_COMMANDER !== "undefined") {
+		var channel = __SWIFT_BRIDGE_COMMANDER;
+	} else {
+		return;
+	}
 
     var bridge = {};
     var stack = [];
-    var channel = webkit.messageHandlers["__SWIFT_BRIDGE_COMMANDER"];
 
     var uuid = function () {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {

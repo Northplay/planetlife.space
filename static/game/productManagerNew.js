@@ -76,7 +76,7 @@ function useProduct(ID) {
 						boughtProduct[4] = true;
 						updateState(allProducts[j].statePrice,boughtProduct);
 					}
-				}				
+				}
 			}
 			updateArrayState('productStates',findProductIndex(ID),state.productStates[findProductIndex(ID)] + 1);
 			allProductTiers[i].fnct();
@@ -115,7 +115,7 @@ function findCurProductTierIndexById(ID) {
 	for (var i = 0; i < allProductTiers.length; i++) {
 		if (allProductTiers[i].ID == ID) {
 			if (allProductTiers[i].tierNr == state.productStates[findProductIndex(ID)]) {
-				productTierIndex = i; 
+				productTierIndex = i;
 			}
 		}
 	}
@@ -288,7 +288,7 @@ for (var i = 6; i < 99; i++) {
 newProduct("Fish Upgrade","goCreatureTalk");
 
 for (var i = 1; i < 99; i++) {
-	var newFishPurity = (i * 5) + 10; 
+	var newFishPurity = (i * 5) + 10;
 	newProductTier(
 		"Fish Upgrade",
 		i,
@@ -478,7 +478,7 @@ for (var i = 1; i < 99; i++) {
 		[Math.floor((i*50) * (1 + (i/8))),0,0,0,(i + 1)],
 		upgradeCrowbar,
 		true
-	);	
+	);
 }
 
 function upgradeCrowbar() {
@@ -559,7 +559,7 @@ for (var i = 1; i < 99; i++) {
 		i,
 		"Better Science",
 		"woodSynthesizer",
-		"Better science means <span style='color:#ff0000'>" + (i + 1) + " wood/sec</span>",
+		"Better science means that the Wood Synthesizer will produce<span style='color:#ff0000'>" + (i + 1) + " wood/sec</span>",
 		[0,Math.floor((i * 20) * (1 + (i/8))),((i * 200) * (1 + (i/8))),0],
 		upgradeWoodSynthesizer,
 		true
@@ -861,7 +861,7 @@ function upgradeBeanieImagination() {
 newProduct("Unlock Chapter 2","goStartMenu","Buy (price)");
 
 newProductTier(
-	"Unlock Chapter 2",
+	"Chapter 2",
 	1,
 	"Unlock Chapter 2",
 	"planetLifeAnimated",
@@ -873,14 +873,26 @@ newProductTier(
 
 function buyChapter2() {
 	if (state.pickedRobot) {
-		goPay();	
+		if (state.purchasedChapter2) {
+			updateState("broccoliChapter",true);
+			goThanksForPaying(burgerCaptured);
+		} else {
+			goPay("broccoliWorldUnlock", function() {
+				updateState("broccoliChapter", true);
+				updateState('purchasedChapter2', true);
+				goThanksForPaying(burgerCaptured);
+				// burgerCaptured();
+			}, function() {
+				goProblemPaying();
+			});
+		}
 	} else {
 		changeScene(
 			"Uuuh! Looks like you are eager to play <span style='color:#ffea00'>Chapter 2</span>, but you need to complete Chapter 1 first",
 			"bobBottle"
 		);
 		createGoButton("Ok!","talk",goFirstStartMenu);
-	}	
+	}
 }
 
 newProduct("Unlock Chapter 3","goStartMenu","Buy (price)");
@@ -897,9 +909,15 @@ newProductTier(
 );
 
 function buyChapter3() {
-	if (state.burgulonCreated) {
-		//Make a go pay for chapter 3
-		goNewBeginning();
+	if (state.broccoliChapter) {
+		if (state.purchasedChapter3) {
+			updateState('purchasedChapter3', true);
+			goNewBeginning();
+		} else {
+			goPay("chapter3Unlock", function() {
+				goNewBeginning();
+			}, function() {});
+		}
 	} else {
 		if (state.pickedRobot) {
 			changeScene(
@@ -934,14 +952,23 @@ newProductTier(
 
 function buyBothChapters() {
 	if (state.pickedRobot) {
-		//TODO make a go pay for both chapters
-		goPay();
+		if (state.purchasedChapter2 && state.purchasedChapter3) {
+			updateState("broccoliChapter",true);
+			burgerCaptured();		
+		} else {
+			goPay("unlockChapter2and3", function() {
+				updateState('purchasedChapter2', true);
+				updateState('purchasedChapter3', true);
+				updateState("broccoliChapter",true);
+				burgerCaptured();
+			}, function() {});
+		}
 	} else {
 		changeScene(
 			"Uuuh! Looks like you are eager to play Chapter 2 & 3, but you need to complete Chapter 1 first",
 			"bobBottle"
 		);
-		createGoButton("Ok!","talk",gFirstoStartMenu);
+		createGoButton("Ok!","talk",goFirstStartMenu);
 	}
 }
 

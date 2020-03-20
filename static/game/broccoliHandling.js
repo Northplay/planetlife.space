@@ -242,18 +242,27 @@ function goRestore() {
 	});
 }
 
-function goPay() {
+function goPay(productId, onComplete, onFailure) {
 	document.getElementById("loading_container").innerHTML = "<div class=\"blocking-loader\"></div>";
 
-	var call = BridgeCommander.call("purchaseProduct", "broccoliWorldUnlock");
+	var call = BridgeCommander.call("purchaseProduct", productId);
 	call.then(function(value) {
 		if (value === "success") {
 			document.getElementById("loading_container").innerHTML = "";
-			afterPay();
+			// afterPay();
+			onComplete(productId);
+		} else {
+			if (onFailure !== undefined) {
+				onFailure(productId);
+			}
 		}
 	});
 
 	call.catch(function(error) {
+		if (onFailure !== undefined) {
+			onFailure(productId);
+		}
+
 		document.getElementById("loading_container").innerHTML = "";
 		document.getElementById("loading_container").innerText = error;
 	});
@@ -1145,7 +1154,7 @@ function goAboutBurgulon() {
 }
 
 function goPayForRide() {
-	updateState("ghosts", state.ghosts -= 50);	
+	updateState("ghosts", state.ghosts -= 50);
 	updateState('wormholePaid', true);
 	goInterstellarRide();
 }
@@ -1187,7 +1196,8 @@ function goEnterWormholeAgain() {
 	changeScene("WOAAH!","wormhole","wormhole");
 	setTimeout(function() {
 		playSound(soundEffect.explosion);
-		goNewBeginning();
+		checkLastPaywall();
+		// goNewBeginning();
 	},5000);
 }
 

@@ -294,23 +294,15 @@ var friendBroccula = {
 }
 
 function resetState() {
-	let newState = initialState;
-	stateQueue.paused = true;
-	newState = initialState;
-	fillArrays();
-	var encoded = encodeState(newState);
-
+	ignoreStateSaves = true;
+	
 	if (hasBridge()) {
 		BridgeCommander.call('resetState');
-		BridgeCommander.call('updateState', encoded);
 	} else if (hasLocalStorage()) {
 		localStorage.removeItem('state');
-		localStorage.setItem('state', encoded);
 	}
-
-	state = newState;
-	stateQueue.paused = false;
-
+	
+	location.reload();
 }
 
 function fillArrays() {

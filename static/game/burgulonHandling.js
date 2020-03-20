@@ -528,7 +528,7 @@ function goBretAncientSecret() {
 		"bret",
 		"bretAncientSecret"
 	);
-	createGoButton("Back","burgulonSurface",goBurgulonSurface);
+	createGoButton("Back","bret",goBret);
 	createProduct("Wood Synthesizer");
 }
 

@@ -109,7 +109,7 @@ function goContinue() {
 
 	//Remove used jerks and beans
 	removeUsedBeans();
-	cleanUpRemovedJerks();
+	// cleanUpRemovedJerks();
 
 }
 

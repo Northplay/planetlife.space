@@ -273,6 +273,13 @@ button:disabled.buildButtonActive {
 	margin-bottom: 10px;
 }
 
+.buildButtonImageFull {
+	float: left;
+	width: 95%;
+	margin-left: 10px;
+	margin-bottom: 10px;
+}
+
 .smallBuildButtonImage {
 	float: left;
 	width: 60px;
@@ -299,6 +306,14 @@ button:disabled.buildButtonActive {
 .buildButtonHeadline {
 	margin-left: 10px;
 	margin-top: 40px;
+}
+
+.menuButtonHeadline {
+	display: block;
+	text-align: center;
+	font-size: 20px;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
 .marked {

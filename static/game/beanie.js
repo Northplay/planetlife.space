@@ -520,7 +520,7 @@ function goMouladin() {
 		createGoButton("Feel your powers","burgulon",goMouladinUpgrade,false);
 	}
 	if (state.bLollipops > 0 && state.bMouladinProgress < 5) {
-		createGoButton("Give " + moderateLollipopAmount + " lollipops","lollipop",goGiveLollipops,moderateLollipopAmount);
+		createGoButton("Give " + moderateLollipopAmount + " lollipops","Lollipop",goGiveLollipops,moderateLollipopAmount);
 	}
 	createGoButton("Talk","talk",goMouladinTalk);
 }

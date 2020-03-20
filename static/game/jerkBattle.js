@@ -272,6 +272,7 @@ function goDerekEat() {
 }
 
 function loadBurgulonDungeonLevel() {
+	console.log("loadBurgulonDungeonLevel");
 	//curBurgulonLevel++;
 	muffins = 0;
 	curDerekBaseHunger += derekulianHealth / 40;
@@ -290,6 +291,7 @@ function calculateDerekHunger() {
 //Do this before entering the dungeon
 
 function startDungeon() {
+	console.log("startDungeon");
 	//curBurgulonLevel = 0;
 	var j = state.jerkPile;
 	for (var i = 0; i < j.length; i++) {
@@ -424,6 +426,8 @@ function goLootLollies(rings) {
 		//goDefeatOgDerek();
 	} else if (bossBattle == "randomDerek") {
 		createGoButton("Alright!","talk",goDerekSummoningDevice);
+	} else if (bossBattle == "jack") {
+		createGoButton("Alright!!","talk",goDefeatJack);
 	}
 	//createGoButton("Alright!","talk",finishDerek);
 }

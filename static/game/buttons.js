@@ -212,6 +212,112 @@ function createBuildButton(headline,image,text,fnct,thisID,buttonText,price,para
 	document.getElementById("buttons").appendChild(br2);
 }
 
+function createMenuButton(headline,image,text,fnct,thisID,buttonText,parameter1) {
+	var fullDiv = document.createElement('div');
+	fullDiv.className = "fullWidth";
+	fullDiv.id = "full" + thisID;
+	fullDiv.style.display = "none";
+	curButtons.push(fullDiv.id);
+	fullDiv.style.marginBottom = "10px";
+	var img = document.createElement('img');
+	img.src = "images/handling/" + image + ".gif";
+	img.className = "buildButtonImageFull";
+	// img.style.marginRight = "5px";
+	var head = document.createElement('h1');
+	head.innerHTML = headline;
+	head.className = "menuButtonHeadline";
+	var iconDiv = document.createElement('div');
+	iconDiv.className = "resIconDiv";
+	iconDiv.style.display = "inline-block";
+	iconDiv.id = "icon" + thisID;
+	iconDiv.style.marginLeft = "10px";
+	iconDiv.style.width = "100%";
+	var fullDiv2 = document.createElement('div');
+	fullDiv2.className = "fullWidth";
+	fullDiv2.id =  "full2" + thisID;
+	fullDiv2.style.marginLeft = "10px";
+	var description = document.createElement('p');
+	description.className = "buildButtonText";
+	description.id = thisID + "-buildButtonDescription";
+	description.innerHTML = text;
+	description.style.marginRight = "20px";
+	var but = document.createElement('button');
+	but.id = thisID;
+	but.className = "buildButton";
+	but.innerHTML = buttonText;
+	// but.disabled = true;
+	var clicked = false;
+	// fullDiv.addEventListener("touchstart",down);
+	// fullDiv.addEventListener("mousedown",down);
+	// fullDiv.addEventListener("touchend",up);
+	// fullDiv.addEventListener("mouseup",up);
+	// fullDiv.addEventListener("touchmove",move);
+	// fullDiv.addEventListener("mouseleave",move);
+	fullDiv.addEventListener("click",up);
+	function down(e) {
+		//e.preventDefault();
+			but.className = "buildButtonActive";
+			clicked = true;
+		playSound(soundEffect.click);
+	 	movedInButton = false;
+	}
+	function up(e) {
+		e.preventDefault();
+		if (!movedInButton) {
+				fnct(parameter1);	
+		}
+		resetButton();
+	}
+	function move(e) {
+		//e.preventDefault();
+		movedInButton = true;
+		if (clicked) {
+			resetButton();
+		}
+	}
+	function resetButton() {
+			but.className = "buildButton";
+			clicked = false;
+	}
+	
+	// function showResource(name, amount) {
+	// 	var img = document.createElement('img');
+	// 	img.src = "images/icons/" + name + ".png";
+	// 	img.className = "resIcon";
+	// 	img.style.display = (amount == 0 ? "none" : "inline-block");
+		
+	// 	var p = document.createElement('p');
+	// 	p.className = "buildButtonText";
+	// 	p.style.display = (amount == 0 ? "none" : "inline-block");
+		
+	// 	p.innerHTML = amount.toLocaleString();
+		
+	// 	document.getElementById("icon" + thisID).appendChild(img);
+	// 	document.getElementById("icon" + thisID).appendChild(p);
+	// }
+	
+	var backgroundDiv = document.createElement('div');
+	backgroundDiv.className = "buildBackground";
+	var br = document.createElement("br");
+	var br2 = document.createElement("br");
+	document.getElementById("buttons").appendChild(fullDiv);
+	document.getElementById("full" + thisID).appendChild(head);
+	document.getElementById("full" + thisID).appendChild(img);
+	document.getElementById("full" + thisID).appendChild(iconDiv);
+	document.getElementById("full" + thisID).appendChild(fullDiv2);
+	document.getElementById("full" + thisID).appendChild(backgroundDiv);
+	document.getElementById("full2" + thisID).appendChild(description);
+	document.getElementById("icon" + thisID).appendChild(but);
+	
+	// showResource("wood", price[0]);
+	// showResource("gold", price[1]);
+	// showResource("coco", price[2]);
+	// showResource("stardust", price[3]);
+	
+	document.getElementById("buttons").appendChild(br);
+	document.getElementById("buttons").appendChild(br2);
+}
+
 function createSmallBuildButton(text,image,thisID,fnct,parameter) {
 	var but = document.createElement('button');
 	but.id = thisID;

@@ -113,7 +113,7 @@ function playMusic() {
 		BridgeCommander.call("playMusic");
 	} else {
 		if (audioSettings.fallbackMusic === null) {
-			audioSettings.fallbackMusic = new Audio("audio/rumsang.mp3");;
+			audioSettings.fallbackMusic = new Audio("audio/rumsang_v2.mp3");;
 
 			audioSettings.fallbackMusic.addEventListener("ended", function () {
 				if (audioSettings.isMusicMuted) { return; }

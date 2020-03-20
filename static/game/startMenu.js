@@ -1,50 +1,104 @@
 function goStartMenu() {
-	// changeScene(
-	// 	"</br></br>Welcome to <span style='color:#16fa05'>PLANET LIFE!</span></br></br>Let's get started",
-	// 	"PlanetLifeTitle",
-	// 	"goStartMenu"
-	// );
-	// createProduct("Chapter 1");
-	// createProduct("Unlock Chapter 2");
-	// createProduct("Unlock Chapter 3");
-	// createProduct("Unlock Chapter 2 & 3");
-	// createGoButton("Tell me more about this game","bobBottle",goExplainGame);
-
-	// if (hasBridge()) {
-	// 	changeScene(
-	// 		"</br></br>Welcome to PLANET LIFE!</br></br>Let's get started",
-	// 		"PlanetLifeTitle",
-	// 		"goStartMenu"
-	// 	);
-	// createProduct("Chapter 1");
-	// createProduct("Chapter 2");
-	// createProduct("Chapter 3");
-	// createProduct("Unlock Chapter 2 & 3");
-	// createGoButton("Tell me more about this game","bobBottle",goExplainGame);
-	// } else {
-	// 	goStartChapter1();
-	// }
 
 	if (hasBridge()) {
 		goFirstStartMenu();
 	} else {
 		goStartChapter1();
 	}
-	
+
 }
 
 function goFirstStartMenu() {
-	changeScene(
-		"</br></br>Welcome to <span style='color:#16fa05'>PLANET LIFE!</span></br></br>Let's get started",
-		"PlanetLifeTitle",
-		"goStartMenu"
-	);
-	createProduct("Chapter 1");
-	createProduct("Unlock Chapter 2");
-	createProduct("Unlock Chapter 3");
-	createProduct("Unlock Chapter 2 & 3");
-	createGoButton("Tell me more about this game","bobBottle",goExplainGame);	
+	var call = BridgeCommander.call("loadProducts");
+	call.then(function(value) {
+		var json = JSON.parse(value);
+
+		var chapter2IAP = json.filter(p => p.identifier === "broccoliWorldUnlock")[0];
+		var chapter3IAP = json.filter(p => p.identifier === "chapter3Unlock")[0];
+		var chapter2and3IAP = json.filter(p => p.identifier === "unlockChapter2and3")[0];
+
+		changeScene(
+			"</br></br>Welcome to <span style='color:#16fa05'>PLANET LIFE!</span></br></br>Let's get started",
+			"PlanetLifeTitle",
+			"goStartMenu"
+		);
+		createMenuButton(
+			"<span style='color:#16fa05'>Chapter 1</span>",
+			"chapter1",
+			"- More than 2 hours free of gameplay</br>- New friends to meet</br>- Dungeons to explore</br>- An endless dungeon",
+			goStartChapter1,
+			"planet1Button",
+			"Play (free)"
+		);
+
+		createChapter2Button();
+
+		createChapter3Button();
+
+		createBothChaptersButton();
+
+		createRestorePurchases(goFirstMenu);
+
+		createGoButton("Tell me more about this game","bobBottle",goExplainGame);
+	});
 }
+
+function createChapter2Button() {
+	var buttonText = !state.purchasedChapter2 ? "Unlock (" + chapter2IAP.localPrice + ")" : "Play (Purchased)";
+
+	createMenuButton(
+		"<span style='color:#ffea00'>Chapter 2</span>",
+		"chapter2",
+		"- More than 4 hours of new gameplay</br>- More dungeons</br>- More endless dungeons</br>- New friends and characters to meet</br>- A vicious quiz",
+		buyChapter2,
+		"planet2Button",
+		buttonText
+	);	
+}
+
+function createChapter3Button() {
+	var buttonText = !state.purchasedChapter3 ? "Unlock (" + chapter3IAP.localPrice + ")" : "Play (Purchased)";
+
+	createMenuButton(
+		"<span style='color:#00fff7'>Chapter 3</span>",
+		"chapter3",
+		"- More than 8 hours of new gameplay</br>- Deckbuilding!</br>- A new kind of dungeon</br>- A lot more friends</br>- New characters to meet</br>- Boss fights</br>- A proper ending to the space adventure",
+		buyChapter3,
+		"planet3Button",
+		buttonText
+	);
+}
+
+function createBothChaptersButton() {
+	var buttonText;
+	if (state.purchasedChapter2 && state.purchasedChapter3) {
+		buttonText = "Play (Purchased)"
+	} else {
+		buttonText = "Unlock (" + chapter2and3IAP.localPrice + ")";
+	}
+
+	createMenuButton(
+		"Chapter <span style='color:#ffea00'>2</span> + <span style='color:#00fff7'>3</span>",
+		"chapterAll",
+		"- More than 12 hours of new gameplay</br>- Everything from chapter 2 & 3",
+		buyBothChapters,
+		"planetAllButton",
+		buttonText
+	);
+}
+
+function createRestorePurchases(onRestore) {
+	createGoButton("Restore purchases","gold",function(){
+		BridgeCommander.call('restorePurchases',function(productIds){
+			var hasChapter2 = productIds.indexOf('broccoliWorldUnlock') !== -1;
+			var hasChapter3 = productIds.indexOf('chapter3Unlock') !== -1;
+			var hasBothChapters = productIds.indexOf('unlockChapter2and3') !== -1;
+			updateState('purchasedChapter2', hasChapter2 || hasBothChapters);
+			updateState('purchasedChapter3', hasChapter3 || hasBothChapters);
+			onRestore();
+		});
+	});	
+} 
 
 function goExplainGame() {
 	changeScene(
@@ -199,28 +253,43 @@ function goStartChapter1() {
 }
 
 function goStartMenu2() {
-	changeScene(
-		"",
-		"PlanetLifeTitle",
-		"goStartMenu"
-	);
-	createIconButton(
-		"Chapter 1 (completed)",
-		"images/handling/planet.gif",
-		"chapter23but",
-		"",
-		"#9e9e9e",
-		true,
-		"buttons",
-		stardustExchange,
-		0
-	);
-	// screateGoButton("Unlock Chapter 2 & 3 (2.99$)","broccoli",goPay);
-	createProduct("Unlock Chapter 2");
-	createProduct("Unlock Chapter 3");
-	createProduct("Unlock Chapter 2 & 3");
-	createGoButton("What do I get for my money?","talk",goTeaseGame);
-	createGoButton("Go back to free solar system","planet",goRoot);
+	var call = BridgeCommander.call("loadProducts");
+	call.then(function(value) {
+		var json = JSON.parse(value);
+
+		var chapter2IAP = json.filter(p => p.identifier === "broccoliWorldUnlock")[0];
+		var chapter3IAP = json.filter(p => p.identifier === "chapter3Unlock")[0];
+		var chapter2and3IAP = json.filter(p => p.identifier === "unlockChapter2and3")[0];
+
+		changeScene(
+			"",
+			"PlanetLifeTitle",
+			"goStartMenu"
+		);
+
+		createIconButton(
+			"Chapter 1 (completed)",
+			"images/handling/planet.gif",
+			"chapter23but",
+			"",
+			"#9e9e9e",
+			true,
+			"buttons",
+			stardustExchange,
+			0
+		);
+
+		createChapter2Button();
+
+		createChapter3Button();
+
+		createBothChaptersButton();
+
+		createRestorePurchases(goStartMenu2);
+
+		createGoButton("What do I get for my money?","talk",goTeaseGame);
+		createGoButton("Go back to free solar system","planet",goRoot);
+	});
 }
 
 function goTeaseGame() {
@@ -410,36 +479,67 @@ function goTeaseLastChapter9() {
 
 
 function goStartMenu3() {
+	var call = BridgeCommander.call("loadProducts");
+	call.then(function(value) {
+		var json = JSON.parse(value);
+
+		var chapter3IAP = json.filter(p => p.identifier === "chapter3Unlock")[0];
+
+		changeScene(
+			"",
+			"PlanetLifeTitle",
+			"goStartMenu"
+		);
+		createIconButton(
+			"Chapter 1 (completed)",
+			"images/handling/planet.gif",
+			"chapter23but",
+			"",
+			"#9e9e9e",
+			true,
+			"buttons",
+			stardustExchange,
+			0
+		);
+		createIconButton(
+			"Chapter 2 (completed)",
+			"images/handling/spaceBroccoli.gif",
+			"chapter23242but",
+			"",
+			"#9e9e9e",
+			true,
+			"buttons",
+			stardustExchange,
+			0
+		);
+
+		createChapter3Button();
+
+		createRestorePurchases(goStartMenu3);
+
+		createGoButton("What do I get for my money?","talk",goTeaseLastChapter2);
+		createGoButton("Go back to the Broccoli Empire","spaceBroccoli",goRoot);
+	});
+}
+
+
+function goThanksForPaying(nextFunction) {
 	changeScene(
-		"",
-		"PlanetLifeTitle",
-		"goStartMenu"
+		"Wow!</br>Thanks a bunch for your support.</br>You are an amazing person, and everyone is happy to have you around. Especially Derek. He wouldn't have a clue what to do without you really",
+		"bobBottle"
 	);
-	createIconButton(
-		"Chapter 1 (completed)",
-		"images/handling/planet.gif",
-		"chapter23but",
-		"",
-		"#9e9e9e",
-		true,
-		"buttons",
-		stardustExchange,
-		0
+	createGoButton("Yay!","talk",nextFunction);
+}
+
+function goProblemPaying() {
+	changeScene(
+		"Oh no!</br>Looks like there was a problem with paying for the chapter.</br>Get in touch with christian@northplay.co for help",
+		"bobBottle"
 	);
-	createIconButton(
-		"Chapter 2 (completed)",
-		"images/handling/spaceBroccoli.gif",
-		"chapter23242but",
-		"",
-		"#9e9e9e",
-		true,
-		"buttons",
-		stardustExchange,
-		0
-	);
-	// screateGoButton("Unlock Chapter 2 & 3 (2.99$)","broccoli",goPay);
-	createProduct("Unlock Chapter 3");
-	// createProduct("Unlock Chapter 2 & 3");
-	createGoButton("What do I get for my money?","talk",goTeaseLastChapter2);
-	createGoButton("Go back to the Broccoli Empire","spaceBroccoli",goRoot);
+	if (state.burgulonCreated) {
+		createGoButton("Oh no","talk",goStartMenu3);
+	} else {
+		createGoButton("Oh no","talk",goStartMenu2);
+	}
+	
 }

@@ -143,6 +143,8 @@ var initialState = {
 	planetudPrices: [],
 	playIntro: true,
 	productStates: [],
+	purchasedChapter2: false,
+	purchasedChapter3: false,
 	quizDone: false,
 	quizHalfway: false,
 	randomDungeonDifficulty: 8,
@@ -176,7 +178,7 @@ var initialState = {
 	wormFoundAgain: false,
 	wormholePaid: false,
 	wormOut: false,
-	version: 8,
+	version: 9,
 };
 
 var state = initialState;
@@ -337,7 +339,7 @@ var stateMigrations = [
 			{ key: 'bFriendAncientDerek', value: false },
 			{ key: 'bDoubleRings', value: false },
 			{ key: 'bBobMessage', value: false },
-			{ key: 'bJerkinsonRecruited', value: false }, 
+			{ key: 'bJerkinsonRecruited', value: false },
 			{ key: 'bDerekShipStates', value: [] },
 			{ key: 'bShipsSummoned', value: [false,false,false,false] },
 			{ key: 'bSpaceRadio', value: false },
@@ -368,6 +370,21 @@ var stateMigrations = [
 			{ key: 'bSpaceBar', value: false },
 			{ key: 'bWoodSynthesizer', value: false },
 		],
+		customFunction: function(state) {
+			var newState = state;
+
+			console.log("Fixing the burgulon product states");
+
+			var newProductStates = state.productStates;
+			newProductStates[18] = 0;
+			newProductStates[19] = 0;
+			newProductStates[20] = 0;
+			newProductStates[21] = 0;
+			newProductStates[22] = 0;
+			updateState('productStates', newProductStates);
+
+			return newState;
+		},
 	},
 	{
 		from: 5,
@@ -393,6 +410,16 @@ var stateMigrations = [
 		to: 8,
 		added: [
 			{ key: 'bBeanieImaginationUpgrade', value: false },
+		],
+		removed: [],
+		updated: [],
+	},
+	{
+		from: 8,
+		to: 9,
+		added: [
+			{ key: 'purchasedChapter2', value: false },
+			{ key: 'purchasedChapter3', value: false },
 		],
 		removed: [],
 		updated: [],
@@ -484,6 +511,7 @@ function loadFromBridge(onComplete) {
 
 function loadFromLocalStorage(onComplete) {
 	var value = localStorage.getItem('state');
+	console.log("load state: " + value);
 	parseAndSetState(value);
 	onComplete();
 }
@@ -495,9 +523,12 @@ function updateState(key, value) {
 	saveState();
 }
 
+var ignoreStateSaves = false;
+
 function saveState() {
+	if (ignoreStateSaves) { return; }
 	var encoded = encodeState(state);
-	
+
 	if (hasBridge()) {
 		BridgeCommander.call('updateState', encoded);
 	} else if (hasLocalStorage()) {
@@ -529,6 +560,10 @@ function runMigration(currentState, migration) {
 	migration.updated.forEach(m => (state[m.key] = m.value));
 	migration.removed.forEach(m => delete state[m]);
 
+	if (migration.customFunction !== undefined) {
+		state = migration.customFunction(state);
+	}
+
 	state.version = migration.to;
 
 	return state;
@@ -558,4 +593,17 @@ function cleanUpRemovedJerks() {
 		}
 	}
 	updateState('jerkPile', mb);
+}
+
+
+function fixOldBurgulonState() {
+	console.log("Fixing the burgulon product states");
+
+	var newProductStates = state.productStates;
+	newProductStates[18] = 0;
+	newProductStates[19] = 0;
+	newProductStates[20] = 0;
+	newProductStates[21] = 0;
+	newProductStates[22] = 0;
+	updateState('productStates', newProductStates);	
 }

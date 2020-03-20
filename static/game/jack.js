@@ -636,13 +636,13 @@ function goDefeatOgDerek4() {
 	createGoButton("Hmm..","talk",goJerkClub);
 }
 
-function goDefeatJack() {
-	changeScene(
-		"The End",
-		"universe"
-	);
-	createGoButton("Ok","burgulon",goNewGalaxy);
-}
+// function goDefeatJack() {
+// 	changeScene(
+// 		"The End",
+// 		"universe"
+// 	);
+// 	createGoButton("Ok","burgulon",goNewGalaxy);
+// }
 
 
 //L LETTERS
@@ -833,6 +833,35 @@ function goJackWins() {
 
 //JACK EXPLODES
 
+//IF you actually manage to defeat jack
+function goDefeatJack() {
+	updateState('bCoreState', 'coreOrange');
+	changeScene(
+		"Against all odds it looks like you defeated Jack!",
+		"jack"
+	);	
+	createGoButton("Insane!","talk",goDefeatJack2);
+}
+
+function goDefeatJack2() {
+	updateState('bSpaceRings', state.bSpaceRings + 900000);
+	changeScene(
+		"Look!</br>Jack dropped <span style='color:#ffc800'>900000 space rings!</span></br>That's a lot of space rings!",
+		"spaceRing"
+	);
+	createGoButton("Oh yeah!","spaceRing",goDefeatJack3);
+}
+
+function goDefeatJack3() {
+	changeScene(
+		"It looks like he is not handling his defeat so well. He is blowing up to giant proportions",
+		"jackBloated"
+	);
+	createGoButton("Oh no!","talk",goJackExplodes3);
+}
+
+//If you defeat jack by coco infused stardust
+
 function goJackExplodes() {
 	updateState('bCoreState', 'coreOrange');
 	changeScene(
@@ -929,7 +958,7 @@ function goRemouladinJack() {
 function goRemouladinJack2() {
 	changeScene(
 		"I'm going to interfere here, and wormhole this disaster somewhere far away!",
-		"appleWormHole"
+		"appleWormhole"
 	);
 	createGoButton("...","talk",goRemouladinJack3);
 }

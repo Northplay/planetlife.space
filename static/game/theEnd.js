@@ -576,8 +576,17 @@ function goCredits3() {
 function goCredits4() {
 	playSound(soundEffect.beating);
 	changeScene(
-		"Without <span style='color:#37ff00'>Michael Flarup</span> and his amazing company <span style='color:#0091ff'>Northplay</span>, this game would never have been published in the first place. Thanks to him, the UI looks slightly better.</br>Also that spacy track that you have been listening to for the last million hours is remixed by him. And he is the original voice of Derek",
+		"Without <span style='color:#37ff00'>Michael Flarup</span> and his amazing company <span style='color:#0091ff'>Northplay</span>, this game would never have been published in the first place. Thanks to him, the UI looks slightly better.</br>And he is the original voice of Derek",
 		"derek"
+	);
+	createGoButton("...","talk",goCredits45);
+}
+
+function goCredits45() {
+	playSound(soundEffect.cheer);
+	changeScene(
+		"If you are hearing those sweet space tunes, you have to thank Frederik Boye. Without his tireless work on those crispy beats, space would have been the boring void you would have expected it to be",
+		"derekDj"
 	);
 	createGoButton("...","talk",goCredits5);
 }

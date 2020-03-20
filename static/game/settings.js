@@ -56,8 +56,10 @@ function goSettings() {
 	if (hasBridge()) {
 		createSettingsIconButton(T("Donate","settings.donate"),"burger",goDonate);
 	}
-	createSettingsIconButton(T("Export savegame","settings.export"),"derekPaper",goExport);
-	createSettingsImportButton(T("Import savegame","settings.import"),"doorShortcut",goImportConfirm);
+	if (!hasBridge()) {
+		createSettingsIconButton(T("Export savegame","settings.export"),"derekPaper",goExport);
+		createSettingsImportButton(T("Import savegame","settings.import"),"doorShortcut",goImportConfirm);
+	}
 	createSettingsIconButton(T("Start over","settings.startOver"),"newSurface",goStartOver);
 }
 
@@ -88,14 +90,14 @@ function goAbout() {
 		document.getElementById("settingsHeadline").innerHTML = T("Jerks","settings.about.jerkHeadline");
 		document.getElementById("settingsArt").src="images/handling/bret.gif";
 		document.getElementById("settingsHandling").innerHTML = T(
-			"--- A jerk by Northplay ---</br></br></br>Made by Christian Laumark Jerkson</br></br>Backend: Kristian Andersen Jerkson</br></br>Design direction: Michael Flarup Jerkson</br></br><span style='color:#565656'>jerk version " + state.version + "</span><br/><br/>",
+			"--- A jerk by Northplay ---</br></br></br>Made by Christian Laumark Jerkson</br></br>Backend: Kristian Andersen Jerkson</br></br>Design direction: Michael Flarup Jerkson</br></br>Music: Frederik Boye Jerkson</br></br><span style='color:#565656'>jerk version " + state.version + "</span><br/><br/>",
 			"settings.about.jerkCredits"
 		);
 	} else {
 		document.getElementById("settingsHeadline").innerHTML = T("settings","settings.about.headline");
 		document.getElementById("settingsArt").src="images/handling/northplay.gif";
 		document.getElementById("settingsHandling").innerHTML = T(
-			"--- A game by Northplay ---</br></br></br>Made by Christian Laumark</br></br>Backend: Kristian Andersen</br></br>Design direction: Michael Flarup</br></br><span style='color:#565656'>version " + state.version + "</span><br/><br/>",
+			"--- A game by Northplay ---</br></br></br>Made by Christian Laumark</br></br>Backend: Kristian Andersen</br></br>Design direction: Michael Flarup</br></br>Music: Frederik Boye</br></br><span style='color:#565656'>version " + state.version + "</span><br/><br/>",
 			"settings.about.credits"
 		);
 	}

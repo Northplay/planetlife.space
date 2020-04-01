@@ -205,7 +205,7 @@ const Index = () => {
 						</a>
 					</Link>
 					<a
-						href="https://www.youtube.com/watch?v=8bLh3u9IckA"
+						href="https://www.youtube.com/watch?v=M64h79ruqgM"
 						className="watch"
 						target="_blank"
 						rel="noopener noreferrer"
@@ -218,7 +218,7 @@ const Index = () => {
 										<iframe
 											width="853"
 											height="400"
-											src="https://www.youtube.com/embed/8bLh3u9IckA?autoplay=1"
+											src="https://www.youtube.com/embed/M64h79ruqgM?autoplay=1"
 											frameBorder="0"
 											allowFullScreen
 											title="Youtube Embed Video"

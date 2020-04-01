@@ -971,6 +971,7 @@ function goGetApple2() {
 }
 
 function goGetApple3() {
+	playSound(soundEffect.wormHole);
 	changeScene(
 		"Wow! Look at those colors. Is it a wormhole?",
 		"wormhole"

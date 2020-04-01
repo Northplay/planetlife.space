@@ -72,7 +72,7 @@ function goRememberBurgulon() {
 		"Sweatson reminds how crazy it was being a robot planet. He can take you back there for a while if you want?",
 		"sweatson"
 	);
-	createGoButton("Maybe later","planet",goFriend,"Sweatson");
+	createGoButton("Maybe later","planet",goFriend,state.friends[1]);
 	createGoButton("That would be nice","burgulon",goBackToBurgulon);
 }
 

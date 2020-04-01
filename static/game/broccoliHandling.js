@@ -611,6 +611,7 @@ function goBurgerPlanet() {
 		"goBurgerPlanet"
 	);
 	setTimeout(function() {
+		playSound(soundEffect.explosion);
 		changeArt("explosion");
 	},4000);
 	setTimeout(function() {
@@ -801,6 +802,7 @@ function goCallStupid() {
 
 function goCallGod() {
 	updateState("remouladinFound", true);
+	playSound(soundEffect.worm);
 	changeScene(
 		"You hear the godly and slightly wormlike voice through the phone line. Planet guy! An apple pops into view",
 		"appleWorm",
@@ -1102,6 +1104,7 @@ function ghostTransaction(buy) {
 //////////////
 
 function goRemouladin() {
+	playSound(soundEffect.worm);
 	changeScene(
 		"Remouladin is chilling in his apple. He makes being a god look so easy",
 		"appleWorm",

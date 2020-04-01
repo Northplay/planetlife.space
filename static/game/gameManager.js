@@ -93,6 +93,10 @@ function sekund() {
 		buttonDisableCheck([0,0,0,10],"cocoStardustBut");
 	}
 
+	if (!state.friendHousePrice[4] && place == "workshop") {
+		buttonDisableCheck(state.friendHousePrice,"buildFriendHouseBut");
+	}
+
 	// if (place == "goSpaceBar") {
 	// 	buttonDisableCheck([0,0,state.bBarCocoSell,0],"barCocoSellBut",true);
 	// }
@@ -190,10 +194,6 @@ function oldPriceCheck() {
 
 	if (place == "workshop" && state.drillNr < drills.length) {
 		buttonDisableCheck(drills[state.drillNr],"upgradeDrillBut");
-	}
-
-	if (!state.friendHousePrice[4] && place == "workshop") {
-		buttonDisableCheck(state.friendHousePrice,"buildFriendHouseBut");
 	}
 }
 
@@ -496,11 +496,19 @@ function isTouchDevice() {
 // CHEATS
 
 function boost() {
-	updateState("pickedRobot", true);
-	updateState("wood", state.wood += 9000);
-	updateState("gold", state.gold += 5000);
-	updateState("coco", state.coco += 9000);
-	updateState("stardust", state.stardust + 5);
+	if (state.burgulonTime) {
+		updateState("bWood", state.wood += 9000);
+		updateState("bGold", state.gold += 5000);
+		updateState("bCoco", state.coco += 9000);
+		updateState("bStardust", state.stardust + 1000);
+	} else {
+		updateState("pickedRobot", true);
+		updateState("wood", state.wood += 9000);
+		updateState("gold", state.gold += 5000);
+		updateState("coco", state.coco += 9000);
+		updateState("stardust", state.stardust + 5);		
+	}
+
 }
 
 function burgerBoost() {

@@ -375,7 +375,7 @@ function goWisemanTalk() {
 		wisemanTalks[wisemanTalkCount],
 		"jerkWiseMan"
 	);
-	createGoButton("Back","jerkWiseman",goVisitWiseman);
+	createGoButton("Back","jerkWiseMan",goVisitWiseman);
 	if (wisemanTalkCount < wisemanTalks.length - 1) {
 		wisemanTalkCount++;
 		createGoButton("Endure more wisdom","talk",goWisemanTalk);

@@ -1194,8 +1194,8 @@ newSingleProduct("Huge Bean (1000 coco)","beanHuge","bCoco",1000,"goBeanShop",bu
 newSingleProduct("Huge Bean (1000 wood)","beanHuge","bWood",1000,"goBeanShop",buyBean,"Huge");
 newSingleProduct("Huge Bean (300 gold)","beanHuge","bGold",300,"goBeanShop",buyBean,"Huge");
 
-newSingleProduct("20 random beans (20000 wood)","beanRandom","bWood",15000,"goBeanShop",buyBeanPack);
-newSingleProduct("20 random beans (20000 coco)","beanRandom","bCoco",15000,"goBeanShop",buyBeanPack);
+newSingleProduct("20 random beans (20000 wood)","beanRandom","bWood",20000,"goBeanShop",buyBeanPack);
+newSingleProduct("20 random beans (20000 coco)","beanRandom","bCoco",20000,"goBeanShop",buyBeanPack);
 newSingleProduct("20 random beans (8000 gold)","beanRandom","bGold",8000,"goBeanShop",buyBeanPack);
 
 newSingleProduct("Reroll Bean Prices (5 stardust)","stardust","bStardust",5,"goBeanShop",rerollBeanPrices);

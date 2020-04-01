@@ -600,7 +600,7 @@ function goDungeonDone() {
 		createGoButton("I'm so proud of you Derek!","derekHealth",goMonsterDungeon);
 	} else if (state.dungeons[dNr].navn == "Derekulus X") {
 		changeScene(
-			"Welcome home Derek. You are a real bullman now!<br/><br/>Take a picture of this and send it to christianlaumark@gmail.com<br/><br/>You have earned a reward you crazy crazy person.<br/><br/>Also there is a door here",
+			"Welcome home Derek. You are a real bullman now!<br/><br/>Take a picture of this and send it to christianlaumark@gmail.com<br/><br/>You have earned a reward you crazy crazy person.<br/><br/>Also there is a door here. It turns out to be a Hall of Fame for the first 100 champions to reach this place",
 			"derek"
 		);
 		//createGoButton("HAhahahaha! I'm crazy!!!","planet",goRoot);

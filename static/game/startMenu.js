@@ -31,20 +31,20 @@ function goFirstStartMenu() {
 			"Play (free)"
 		);
 
-		createChapter2Button();
-
-		createChapter3Button();
-
-		createBothChaptersButton();
-
-		createRestorePurchases(goFirstMenu);
+		createChapter2Button(chapter2IAP);
+		createChapter3Button(chapter3IAP);
+		createBothChaptersButton(chapter2and3IAP);
+		createRestorePurchases(goFirstStartMenu);
 
 		createGoButton("Tell me more about this game","bobBottle",goExplainGame);
 	});
 }
 
-function createChapter2Button() {
-	var buttonText = !state.purchasedChapter2 ? "Unlock (" + chapter2IAP.localPrice + ")" : "Play (Purchased)";
+function createChapter2Button(chapter2IAP) {
+	var buttonText = "Error";
+	if (chapter2IAP) {
+		buttonText = !state.purchasedChapter2 ? "Unlock (" + chapter2IAP.localPrice + ")" : "Play (Purchased)";
+	}
 
 	createMenuButton(
 		"<span style='color:#ffea00'>Chapter 2</span>",
@@ -53,11 +53,14 @@ function createChapter2Button() {
 		buyChapter2,
 		"planet2Button",
 		buttonText
-	);	
+	);
 }
 
-function createChapter3Button() {
-	var buttonText = !state.purchasedChapter3 ? "Unlock (" + chapter3IAP.localPrice + ")" : "Play (Purchased)";
+function createChapter3Button(chapter3IAP) {
+	var buttonText = "Error";
+	if (chapter3IAP) {
+		buttonText = !state.purchasedChapter3 ? "Unlock (" + chapter3IAP.localPrice + ")" : "Play (Purchased)";	
+	}
 
 	createMenuButton(
 		"<span style='color:#00fff7'>Chapter 3</span>",
@@ -69,12 +72,14 @@ function createChapter3Button() {
 	);
 }
 
-function createBothChaptersButton() {
-	var buttonText;
-	if (state.purchasedChapter2 && state.purchasedChapter3) {
-		buttonText = "Play (Purchased)"
-	} else {
-		buttonText = "Unlock (" + chapter2and3IAP.localPrice + ")";
+function createBothChaptersButton(chapter2and3IAP) {
+	var buttonText = "Error";
+	if (chapter2and3IAP) {
+		if (state.purchasedChapter2 && state.purchasedChapter3) {
+			buttonText = "Play (Purchased)"
+		} else {
+			buttonText = "Unlock (" + chapter2and3IAP.localPrice + ")";
+		}	
 	}
 
 	createMenuButton(
@@ -89,7 +94,8 @@ function createBothChaptersButton() {
 
 function createRestorePurchases(onRestore) {
 	createGoButton("Restore purchases","gold",function(){
-		BridgeCommander.call('restorePurchases',function(productIds){
+		var call = BridgeCommander.call('restorePurchases');
+		call.then(function(productIds) {
 			var hasChapter2 = productIds.indexOf('broccoliWorldUnlock') !== -1;
 			var hasChapter3 = productIds.indexOf('chapter3Unlock') !== -1;
 			var hasBothChapters = productIds.indexOf('unlockChapter2and3') !== -1;
@@ -97,8 +103,8 @@ function createRestorePurchases(onRestore) {
 			updateState('purchasedChapter3', hasChapter3 || hasBothChapters);
 			onRestore();
 		});
-	});	
-} 
+	});
+}
 
 function goExplainGame() {
 	changeScene(
@@ -279,12 +285,9 @@ function goStartMenu2() {
 			0
 		);
 
-		createChapter2Button();
-
-		createChapter3Button();
-
-		createBothChaptersButton();
-
+		createChapter2Button(chapter2IAP);
+		createChapter3Button(chapter3IAP);
+		createBothChaptersButton(chapter2and3IAP);
 		createRestorePurchases(goStartMenu2);
 
 		createGoButton("What do I get for my money?","talk",goTeaseGame);
@@ -460,7 +463,11 @@ function goTeaseLastChapter9() {
 		"And that's only just a few of the things that are going to happen.</br>But I recommend that you go check it out yourself",
 		"bobBottle"
 	);
-	createGoButton("Wow","talk",goStartMenu2);
+	if (state.broccoliChapter) {
+		createGoButton("Wow","talk",goStartMenu3);
+	} else {
+		createGoButton("Wow","talk",goStartMenu2);
+	}
 }
 
 
@@ -513,8 +520,7 @@ function goStartMenu3() {
 			0
 		);
 
-		createChapter3Button();
-
+		createChapter3Button(chapter3IAP);
 		createRestorePurchases(goStartMenu3);
 
 		createGoButton("What do I get for my money?","talk",goTeaseLastChapter2);
@@ -541,5 +547,5 @@ function goProblemPaying() {
 	} else {
 		createGoButton("Oh no","talk",goStartMenu2);
 	}
-	
+
 }

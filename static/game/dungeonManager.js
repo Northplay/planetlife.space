@@ -11,14 +11,14 @@ function dungeonType(navn,depth,difficulty,image,levels,place,imageFighting) {
 }
 
 //PLANET DUNGEONS
-var juicyDungeon = new dungeonType("Juicy Dungeon","(shallow)",1,"dungeon",10,"planet","dungeonBeating");
+var juicyDungeon = new dungeonType("Juicy Dungeon","(shallow)",0.5,"dungeon",10,"planet","dungeonBeating");
 var scaryDungeon = new dungeonType("Scary Dungeon","(deep)",1,"dungeon",20,"planet","dungeonBeating");
-var coolDungeon = new dungeonType("Cool Dungeon","(abyssal)",1,"dungeon",30,"planet","dungeonBeating");
+var coolDungeon = new dungeonType("Cool Dungeon","(abyssal)",1.5,"dungeon",30,"planet","dungeonBeating");
 
 //COCO DUNGEONS
 var cocoDungeon1 = new dungeonType("Sweet Coco Dungeon","(shallow)",3,"cocoDungeon",10,"cocoCastle","cocoDungeonBeating");
-var cocoDungeon2 = new dungeonType("Slippery Coco Dungeon","(deep)",3,"cocoDungeon",20,"cocoCastle","cocoDungeonBeating");
-var cocoDungeon3 = new dungeonType("Melting Coco Dungeon","(abyssal)",3,"cocoDungeon",30,"cocoCastle","cocoDungeonBeating");
+var cocoDungeon2 = new dungeonType("Slippery Coco Dungeon","(deep)",3.5,"cocoDungeon",20,"cocoCastle","cocoDungeonBeating");
+var cocoDungeon3 = new dungeonType("Melting Coco Dungeon","(abyssal)",4,"cocoDungeon",30,"cocoCastle","cocoDungeonBeating");
 
 //MONSTER DUNGEONS
 var monsterDungeon1 = new dungeonType(
@@ -33,7 +33,7 @@ var monsterDungeon1 = new dungeonType(
 var monsterDungeon2 = new dungeonType(
 	"Stinky Monster Dungeon",
 	"(deep)",
-	5,
+	5.5,
 	"monsterDungeon",
 	20,
 	"lochJuice",
@@ -42,7 +42,7 @@ var monsterDungeon2 = new dungeonType(
 var monsterDungeon3 = new dungeonType(
 	"Repulsive Monster Dungeon",
 	"(abyssal)",
-	5,
+	6,
 	"monsterDungeon",
 	30,
 	"lochJuice",
@@ -86,8 +86,9 @@ var woodDoor = new doorType("Wood door","doorWood",15,0,0,[1,0,0,0]);
 var cocoDoor = new doorType("Coco door","doorCoco",15,0,0,[0,0,1,0]);
 var goldDoor = new doorType("Gold door","doorGold",25,0,0,[0,1,0,0]);
 var stardustDoor = new doorType("Stardust door","doorStardust",50,0,0,[0,0,0,1]);
+var chestDoor = new doorType("Chest door","doorChest",35,0,0,[0,0,0,0]);
 
-var allDoorKinds = [smallPresentDoor,mediumPresentDoor,bigPresentDoor,shortcutDoor,boringDoor,mysteryDoor,woodDoor,cocoDoor,goldDoor,stardustDoor];
+var allDoorKinds = [smallPresentDoor,mediumPresentDoor,bigPresentDoor,shortcutDoor,boringDoor,mysteryDoor,woodDoor,cocoDoor,goldDoor,stardustDoor,chestDoor];
 
 var doorTypes = [];
 //var doorTypes = [smallPresentDoor,mediumPresentDoor,bigPresentDoor,shortcutDoor,boringDoor,mysteryDoor];
@@ -98,7 +99,8 @@ var doorTypes0 = [
 	mysteryDoor,mysteryDoor,
 	woodDoor,woodDoor,woodDoor,
 	cocoDoor,cocoDoor,cocoDoor,
-	goldDoor
+	goldDoor,
+	chestDoor
 	];
 var doorTypes5 = [
 	boringDoor,boringDoor,
@@ -107,6 +109,7 @@ var doorTypes5 = [
 	woodDoor,woodDoor,
 	cocoDoor,cocoDoor,
 	goldDoor,goldDoor,
+	chestDoor
 	];
 var doorTypes10 = [
 	boringDoor,boringDoor,
@@ -115,7 +118,8 @@ var doorTypes10 = [
 	woodDoor,woodDoor,
 	cocoDoor,cocoDoor,
 	goldDoor,goldDoor,goldDoor,
-	stardustDoor
+	stardustDoor,
+	chestDoor
 	];
 var doorTypes15 = [
 	boringDoor,boringDoor,
@@ -124,7 +128,8 @@ var doorTypes15 = [
 	woodDoor,
 	cocoDoor,
 	goldDoor,goldDoor,goldDoor,
-	stardustDoor,stardustDoor
+	stardustDoor,stardustDoor,
+	chestDoor
 	];
 var doorTypes20 = [
 	boringDoor,boringDoor,
@@ -133,7 +138,8 @@ var doorTypes20 = [
 	woodDoor,
 	cocoDoor,
 	goldDoor,goldDoor,
-	stardustDoor,stardustDoor,stardustDoor
+	stardustDoor,stardustDoor,stardustDoor,
+	chestDoor
 	];
 
 function insertPresentDoors(level,difficulty,doorCount) {
@@ -147,7 +153,7 @@ function insertPresentDoors(level,difficulty,doorCount) {
 		} else if (chance > 10) {
 			chosenDoor = bigPresentDoor;
 		}
-		doorTypes.push(chosenDoor);	
+		doorTypes.push(chosenDoor);
 	}
 }
 
@@ -155,13 +161,19 @@ var dNr = 0;
 var doors = [];
 var doorNr;
 var jerkCount;
+var chanceDoorsRolled = 0;
+var jerksStrengthed = 0;
+var jerkDam = 0;
+var jerksArmored = 0;
+var thirstyHappened = false;
 
 function goPickDungeon() {
+	changeBackground("BG_Planet");
 	updateState('dungeonFound', true);
 	if (state.derekDefrosted) {
 		changeScene("Derek can't wait to go see what's down those dungeons. You better choose a dungeon soon. Derek is breathing heavily.","dungeonDerek","goPickDungeon");
 		createGoButton("Back","newSurface",checkWhat);
-		createGoButton("DEREK!","derek",goDerekHub);
+		// createGoButton("DEREK!","derek",goDerekHub);
 		if (state.derekHealth < state.derekMaxHealth) {
 			createSmallBuildButton("Heal Derek (" + (state.derekMaxHealth - state.derekHealth) + " coco)","coco","healDerekBut",cocoHealDerek);
 		}
@@ -173,6 +185,36 @@ function goPickDungeon() {
 				createGoButton(state.dungeons[i].navn + " " + state.dungeons[i].depth,state.dungeons[i].image,goThisDungeon,i);
 			}
 		}
+		var anyDungeons = false;
+		var anyCocoDungeons = false;
+		var anyMonsterDungeons = false;
+		var anySpaceDungeons = false;
+		for (var i = 0; i < state.dungeons.length; i++) {
+			// if (!state.dungeons[i].completed && state.dungeons[i].place == "planet") {
+			// 	anyDungeons = true;
+			// }
+			if (!state.dungeons[i].completed && state.dungeons[i].place == "cocoCastle" && state.cocoDungeonsFound) {
+				anyCocoDungeons = true;
+			}
+			if (!state.dungeons[i].completed && state.dungeons[i].place == "lochJuice" && state.monsterDungeons) {
+				anyMonsterDungeons = true;
+			}
+			if (!state.dungeons[i].completed && state.dungeons[i].place == "space" && state.derekulusX) {
+				anySpaceDungeons = true;
+			}
+		}
+		if (anySpaceDungeons) {
+			createGoButton("Derekulus X","spaceDungeon",goSpaceDungeon);
+		}
+		if (anyMonsterDungeons) {
+			createGoButton("Monster Dungeons","monsterDungeon",goMonsterDungeon);
+		}
+		if (anyCocoDungeons) {
+			createGoButton("Coco Dungeons","cocoDungeon",goCocoDungeons);
+		}
+		if (anyDungeons) {
+			createGoButton("Dungeons","dungeon",goPickDungeon);
+		}
 	} else {
 		changeScene("It's a valley full of dungeons. Leading into.. you? You'll need somebody to go down there, because you obviously can't","dungeon","goPickDungeon");
 		createGoButton("Back","newSurface",checkWhat);
@@ -180,6 +222,16 @@ function goPickDungeon() {
 	if (state.derekDead) {
 		derekDead();
 	}
+}
+
+function fillPotionBelt() {
+	updateState('gold', state.gold - (calculateEmptyPotionSlots() * 25));
+	updateState('healthPotions', state.healthPotionCapacity);
+	upgradeAnimation("So many potions in that belt!","derekBelt",goDerekHub);
+}
+
+function calculateEmptyPotionSlots() {
+	return state.healthPotionCapacity - state.healthPotions;
 }
 
 function goDungeonMaster() {
@@ -205,7 +257,7 @@ function cocoHealDerek(where) {
 	if (state.coco >= price) {
 		playSound(soundEffect.heal);
 		playSound(soundEffect.derek);
-		updateState('derekHealth',state.derekMaxHealth);
+		updateState('derekHealth', state.derekMaxHealth);
 		updateState('coco',state.coco - price);
 		if (where == "Coco dungeons") {
 			goCocoDungeons();
@@ -224,15 +276,16 @@ function goBurgerAdvice() {
 	var h2 = "<br/>Honestly you get quite tired of listening after a while";
 	var tips = [
 		" Through chirps and beeps, he convinces you that it's best to start with the shallow dungeon. He talks a great deal about learning curves and Derek Safety Regulations.",
-		" Burger carefully chirps a warning. It is important to have Derek properly educated before going into the dungeon. The poor bull might die, and it is said that only stardust will bring him alive again.",
+		" Burger carefully chirps a warning. It is important to have Derek properly educated before going into the dungeon. The poor bull might die, and it is said that only stardust will bring him back to life again.",
 		" Especially about doors in dungeons. He tells you that jerks typically like to hide behind doors of extra cool treasure. Like presents. He talks to lengths about jerk gravitational physics and treasure logic.",
 		" He chirps out some wisdom - The deeper you are in the dungeon, the more jerks you are going to see. He writes some simple, but mind boggling functions.",
-		" He looks out in the distance. His slow chirps tell you that there must be more dungeons out in the universe. Much harder than these dungeons on your surface."
+		" He looks out in the distance. His slow chirps tell you that there must be more dungeons out in the universe. Much harder than these dungeons on your surface. You try to get Burger to tell you more, but something seems to be wrong with his memory parts again.",
+		" But he tells you that <span style='color:#ff00bb'>@3DCrede</span> on twitter knows even more, and is just as eager to talk about dungeons."
 	];
 	h += tips[burgerAdviceNr];
-	var tipImages = ["burger","dungeonSchool","doorBigPresent","classroom","universe"];
+	var tipImages = ["burger","dungeonSchool","doorBigPresent","classroom","universe","item_GlassesOfThirsty"];
 	changeScene(h + h2,tipImages[burgerAdviceNr],"goBurgerAdvice");
-	burgerAdviceNr++ 
+	burgerAdviceNr++
 	if (burgerAdviceNr == tips.length) {
 		burgerAdviceNr = 0;
 	}
@@ -246,15 +299,29 @@ function goBurgerAdvice() {
 		);
 		createGoButton("What's up?","workshop",goWorkshop);
 	}
-	
+
 }
 
 function goThisDungeon(nr) {
+	changeBackground("BG_Dungeon");
+	playBattleMusic();
 	dNr = nr;
+	if (state.dungeons[dNr].image == "cocoDungeon") {
+		changeBackground("BG_CocoDungeon");
+	}
+	if (state.dungeons[dNr].image == "monsterDungeon") {
+		changeBackground("BG_MonsterDungeon");
+	}
+	if (state.dungeons[dNr].image == "spaceDungeon") {
+		changeBackground("BG_DerekulusX");
+	}
 	//Resets all the uses on skills
+	var statNames = ["extra Bull Fart uses","extra Thirsty uses","extra Door of Regret uses","extra Full Heal uses"];
 	for (var i = 0; i < allSkills.length; i++) {
 		if (state.skillStates[i] > 0) {
-			allSkills[i].curUses = allSkillTiers[findCurTierIndexBySkillIndex(i)].uses;	
+			allSkills[i].curUses = allSkillTiers[findCurTierIndexBySkillIndex(i)].uses;
+		} else if (allDerekStats[statNames[i]] > 0) {
+			allSkills[i].curUses = 0;
 		}
 	}
 	//Resets level on dungeon
@@ -265,23 +332,24 @@ function goThisDungeon(nr) {
 }
 
 function goPickDoor(chooseDoor) {
-	changeScene(
-		"Derek is on <span style='color:#38b200'>level " + state.dungeons[dNr].curLevel + "/" + state.dungeons[dNr].levels + "</span> of this dungeon. Derek's health is like <span style='color:#ff0000'>" + state.derekHealth + "/" + state.derekMaxHealth + "</span>. There are two doors. Which one will Derek enter?",
-		state.dungeons[dNr].image,
-		"goPickDoor"
-	);
-	if (state.dungeons[dNr].place == "planet") {
-		createGoButton("Leave this dungeon!","newSurface",exitDungeonSure);
-	}
-	if (state.dungeons[dNr].place == "cocoCastle") {
-		createGoButton("Leave this dungeon!","cocoDungeon",exitDungeonSure);
-	}
-	if (state.dungeons[dNr].place == "lochJuice") {
-		createGoButton("Leave this dungeon!","monsterDungeon",exitDungeonSure);
-	}
-	if (state.dungeons[dNr].place == "space") {
-		createGoButton("Leave this dungeon!","planet",exitDungeonSure);
-	}
+
+	chanceDoorsRolled = 0;
+	thirstyHappened = false;
+
+	var derekHealed = "";
+
+	if (allDerekStats["health regeneration per dungeon level"] > 0 && state.derekHealth < state.derekMaxHealth) {
+		var health = state.derekHealth;
+		health += allDerekStats["health regeneration per dungeon level"];
+		if (health > state.derekMaxHealth) {
+			health = state.derekMaxHealth;
+		}
+		updateState('derekHealth', health);
+		derekHealed = "</br><span style='color:#16fa05'>Derek healed " + allDerekStats["health regeneration per dungeon level"] + " health from his equipment.</span>"
+	} 
+
+	var h = "Derek is on <span style='color:#38b200'>level " + state.dungeons[dNr].curLevel + "/" + state.dungeons[dNr].levels + "</span> of this dungeon. Derek's health is like <span style='color:#ff0000'>" + (state.derekHealth + allDerekStats["health"]) + "/" + (state.derekMaxHealth + allDerekStats["health"]) + "</span>. There are two doors. Which one will Derek enter?" + derekHealed;
+
 	if (chooseDoor) {
 		if (state.dungeons[dNr].curLevel == 5) {
 			doorTypes = doorTypes5.slice();
@@ -300,33 +368,109 @@ function goPickDoor(chooseDoor) {
 			insertPresentDoors(0,state.dungeons[dNr].difficulty,3);
 		}
 		for (var i = 0; i < 2; i++) {
-			doors[i] = doorTypes[Math.floor(Math.random() * doorTypes.length)];
+			var thisRandomDoor = Math.floor(Math.random() * doorTypes.length);
+			doors[i] = doorTypes[thisRandomDoor];
+			console.log("OG Door was " + doorTypes[thisRandomDoor].navn);
+			if (chanceDoorsRolled < 1) {
+				console.log("chance doors rolled " + chanceDoorsRolled);
+				h += rollChanceOfDoor(i);
+			}
 		}
 		while (doors[1] == doors[0]) {
+			console.log("rerolling doors because they are the same");
 			doors[1] = doorTypes[Math.floor(Math.random() * doorTypes.length)];
+			if (chanceDoorsRolled < 1) {
+				console.log("chance doors rolled " + chanceDoorsRolled);
+				h += rollChanceOfDoor(1);
+			}
 		}
+		console.log("---- FLOOR LOADED -----");
+	}
+
+	changeScene(
+		h,
+		state.dungeons[dNr].image,
+		"goPickDoor"
+	);
+	if (state.dungeons[dNr].place == "planet") {
+		createGoButton("Leave this dungeon!","newSurface",exitDungeonSure);
+	}
+	if (state.dungeons[dNr].place == "cocoCastle") {
+		createGoButton("Leave this dungeon!","cocoDungeon",exitDungeonSure);
+	}
+	if (state.dungeons[dNr].place == "lochJuice") {
+		createGoButton("Leave this dungeon!","monsterDungeon",exitDungeonSure);
+	}
+	if (state.dungeons[dNr].place == "space") {
+		createGoButton("Leave this dungeon!","planet",exitDungeonSure);
 	}
 	for (var i = 0; i < doors.length; i++) {
 		createGoButton(doors[i].navn,doors[i].image,goCheckDoor,i);
 	}
 	if (state.dungeons[dNr].curLevel >= state.dungeons[dNr].levels) {
 		goDungeonDone();
-	}	
-}	
+	}
+}
+
+function rollChanceOfDoor(i) {
+	var stardustDoorChance = Math.random() * 100;
+	var shortcutDoorChance = Math.random() * 100;
+	var chestDoorChance = Math.random() * 100;
+	var stardustDoorPoints = 0, shortcutDoorPoints = 0, chestDoorPoints = 0;
+	if (stardustDoorChance <= allDerekStats["chance of stardust door"]) {
+		stardustDoorPoints = allDerekStats["chance of stardust door"] - stardustDoorChance;
+	}
+	if (shortcutDoorChance <= allDerekStats["chance of shortcut door"]) {
+		shortcutDoorPoints = allDerekStats["chance of shortcut door"] - shortcutDoorChance;
+	}
+	if (chestDoorChance <= allDerekStats["chance of chest door"]) {
+		chestDoorPoints = allDerekStats["chance of chest door"] - chestDoorChance;
+	}
+	console.log("stardustDoorPoints: " + stardustDoorPoints);
+	console.log("shortcutDoorPoints: " + shortcutDoorPoints);
+	console.log("chestDoorPoints: " + chestDoorPoints);
+	if (stardustDoorPoints > shortcutDoorPoints && stardustDoorPoints > chestDoorPoints) {
+		console.log("Set door to Stardust Door");
+		chanceDoorsRolled++;
+		doors[i] = allDoorKinds[9];
+		// doors[i].navn += "<span style='color:#0088ff'> (found by equipment)</span>";
+		return "<span style='color:#0088ff'></br>Derek found a Stardust Door with his equipment.</span>";
+	} else if (shortcutDoorPoints > stardustDoorPoints && shortcutDoorPoints > chestDoorPoints) {
+		console.log("Set door to Shortcut Door");
+		chanceDoorsRolled++;
+		doors[i] = allDoorKinds[3];
+		// doors[i].navn += "<span style='color:#0088ff'> (found by equipment)</span>";
+		return "<span style='color:#0088ff'></br>Derek found a Shortcut Door with his equipment.</span>";
+	} else if (chestDoorPoints > stardustDoorPoints && chestDoorPoints > shortcutDoorPoints) {
+// Lav det til chestDoor når den feature er lavet
+		console.log("Set door to Chest Door");
+		chanceDoorsRolled++;
+		doors[i] = allDoorKinds[10];
+		// doors[i].navn += "<span style='color:#0088ff'> (found by equipment)</span>";
+		return "<span style='color:#0088ff'></br>Derek found a Chest Door with his equipment.</span>";	
+	} else {
+		return "";
+	}
+}
 
 function generateJerks() {
 	jerkCount = Math.round((doors[doorNr].jerkCount + (state.dungeons[dNr].curLevel * 1.5) + (Math.random() * state.dungeons[dNr].curLevel)) * state.dungeons[dNr].difficulty);
 }
 
 function goCheckDoor(nr) {
-	doorNr = nr;
-	if (doors[doorNr].navn == "Shortcut door") {
-		goShortcutDoor();
-	} else if (doors[doorNr].navn == "Mystery door") {
-		goMysteryDoor();
+	if ((Math.random() * 100) < allDerekStats["chance of Thirsty"] && !thirstyHappened) {
+		thirstyHappened = true;
+		skillThirsty(true,nr);
 	} else {
-		generateJerks();
-		goEnterDoor();
+		doorNr = nr;
+		if (doors[doorNr].navn == "Shortcut door") {
+			goShortcutDoor();
+		} else if (doors[doorNr].navn == "Mystery door") {
+			goMysteryDoor();
+		} else {
+			generateJerks();
+			goEnterDoor();
+		}
 	}
 }
 
@@ -343,7 +487,7 @@ function goMysteryDoor() {
 			createGoButton("Let's a go!",doors[doorNr].image,goEnterDoor);
 		}
 	}
-} 
+}
 
 function goShortcutDoor() {
 	upgradeAnimation("Shortcut!","doorShortcut",goPickDoor,true);
@@ -351,79 +495,123 @@ function goShortcutDoor() {
 }
 
 function goEnterDoor() {
-	changeScene("So dude, this is <span style='color:#38b200'>level " + state.dungeons[dNr].curLevel + "/" + state.dungeons[dNr].levels + "</span>. There's around <span style='color:#38b200'>" + jerkCount + " jerks</span> in this room. I'm totally gonna wreck them by the way. Also my health is like <span style='color:#ff0000'>" + state.derekHealth + "/" + state.derekMaxHealth + "</span> right now, but I'm cool",doors[doorNr].image);
+	changeScene("So dude, this is <span style='color:#38b200'>level " + state.dungeons[dNr].curLevel + "/" + state.dungeons[dNr].levels + "</span>. There's around <span style='color:#38b200'>" + jerkCount + " jerks</span> in this room. I'm totally gonna wreck them by the way. Also my health is like <span style='color:#ff0000'>" + (state.derekHealth + allDerekStats["health"]) + "/" + (state.derekMaxHealth + allDerekStats["health"]) + "</span> right now, but I'm cool",doors[doorNr].image);
+	if (state.dungeons[dNr].place == "planet") {
+		createGoButton("Leave this dungeon!","newSurface",exitDungeonSure,true);
+	}
+	if (state.dungeons[dNr].place == "cocoCastle") {
+		createGoButton("Leave this dungeon!","cocoDungeon",exitDungeonSure,true);
+	}
+	if (state.dungeons[dNr].place == "lochJuice") {
+		createGoButton("Leave this dungeon!","monsterDungeon",exitDungeonSure,true);
+	}
+	if (state.dungeons[dNr].place == "space") {
+		createGoButton("Leave this dungeon!","planet",exitDungeonSure,true);
+	}
 	createGoButton("Fight them!","derek",goFight);
 	if (state.healthPotions > 0 && state.derekHealth < state.derekMaxHealth) {
-		createGoButton("Drink a health potion (" + state.healthPotions + "/" + state.healthPotionCapacity + ") <span style='color:#ff0000'>+" + state.healthPotionHeal + " health</span>","healthPotion",drinkPotion);
+		createGoButton("Drink a health potion (" + state.healthPotions + "/" + state.healthPotionCapacity + ") <span style='color:#ff0000'>+" + (state.healthPotionHeal + allDerekStats["potion healing"]) + " health</span>","healthPotion",drinkPotion);
 	}
+	var statNames = ["extra Bull Fart uses","extra Thirsty uses","extra Door of Regret uses","extra Full Heal uses"];
 	for (var i = 0; i < allSkills.length; i++) {
 		if (state.skillStates[i] > 0) {
-			createGoButton("Use " + allSkills[i].navn + " (" + allSkills[i].curUses + "/" + allSkillTiers[findCurTierIndexBySkillIndex(i)].uses + ")",allSkills[i].image,allSkills[i].fnct);
+			createGoButton("Use " + allSkills[i].navn + " (" + (allSkills[i].curUses + allDerekStats[statNames[i]]) + "/" + (allSkillTiers[findCurTierIndexBySkillIndex(i)].uses + allDerekStats[statNames[i]]) + ")",allSkills[i].image,allSkills[i].fnct);
+		} else if (allDerekStats[statNames[i]] > 0){
+			createGoButton("Use " + allSkills[i].navn + " (" + (allSkills[i].curUses + allDerekStats[statNames[i]]) + "/" + allDerekStats[statNames[i]] + ")",allSkills[i].image,allSkills[i].fnct);
 		}
 	}
+	createGoButton("Check Derek's equipment","derek",goCheckDerekStats);
+}
+
+function goCheckDerekStats() {
+	changeScene(
+		writeAllDerekStats() + "</span>",
+		"derek"
+	);
+	createGoButton("Back",doors[doorNr].image,goEnterDoor);
 }
 
 function goFight() {
 	skipAllowed = false;
-	checkOutcome();
-	if (state.impatientMode) {
-
-		levelSummary();
-
+	if ((Math.random() * 100) <= allDerekStats["chance of Bull Fart"]) {
+		changeScene(
+			"<span style='color:#0088ff'>Chance of Bull Fart</span> made Derek rip a big old smelly bull fart. All the jerks cleared out",
+			"bullFart"
+		);
+		createGoButton("Well done Derek!","bullFart",levelSummary);
 	} else {
+		checkOutcome();
+		if (state.impatientMode) {
+			// if (doors[doorNr].navn != 'boringDoor') {
+			// 	levelSummary();
+			// } else {
 
-		var beatingSounds = [soundEffect.beating,soundEffect.beating2,soundEffect.beating3,soundEffect.beating4,soundEffect.beating5];
-		var randomSound = Math.floor(Math.random() * beatingSounds.length);
-		playSound(beatingSounds[randomSound]);
-		changeScene("AV!",state.dungeons[dNr].imageFighting);
-		setTimeout(function() {
-			playSound(soundEffect.punch1);
-			newHandling("UF!");
-		},100);
-		setTimeout(function() {
-			playSound(soundEffect.punch2);
-			newHandling("%#!*@");
-		},200);
-		setTimeout(function() {
-			playSound(soundEffect.punch4);
-			newHandling("HELP!");
-		},300);
-		setTimeout(function() {
-			playSound(soundEffect.punch3);
-			newHandling("!!!");
-		},400);
-		setTimeout(function() {
-			playSound(soundEffect.punch2);
-			newHandling("WHAT!?");
-		},500);
-		setTimeout(function() {
-			playSound(soundEffect.punch1);
-			newHandling("OH NO!");
-		},600);
-		setTimeout(function() {
-			playSound(soundEffect.punch4);
-			newHandling("URGH!");
-		},700);
-		setTimeout(function() {
-			playSound(soundEffect.punch3);
-			changeScene("...",state.dungeons[dNr].image);
-		},800);
-		setTimeout(function() {
-			changeScene("...",state.dungeons[dNr].image);
-			createGoButton("Derek?","derek",levelSummary);
-			skipAllowed = true;
-		},1300);
+			// }
+			levelSummary();
+		} else {
 
+			var beatingSounds = [soundEffect.beating,soundEffect.beating2,soundEffect.beating3,soundEffect.beating4,soundEffect.beating5];
+			var randomSound = Math.floor(Math.random() * beatingSounds.length);
+			playSound(beatingSounds[randomSound]);
+			changeScene("AV!",state.dungeons[dNr].imageFighting);
+			setTimeout(function() {
+				playSound(soundEffect.punch1);
+				newHandling("UF!");
+			},100);
+			setTimeout(function() {
+				playSound(soundEffect.punch2);
+				newHandling("%#!*@");
+			},200);
+			setTimeout(function() {
+				playSound(soundEffect.punch4);
+				newHandling("HELP!");
+			},300);
+			setTimeout(function() {
+				playSound(soundEffect.punch3);
+				newHandling("!!!");
+			},400);
+			setTimeout(function() {
+				playSound(soundEffect.punch2);
+				newHandling("WHAT!?");
+			},500);
+			setTimeout(function() {
+				playSound(soundEffect.punch1);
+				newHandling("OH NO!");
+			},600);
+			setTimeout(function() {
+				playSound(soundEffect.punch4);
+				newHandling("URGH!");
+			},700);
+			setTimeout(function() {
+				playSound(soundEffect.punch3);
+				changeScene("...",state.dungeons[dNr].image);
+			},800);
+			setTimeout(function() {
+				changeScene("...",state.dungeons[dNr].image);
+				createGoButton("Derek?","derek",levelSummary);
+				skipAllowed = true;
+			},1300);
+
+		}
 	}
 
 }
 
 
 function checkOutcome() {
-	var jerkDam = 0;
+	jerkDam = 0;
+	jerksStrengthed = 0;
+	jerksArmored = 0;
 	for (var i = 0; i < jerkCount; i++) {
-		if ((Math.random() * state.derekToughness) < jerkCount) {
-			jerkDam += Math.floor((Math.random() * 4) + 1);
+		var strengthRoll = (Math.random() * (state.derekToughness + allDerekStats["strength"]));
+		if (strengthRoll < jerkCount) {
+			if (strengthRoll + allDerekStats["armor"] < jerkCount) {
+				jerkDam += Math.floor((Math.random() * 4) + 1);
+			} else {
+				jerksArmored++;
+			}
+		} else {
+			jerksStrengthed++;
 		}
 	}
 	updateState('derekHealth', state.derekHealth - jerkDam);
@@ -435,7 +623,7 @@ function checkOutcome() {
 }
 
 function levelSummary() {
-	if (state.derekHealth > 0) {
+	if (state.derekHealth + allDerekStats["health"] > 0) {
 		playSound(soundEffect.derek);
 		summary();
 	} else {
@@ -447,11 +635,23 @@ function levelSummary() {
 function summary(backFromPresent) {
 	var h = "";
 	var p = "";
+	var a = "";
+	var js = "";
+	var jd = "";
+	if (jerkDam > 0) {
+		jd = "</br>The remaining jerks only dealt <span style='color:#ff0000'>" + jerkDam + " damage</span> to me";
+	}
+	if (jerksStrengthed > 0) {
+		js = "</br>I fended off <span style='color:#ff4d00'>" + jerksStrengthed + " jerk(s) with my strength</span>";
+	}
+	if (jerksArmored > 0) {
+		a = "</br>I blocked off <span style='color:#0088ff'>" + jerksArmored + " jerk(s) with my armor</span>";
+	}
 	if (backFromPresent) {
-		h = "Enough of that childish present opening business. More dungeon!"; 
+		h = "Enough of that childish present opening business. More dungeon!";
 	} else {
 		state.dungeons[dNr].curLevel++;
-		h = "I'm so pumped! I beat up <span style='color:#38b200'>" + jerkCount + " jerks</span>. My health is like <span style='color:#ff0000'>" + state.derekHealth + "/" + state.derekMaxHealth + "</span> right now, but I'm cool. ";
+		h = "I'm so pumped! I beat up <span style='color:#38b200'>" + jerkCount + " jerks</span>" + js + a + jd + "</br>My health is like <span style='color:#ff0000'>" + (state.derekHealth + allDerekStats["health"]) + "/" + (state.derekMaxHealth + allDerekStats["health"]) + "</span> right now, but I'm cool. ";
 		if (doors[doorNr].giftCount > 0) {
 			p = "</br>Ok, wow! It looks there is a present for you down here";
 		}
@@ -473,34 +673,96 @@ function summary(backFromPresent) {
 	} else if (resource != 99) {
 		var imgs = ["wood","gold","coco","stardust"];
 		createGoButton("Loot!",imgs[resource],goLoot,resource);
+	} else if (doors[doorNr].navn == "Chest door") {
+		createGoButton("Open Chest","chest",goOpenChest)
 	} else {
-		//createGoButton("Go deeper!",state.dungeons[dNr].image,goPickDoor,true);
-		goPickDoor(true);
+		createGoButton("Go deeper!",state.dungeons[dNr].image,goPickDoor,true);
+		if (backFromPresent) {
+			goPickDoor(true);
+		}
 	}
+	jerkDam = 0;
+	jerksStrengthed = 0;
+	jerksArmored = 0;
+}
+
+function goOpenChest() {
+	var chestDelay;
+	var explosionDelay;
+	if (state.impatientMode) {
+		chestDelay = 50;
+		explosionDelay = 5;
+	} else {
+		chestDelay = 1500;
+		explosionDelay = 1000;
+	}
+	setTimeout(function(){
+		playSound(soundEffect.explosion);
+	},explosionDelay);
+	changeScene(
+		"What fantastic treasure could be inside?",
+		"chestOpen"
+	);
+	setTimeout(function(){
+		rollNewItem(state.dungeons[dNr].difficulty,state.dungeons[dNr].curLevel);
+		var h = "It's ";
+		var item = state.derekItems.length - 1;
+		h += writeItemName(item,state.derekItems,false) + "</br><span style='color:#a1a1a1'>'" + state.derekItems[item].text + "'</span></br>" + writeItemStats(item,state.derekItems);
+		changeScene(
+			h,
+			state.derekItems[item].itemImage
+		);
+		createGoButton("Cool",state.derekItems[item].itemImage,goPickDoor,true);
+	},chestDelay);
 }
 
 function goLoot(resource) {
+	var extraLoot = "";
+	var extraLootAmount = 0;
 	var resources = ["wood","gold","coco","stardust"];
 	var lootAmount = Math.round((state.dungeons[dNr].curLevel * 5) * (state.dungeons[dNr].difficulty * 4));
 	if (resource == 0) {
-		updateState('wood', state.wood += lootAmount);
+		if (allDerekStats["extra wood from wood doors"] > 0) {
+			extraLootAmount = Math.round(lootAmount * (allDerekStats["extra wood from wood doors"]/100));
+			extraLoot = " + " + extraLootAmount; 
+			console.log("Extra loot = " + extraLootAmount);
+		}
+		updateState('wood', state.wood + (lootAmount + extraLootAmount));
 	}
 	if (resource == 1) {
 		lootAmount = Math.round(lootAmount/3);
-		updateState('gold', state.gold += lootAmount);
+		if (allDerekStats["extra gold from gold doors"] > 0) {
+			extraLootAmount = Math.round(lootAmount * (allDerekStats["extra gold from gold doors"]/100));
+			extraLoot = " + " + extraLootAmount; 
+			console.log("Extra loot = " + extraLootAmount);
+		}
+		updateState('gold', state.gold + (lootAmount + extraLootAmount));
 	}
 	if (resource == 2) {
-		updateState('coco', state.coco += lootAmount);
+		if (allDerekStats["extra coco from coco doors"] > 0) {
+			extraLootAmount = Math.round(lootAmount * (allDerekStats["extra coco from coco doors"]/100));
+			extraLoot = " + " + extraLootAmount; 
+			console.log("Extra loot = " + extraLootAmount);
+		}
+		updateState('coco', state.coco + (lootAmount + extraLootAmount));
 	}
 	if (resource == 3) {
-		lootAmount = Math.round(lootAmount/100);
+		lootAmount = Math.round(lootAmount/60);
 		if (lootAmount <= 4) {
 			lootAmount = 4;
 		}
-		updateState('stardust', state.stardust + lootAmount);
+		if (allDerekStats["extra stardust from stardust doors"] > 0) {
+			extraLootAmount = Math.round(lootAmount * (allDerekStats["extra stardust from stardust doors"]/100));
+			if (extraLootAmount < 1) {
+				extraLootAmount = 1;
+			}
+			extraLoot = " + " + extraLootAmount; 
+			console.log("Extra loot = " + extraLootAmount);
+		}
+		updateState('stardust', state.stardust + (lootAmount + extraLootAmount));
 	}
 	changeScene(
-		"There's <span style='color:#38b200'>" + lootAmount + " " + resources[resource] + "</span> lying around in the corner of the room. Derek frantically gathers it for you",
+		"There's <span style='color:#38b200'>" + lootAmount + extraLoot + " " + resources[resource] + "</span> lying around in the corner of the room. Derek frantically gathers it for you",
 		resources[resource],
 		"goLoot"
 	);
@@ -512,17 +774,21 @@ function backFromPresent() {
 }
 
 function drinkPotion() {
-	updateState('derekHealth', state.derekHealth + state.healthPotionHeal);
+	updateState('derekHealth', state.derekHealth + (state.healthPotionHeal + allDerekStats["potion healing"]));
 	if (state.derekHealth > state.derekMaxHealth) {
 		updateState('derekHealth', state.derekMaxHealth);
 	}
 	updateState('healthPotions', state.healthPotions - 1);
 	playSound(soundEffect.potion);
-	changeScene("REFRESHING!! Now my health is more like <span style='color:#ff0000'>" + state.derekHealth + "/" + state.derekMaxHealth + "</span>","healthPotion","dungeon");
+	changeScene("REFRESHING!! Now my health is more like <span style='color:#ff0000'>" + (state.derekHealth + allDerekStats["health"]) + "/" + (state.derekMaxHealth + allDerekStats["health"]) + "</span>","healthPotion","dungeon");
 	createButton("Much better!",goEnterDoor);
+	if (state.impatientMode) {
+		goEnterDoor();
+	}
 }
 
 function goDungeonDone() {
+	playMusic();
 	state.dungeons[dNr].completed = true;
 	var newPrice = state.revivePrice[3] + 1;
 	var newRevivePrice = [0,0,0,newPrice];
@@ -532,7 +798,7 @@ function goDungeonDone() {
 		var newFriends = state.friends;
 		newFriends[3].found = true;
 		updateState('friends',newFriends);
-		createButton("What is it Derek?",findFriend,state.friends[3]);	
+		createButton("What is it Derek?",findFriend,state.friends[3]);
 	} else if (state.dungeons[dNr].navn == "Scary Dungeon") {
 		changeScene("Boss! Something scary is down here","dungeon");
 		var newFriends = state.friends;
@@ -590,24 +856,70 @@ function goDungeonDone() {
 			"Wait a minute. This dungeon isn't endless!! It was all a scam after all.. Oh, but there's a note here. It tells you that this was just a mini endless dungeon. A true Derek should seek the depths of the toughest endless dungeon to prove his worth.<br/><br/>Derek is eager for more endless dungeons",
 			"derek"
 		);
-		createGoButton("Better keep a positive attitude about this","planet",goDungeonDebrief);
+		createGoButton("Better keep a positive attitude about this","planet",goFindEndlessDungeonCube);
 	} else if (state.dungeons[dNr].navn == "Endless Monster Dungeon") {
 		updateState('spaceDungeon', true);
-		changeScene(
-			"You can't believe it. Derek just beat the living crap out of the hardest dungeon in the whole game. He is the toughest son of a bitch you will ever know! From the deep depths of the dungeon you can hear him do an insanely loud bull howl that can probably be heard several thousand light years away.<br/><br/>He's just such an epic bull!",
-			"derek"
-		);
-		createGoButton("I'm so proud of you Derek!","derekHealth",goMonsterDungeon);
+		if (censoredWords) {
+			changeScene(
+				"You can't believe it. Derek just beat the hardest dungeon in the whole game. He is the toughest fighter you will ever know! From the deep depths of the dungeon you can hear him do an insanely loud bull howl that can probably be heard several thousand light years away.<br/><br/>He's just such an epic bull!",
+				"derek"
+			);
+		} else {
+			changeScene(
+				"You can't believe it. Derek just beat the living crap out of the hardest dungeon in the whole game. He is the toughest son of a bitch you will ever know! From the deep depths of the dungeon you can hear him do an insanely loud bull howl that can probably be heard several thousand light years away.<br/><br/>He's just such an epic bull!",
+				"derek"
+			);			
+		}
+
+		createGoButton("I'm so proud of you Derek!","derekHealth",goFindEndlessDungeonCube);
 	} else if (state.dungeons[dNr].navn == "Derekulus X") {
 		changeScene(
-			"Welcome home Derek. You are a real bullman now!<br/><br/>Take a picture of this and send it to christianlaumark@gmail.com<br/><br/>You have earned a reward you crazy crazy person.<br/><br/>Also there is a door here. It turns out to be a Hall of Fame for the first 100 champions to reach this place",
+			"Welcome home Derek. You are a real bullman now!<br/><br/>Take a picture of this and send it to burgertherobot@gmail.com<br/><br/>You have earned a reward you crazy crazy person.<br/><br/>Also there is a door here. It turns out to be a Hall of Fame for the first 100 champions to reach this place",
 			"derek"
 		);
 		//createGoButton("HAhahahaha! I'm crazy!!!","planet",goRoot);
+		if (!state.derekulusXCubeFound) {
+			createGoButton("Loot the room","wormCube",goFindDerekulusXCube);
+		} else {
+			createGoButton("Leave dungeon","planet",goRoot);
+		}
 		createGoButton("Enter door","doorDerek",goHallOfDerek);
 	} else {
 		goDungeonDebrief();
 	}
+}
+
+function goFindEndlessDungeonCube() {
+	updateState('wormCubes', state.wormCubes + 1);
+	if (state.tTerrariumFound) {
+		changeScene(
+			"Ok wow! There was <span style='color:#ff00bb'>a Worm Cube</span> at the end of this endless dungeon.</br>Let's put it in the Time Terrarium",
+			"wormCube"
+		);
+	} else {
+		changeScene(
+			"Ok wow! There was <span style='color:#ff00bb'>a Worm Cube</span> at the end of this endless dungeon.</br>You don't know what it is, but you have a feeling that you will need it in another life. Better keep it safe",
+			"wormCube"
+		);
+	}
+	createGoButton("Fantastic!","wormCube",goDungeonDebrief);
+}
+
+function goFindDerekulusXCube() {
+	updateState('derekulusXCubeFound', true);
+	updateState('wormCubes', state.wormCubes + 3);
+	if (state.tTerrariumFound) {
+		changeScene(
+			"Ok wow! There are <span style='color:#ff00bb'>3 Worm Cubes</span> here!</br>Let's put them in the Time Terrarium",
+			"wormCube"
+		);
+	} else {
+		changeScene(
+			"Ok wow! There are <span style='color:#ff00bb'>3 Worm Cubes</span> here!</br>You don't know what they are, but you have a feeling that you will need them in another life. Better keep them safe",
+			"wormCube"
+		);
+	}
+	createGoButton("Fantastic!","wormCube",goDungeonDone);
 }
 
 function goHallOfDerek() {
@@ -631,17 +943,22 @@ function goCoughItUp() {
 	createGoButton("Mysterious!","villaKey",goDungeonDebrief);
 }
 
-function exitDungeonSure() {
+function exitDungeonSure(inRoom) {
 	changeScene(
 		"Are you sure you want to leave this dungeon? You'll have to start on level 1 next time you dive in",
 		"derek",
 		"exitDungeonSure"
 	);
-	createGoButton("No","talk",goPickDoor,false);
+	if (inRoom) {
+		createGoButton("No","talk",goEnterDoor);
+	} else {
+		createGoButton("No","talk",goPickDoor,false);
+	}
 	createGoButton("Yes","talk",exitDungeon);
 }
 
 function exitDungeon() {
+	playMusic();
 	if (state.dungeons[dNr].place == "planet") {
 		goPickDungeon();
 	}
@@ -662,8 +979,10 @@ function goDungeonDebrief() {
 }
 
 function derekDead() {
+	playMusic();
 	//document.getElementById("dungeonLevel").innerHTML = "";
 	changeScene("Looks like the Jerks got Derek. Use <span style='color:#00e9ff'>" + state.revivePrice[3] + " stardust</span> to revive him?",state.dungeons[dNr].image,"dungeon");
+	updateState('derekHealth', state.derekMaxHealth);
 	updateState('derekDead', true);
 	if (state.stardust >= state.revivePrice[3]) {
 		createButton("Save Derek!",reviveDerek);
@@ -677,6 +996,7 @@ function reviveDerek() {
 	updateState('derekDead', false);
 	changeScene("There there Derek..","dungeonDerek");
 	updateState('derekHealth', state.derekMaxHealth);
+	console.log("reviving Derek to " + state.derekHealth + " health");
 	buy(state.revivePrice);
 	setTimeout(function() {
 		goRoot();

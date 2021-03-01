@@ -1,9 +1,12 @@
 var audioSettings = {
+	meiThresholdComplete: false,
 	isMusicMuted: false,
 	isSFXMuted: false,
 	shouldPlayMusic: false,
-	fallbackEffects: null,
-	fallbackMusic: null,
+	isBattleMusic: false,
+	sfxPlayers: null,
+	musicPlayer: null,
+	battlePlayer: null,
 };
 
 // map sounds to files (filename minus directory and .mp3)
@@ -60,7 +63,7 @@ var soundEffect = {
 	core: "Core",
 	beanie: "Beanie",
 	mouladin: "Mouladin",
-	slopnax: "Slopnax",	
+	slopnax: "Slopnax",
 	bentLords: "BentLords",
 	technoLow: "TechnoLow",
 	mayonada: "Mayonada",
@@ -71,72 +74,91 @@ function loadAudioState() {
 	audioSettings.isMusicMuted = state.musicMuted;
 }
 
-function prepareSounds() {
-	var files = [];
-	for (var key in soundEffect) {
-		if (soundEffect.hasOwnProperty(key)) {
-			files.push(soundEffect[key]);
-		}
-	}
-
-	if (hasBridge()) {
-		let json = JSON.stringify(files);
-		BridgeCommander.call("prepareSounds", json);
-	}
-}
-
 function playSound(filename) {
 	if (audioSettings.isSFXMuted) { return; }
+	// First interaction with DOM has not yet happened
+	if (!audioSettings.meiThresholdComplete) { return; }
 
-	if (hasBridge()) {
-		BridgeCommander.call("playSound", filename);
-	} else {
-		if (audioSettings.fallbackEffects === null) {
-			audioSettings.fallbackEffects = {};
-			for (var key in soundEffect) {
-				if (soundEffect.hasOwnProperty(key)) {
-					let value = soundEffect[key];
-					audioSettings.fallbackEffects[value] = new Audio("audio/" + value + ".mp3");
-				}
+	if (audioSettings.sfxPlayers === null) {
+		audioSettings.sfxPlayers = {};
+		for (var key in soundEffect) {
+			if (soundEffect.hasOwnProperty(key)) {
+				let value = soundEffect[key];
+				audioSettings.sfxPlayers[value] = new Audio("audio/" + value + ".mp3");
 			}
 		}
+	}
 
-		audioSettings.fallbackEffects[filename].play();
+	audioSettings.sfxPlayers[filename].play();
+}
+
+function playBattleMusic() {
+	if (audioSettings.isMusicMuted) { return; }
+	if (!audioSettings.shouldPlayMusic) { return; }
+	// First interaction with DOM has not yet happened
+	if (!audioSettings.meiThresholdComplete) { return; }
+
+	audioSettings.isBattleMusic = true;
+
+	if (audioSettings.battlePlayer === null) {
+		audioSettings.battlePlayer = new Audio("audio/Honk_DereksTheme.mp3");
+
+		audioSettings.battlePlayer.addEventListener("ended", function () {
+			if (audioSettings.isMusicMuted || !audioSettings.isBattleMusic) { return; }
+			audioSettings.battlePlayer.currentTime = 0;
+			audioSettings.battlePlayer.play();
+		});
+
+	}
+
+	if (audioSettings.musicPlayer !== null) {
+		audioSettings.musicPlayer.pause();
+	}
+
+	if (audioSettings.battlePlayer !== null) {
+		audioSettings.battlePlayer.play();
 	}
 }
 
 function playMusic() {
 	if (audioSettings.isMusicMuted) { return; }
 	if (!audioSettings.shouldPlayMusic) { return; }
+	// First interaction with DOM has not yet happened
+	if (!audioSettings.meiThresholdComplete) { return; }
 
-	if (hasBridge()) {
-		BridgeCommander.call("playMusic");
-	} else {
-		if (audioSettings.fallbackMusic === null) {
-			audioSettings.fallbackMusic = new Audio("audio/rumsang_v2.mp3");;
+	audioSettings.isBattleMusic = false;
 
-			audioSettings.fallbackMusic.addEventListener("ended", function () {
-				if (audioSettings.isMusicMuted) { return; }
-				audioSettings.fallbackMusic.currentTime = 0;
-				audioSettings.fallbackMusic.play();
-			});
-			audioSettings.fallbackMusic.play();
-		}
+	if (audioSettings.musicPlayer === null) {
+		audioSettings.musicPlayer = new Audio("audio/rumsang_v2.mp3");;
 
-		audioSettings.fallbackMusic.play();
+		audioSettings.musicPlayer.addEventListener("ended", function () {
+			if (audioSettings.isMusicMuted || audioSettings.isBattleMusic) { return; }
+			audioSettings.musicPlayer.currentTime = 0;
+			audioSettings.musicPlayer.play();
+		});
+		audioSettings.musicPlayer.play();
+	}
+
+	if (audioSettings.battlePlayer !== null) {
+		audioSettings.battlePlayer.pause();
+	}
+
+	if (audioSettings.musicPlayer !== null) {
+		audioSettings.musicPlayer.play();
 	}
 }
 
 function resetMusic() {
 	if (audioSettings.isMusicMuted) { return; }
 
-	if (hasBridge()) {
-		BridgeCommander.call("resetMusic");
-	} else {
-		if (audioSettings.fallbackMusic !== null) {
-			audioSettings.fallbackMusic.pause();
-			audioSettings.fallbackMusic.currentTime = 0;
-		}
+	if (audioSettings.musicPlayer !== null) {
+		audioSettings.musicPlayer.pause();
+		audioSettings.musicPlayer.currentTime = 0;
+	}
+
+	if (audioSettings.battlePlayer !== null) {
+		audioSettings.battlePlayer.pause();
+		audioSettings.battlePlayer.currentTime = 0;
 	}
 }
 
@@ -144,13 +166,9 @@ function muteSound() {
 	audioSettings.isSFXMuted = true;
 	updateState("soundMuted", true);
 
-	if (hasBridge()) {
-		BridgeCommander.call("muteSound");
-	} else {
-		for (var key in audioSettings.fallbackEffects) {
-			if (audioSettings.fallbackEffects.hasOwnProperty(key)) {
-				audioSettings.fallbackEffects[key].pause();
-			}
+	for (var key in audioSettings.sfxPlayers) {
+		if (audioSettings.sfxPlayers.hasOwnProperty(key)) {
+			audioSettings.sfxPlayers[key].pause();
 		}
 	}
 }
@@ -158,30 +176,24 @@ function muteSound() {
 function unMuteSound() {
 	audioSettings.isSFXMuted = false;
 	updateState("soundMuted", false);
-
-	if (hasBridge()) {
-		BridgeCommander.call("unMuteSound");
-	}
 }
 
 function muteMusic() {
 	audioSettings.isMusicMuted = true;
 	updateState("musicMuted", true);
 
-	if (hasBridge()) {
-		BridgeCommander.call("muteMusic");
-	} else {
-		audioSettings.fallbackMusic.pause();
+	if (audioSettings.musicPlayer !== null) {
+		audioSettings.musicPlayer.pause();
+	}
+
+	if (audioSettings.battlePlayer !== null) {
+		audioSettings.battlePlayer.pause();
 	}
 }
 
 function unMuteMusic() {
 	audioSettings.isMusicMuted = false;
 	updateState("musicMuted", false);
-
-	if (hasBridge()) {
-		BridgeCommander.call("unMuteMusic");
-	}
 
 	playMusic();
 }

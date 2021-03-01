@@ -4,6 +4,7 @@ function firstClick() {
 }
 
 function bigBang() {
+	audioSettings.meiThresholdComplete = true;
 	audioSettings.shouldPlayMusic = false;
 
 	changeScene("It's all totally dark here. Is anything here at all?","invisibleImg","bigBang");
@@ -30,7 +31,7 @@ function bigBang2() {
 function goChoosePlanet() {
 	changeScene("Is that you?","planet","bigBang");
 	createGoButton("Yes","talk",introduction);
-	// createGoButton("No","talk",goBecomeBurgulon);	
+	// createGoButton("No","talk",goBecomeBurgulon);
 }
 
 function introduction() {
@@ -68,19 +69,38 @@ function exploreAsteroid() {
 	createGoButton("Asteroid","asteroid",goAsteroid);
 }
 
-function startGame() {
+function startGame(gameCompleted) {
 	loadState(function() {
 		loadAudioState();
-		prepareSounds();
-		
-		if (state.playIntro) {
+		if (gameCompleted) {
+			for (var key in savedVars) {
+				console.log(key + " " + savedVars[key]);
+				updateState(key,savedVars[key]);
+			}
+			updateState('tTerrariumFound', true);
 			updateState('playIntro', false);
-			skipAllowed = false;
-			toggleResIcons();
-			firstClick();
-		} else {
-			goContinue();
+			ignoreStateSaves = false;
 		}
+
+		if (coolMath) {
+			document.getElementById('coolMathSplash').style.display = 'block';
+			setTimeout(function(){
+				coolMath = false;
+				startGame(false);
+			},3000);
+		} else {
+			document.getElementById('gameDiv').style.display = 'block';
+			document.getElementById('coolMathSplash').style.display = 'none';
+			if (state.playIntro) {
+				updateState('playIntro', false);
+				skipAllowed = false;
+				// toggleResIcons();
+				firstClick();
+			} else {
+				goContinue();
+			}
+		}
+
 	});
 }
 
@@ -127,10 +147,10 @@ function goBecomeBurgulon5() {
 		delay = 10;
 	}
 	skipAllowed = true;
-	toggleResIcons();
+	// toggleResIcons();
 	changeScene("Why don't you go take a look around?","burgulon");
 	createGoButton("Explore","binoculars",goSpaceJerk);
 	createGoButton("Maybe later","talk",goNewGalaxy);
 }
 
-startGame();
+startGame(false);

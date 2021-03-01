@@ -643,7 +643,7 @@ function attackDerek(ID) {
 		J_DealDamage(amount);
 	}
 	if (attack == "damage pr muffin") {
-		amount = Math.round((muffins * strengthMultiplier) * state.bJerkAttackPower);
+		amount = amount * (Math.round((muffins * strengthMultiplier) * state.bJerkAttackPower));
 		h = "The little jerk is so angry that none of the muffins are for him. He deals <span style='color:#ff0000'>" + amount + " damage.</span>";
 		J_DealDamage(amount);
 	}
@@ -753,7 +753,7 @@ function beatUpJerk() {
 	];
 
 	if (curDerekulianHealth <= 0) {
-		goDerekDead();
+		goDerekDead(); 
 	} else {
 		if (state.impatientMode) {
 			goChooseJerk();
@@ -821,7 +821,7 @@ function describeJerk(type,amount) {
 		return "Deals " + Math.round(((availableJerksInPile(state.jerkPile) * amount) * strengthMultiplier) * state.bJerkAttackPower) + " damage (3 for each jerk in your pile)";
 	}
 	if (type == "damage pr muffin") {
-		return "Deals " + Math.round((muffins * strengthMultiplier) * state.bJerkAttackPower) + " damage (more for each muffin baked)";
+		return "Deals " + amount * (Math.round((muffins * strengthMultiplier) * state.bJerkAttackPower)) + " damage (more for each muffin baked)";
 	}
 	if (type == "double muffins") {
 		return "Doubles your muffins";

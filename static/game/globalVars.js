@@ -1,5 +1,3 @@
-var isGamePaused = false;
-var mobile = false;
 
 var H_Handling1 =
 "You are a beautiful little planet, hanging out in a cosy little solar system";
@@ -18,6 +16,7 @@ var aboutToggled = false;
 var donateToggle = false;
 var resIconsToggled = true;
 var resInfoToggled = true;
+var lastBackground = "BG_universe";
 
 var transition = false;
 var skipAllowed = true;
@@ -163,6 +162,14 @@ var lolliGoals = [
 	1200
 ];
 
+//Time Terrarium checkout at end
+var completeGameTerrariumTime = false;
+// var chosenTTItem = false;
+// var chosenTTJerk = false;
+
+//COMPLETE GAME & ASCEND
+var savedVars;
+
 //Cheat
 var burgerCheatCount = 0;
 var burgerCheat = false;
@@ -293,16 +300,46 @@ var friendBroccula = {
 	effectValue: 10
 }
 
-function resetState() {
+function resetState(gameCompleted) {
 	ignoreStateSaves = true;
 	
+	if (gameCompleted) {
+		savedVars = saveInitVars();
+	}
+
 	if (hasBridge()) {
 		BridgeCommander.call('resetState');
 	} else if (hasLocalStorage()) {
 		localStorage.removeItem('state');
 	}
 	
-	location.reload();
+	if (gameCompleted) {
+		// location.reload();
+		startGame(true);
+	} else {
+		location.reload();
+	}
+}
+
+function saveInitVars() {
+	var initVars = [];
+	initVars['tTerrariumFound'] = state.tTerrariumFound;
+	initVars['tWoodPS'] = state.tWoodPS;
+	initVars['tWood'] = state.tWood;
+	initVars['tWoodCapacity'] = state.tWoodCapacity;
+	initVars['tCocoPS'] = state.tCocoPS;
+	initVars['tCoco'] = state.tCoco;
+	initVars['tCocoCapacity'] = state.tCocoCapacity;
+	initVars['tGamesCompleted'] = state.tGamesCompleted;
+	initVars['tGoldPS'] = state.tGoldPS;
+	initVars['tGold'] = state.tGold;
+	initVars['tGoldCapacity'] = state.tGoldCapacity;
+	initVars['wormCubes'] = state.wormCubes;
+	initVars['tClosetArray'] = state.tClosetArray;
+	initVars['tClosetSlots'] = state.tClosetSlots;
+	initVars['tClubArray'] = state.tClubArray;
+	initVars['tClubSlots'] = state.tClubSlots;
+	return initVars;
 }
 
 function fillArrays() {

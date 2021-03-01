@@ -4,6 +4,7 @@ function goMeetAncientPlanet() {
 }
 
 function goAncientPlanet() {
+	changeBackground("BG_AncientPlanet");
 	changeScene(
 		"There's an ancient planet floating about. It's been dead for a long time now.</br>On its surface there is a small fenced garden, and the entrance to a dungeon",
 		"ancientPlanet",
@@ -240,6 +241,7 @@ var gnomeDoorTypes30 = [
 	];
 
 function initializeGnomeDungeon(stealth) {
+	changeBackground("BG_AncientDungeon");
 	gnomeLevel = 0;
 	gnomeStealth = stealth;
 	if (state.bMouladinUpgrades[3]) {
@@ -256,11 +258,30 @@ function newGnomeDungeonLevel() {
 		goFindFriendSweatson();
 	} else if (gnomeLevel == 80 && state.bBobMessage && !state.bFriendAncientDerek) {
 		goFindFriendAncientDerek();
+	} else if (gnomeLevel == 100 && !state.bAncientCubeFound) {
+		goFindAncientDungeonCube();
 	} else {
 		getGnomeDoor(gnomeDoor1);
 		getGnomeDoor(gnomeDoor2);	
 		goGnomeDungeon();
 	}
+}
+
+function goFindAncientDungeonCube() {
+	updateState('wormCubes', state.wormCubes + 1);
+	updateState('bAncientCubeFound', true);
+	if (state.tTerrariumFound) {
+		changeScene(
+			"Ok wow! There was <span style='color:#ff00bb'>a Worm Cube</span> stowed away in the corner of this level.</br>Let's put it in the Time Terrarium",
+			"wormCube"
+		);
+	} else {
+		changeScene(
+			"Ok wow! There was <span style='color:#ff00bb'>a Worm Cube</span> stowed away in the corner of this level.</br>You don't know what it is, but you have a feeling that you will need it in another life. Better keep it safe",
+			"wormCube"
+		);
+	}
+	createGoButton("Fantastic! But let's keep going","wormCube",newGnomeDungeonLevel);
 }
 
 function goGnomeDungeon() {

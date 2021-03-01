@@ -1,10 +1,14 @@
 function toggleSettings() {
+	document.getElementById("resCounter").innerHTML = "";
 	boostCheatCount = 0;
 	playSound(soundEffect.click);
 	toggleResInfo();
 	clearSettingsScene();
 	if (!settingsToggled) {
 		settingsToggled = true;
+		if (curArt == "derek") {
+			document.getElementById('derekDiv').style.display = "none";
+		}
 		document.getElementById("buttons").style.display = "none";
 		document.getElementById("handling").style.display = "none";
 		document.getElementById("handlingArt").style.display = "none";
@@ -12,9 +16,14 @@ function toggleSettings() {
 		document.getElementById("settingsHandling").style.display = "block";
 		document.getElementById("settingsArt").style.display = "inline-block";
 		document.getElementById("settingsHeadline").style.display = "block";
+		changeBackground("BG_AlmostBlack");
 		goSettings();
 	} else {
 		settingsToggled = false;
+		if (curArt == "derek") {
+			loadDerekEquipmentImages();
+			document.getElementById('derekDiv').style.display = "inline-block";
+		}
 		document.getElementById("buttons").style.display = "block";
 		document.getElementById("handling").style.display = "block";
 		document.getElementById("handlingArt").style.display = "inline-block";
@@ -22,6 +31,7 @@ function toggleSettings() {
 		document.getElementById("settingsHandling").style.display = "none";
 		document.getElementById("settingsArt").style.display = "none";
 		document.getElementById("settingsHeadline").style.display = "none";
+		changeBackground(lastBackground);
 		if (donateFromEnd) {
 			donateFromEnd = false;
 			goNotDonate();
@@ -33,34 +43,34 @@ function goSettings() {
 	clearSettingsScene();
 	document.getElementById("settingsHeadline").innerHTML = "Settings";
 	document.getElementById("settingsHandling").innerHTML = "";
-	createSettingsIconButton(T("Back","buttons.back"),"planet",toggleSettings);
+	createSettingsIconButton("Back","planet",toggleSettings);
 	if (audioSettings.isSFXMuted) {
-		createSettingsIconButton(T("Sound (off)","settings.sound.off"),"doorShhh",toggleSounds);
+		createSettingsIconButton("Sound (off)","doorShhh",toggleSounds);
 	} else {
-		createSettingsIconButton(T("Sound (on)","settings.sound.on"),"explosion",toggleSounds);
+		createSettingsIconButton("Sound (on)","explosion",toggleSounds);
 	}
 	if (audioSettings.isMusicMuted) {
-		createSettingsIconButton(T("Music (off)","settings.music.off"),"universe",toggleMusic);
+		createSettingsIconButton("Music (off)","universe",toggleMusic);
 	} else {
-		createSettingsIconButton(T("Music (on)","settings.music.on"),"spaceRadio",toggleMusic);
+		createSettingsIconButton("Music (on)","spaceRadio",toggleMusic);
 	}
 	if (state.impatientMode) {
 		createSettingsIconButton("Impatient mode (on)","derekDoom",toggleImpatientMode);
 	} else {
 		createSettingsIconButton("Impatient mode (off)","derek",toggleImpatientMode);
 	}
-	createSettingsIconButton(T("About","settings.about"),"northplay",goAbout);
+	createSettingsIconButton("About","northplay",goAbout);
 	if (burgerCheat) {
-		createSettingsIconButton(T("Space farts","settings.spaceFarts"),"spaceBroccoli",goSpaceFarts);
+		createSettingsIconButton("Space farts","spaceBroccoli",goSpaceFarts);
 	}
 	if (hasBridge()) {
-		createSettingsIconButton(T("Donate","settings.donate"),"burger",goDonate);
+		createSettingsIconButton("Donate","burger",goDonate);
 	}
-	if (!hasBridge()) {
-		createSettingsIconButton(T("Export savegame","settings.export"),"derekPaper",goExport);
-		createSettingsImportButton(T("Import savegame","settings.import"),"doorShortcut",goImportConfirm);
+	if (!hasBridge() && !disableExport) {
+		createSettingsIconButton("Export savegame","derekPaper",goExport);
+		createSettingsImportButton("Import savegame","doorShortcut",goImportConfirm);
 	}
-	createSettingsIconButton(T("Start over","settings.startOver"),"newSurface",goStartOver);
+	createSettingsIconButton("Start over","newSurface",goStartOver);
 }
 
 function toggleImpatientMode() {
@@ -84,29 +94,31 @@ function goSpaceFarts() {
 function goAbout() {
 	clearSettingsScene();
 	boostCheatCount++;
-	if (boostCheatCount > 3) {
+	if (boostCheatCount > 3 && state.tGamesCompleted < 1) {
 		boostCheatCount = 0;
 		boost();
-		document.getElementById("settingsHeadline").innerHTML = T("Jerks","settings.about.jerkHeadline");
+		document.getElementById("settingsHeadline").innerHTML = "Jerks";
 		document.getElementById("settingsArt").src="images/handling/bret.gif";
-		document.getElementById("settingsHandling").innerHTML = T(
-			"--- A jerk by Northplay ---</br></br></br>Made by Christian Laumark Jerkson</br></br>Backend: Kristian Andersen Jerkson</br></br>Design direction: Michael Flarup Jerkson</br></br>Music: Frederik Boye Jerkson</br></br><span style='color:#565656'>jerk version " + state.version + "</span><br/><br/>",
-			"settings.about.jerkCredits"
-		);
+		document.getElementById("settingsHandling").innerHTML =
+			"--- A jerk by Northplay ---</br></br></br>Made by Christian Laumark Jerkson</br></br>Backend: Kristian Andersen Jerkson</br></br>Design direction: Michael Flarup Jerkson</br></br>Music: Frederik Boye Jerkson</br></br><span style='color:#565656'>jerk version " + state.version + "</span><br/><br/>";
 	} else {
-		document.getElementById("settingsHeadline").innerHTML = T("settings","settings.about.headline");
+		document.getElementById("settingsHeadline").innerHTML = "settings";
 		document.getElementById("settingsArt").src="images/handling/northplay.gif";
-		document.getElementById("settingsHandling").innerHTML = T(
-			"--- A game by Northplay ---</br></br></br>Made by Christian Laumark</br></br>Backend: Kristian Andersen</br></br>Design direction: Michael Flarup</br></br>Music: Frederik Boye</br></br><span style='color:#565656'>version " + state.version + "</span><br/><br/>",
-			"settings.about.credits"
-		);
+		document.getElementById("settingsHandling").innerHTML =
+			"--- A game by Northplay ---</br></br></br>Made by Christian Laumark</br></br>Backend: Kristian Andersen</br></br>Design direction: Michael Flarup</br></br>Music: Frederik Boye</br></br><span style='color:#565656'>version " + state.version + "</span><br/><br/>";
 	}
-	createSettingsButton(T("Back","buttons.back"),goSettings);
-	createSettingsIconButton(T("Follow Northplay","buttons.settings.followNorthplay"),"northplay",goFollowNorthplay);
-	createSettingsIconButton(T("Follow Christian","buttons.settings.followChristian"),"burger",goFollowCrede);
-	createSettingsIconButton(T("Join Planet Life Discord","buttons.settings.joinDiscord"),"planet",goJoinDiscord);
-	if (hasBridge()) {
-		createSettingsIconButton(T("Review Game","buttons.settings.reviewGame"),"classroom",goReviewGame);
+	createSettingsIconButton("Back","settings",goSettings);
+	if (aboutPromotion) {
+		createSettingsIconButton("Follow Northplay","northplay",goFollowNorthplay);
+		createSettingsIconButton("Follow Christian","burger",goFollowCrede);
+		createSettingsIconButton("Join Planet Life Discord","planet",goJoinDiscord);
+		createSettingsIconButton("Download Planet Life Backgrounds","PlanetLifeTitle",goPlanetLifeBackgrounds);
+		if (hasBridge()) {
+			createSettingsIconButton("Review Game","classroom",goReviewGame);
+		}		
+	} else {
+		document.getElementById("settingsHandling").innerHTML = 
+			"--- A game by Northplay ---</br></br></br>Made by Christian Laumark</br></br>Backend: Kristian Andersen</br></br>Design direction: Michael Flarup</br></br>Music: Frederik Boye</br></br><span style='color:#02f41a'>If you have questions about the game, join Northplays Discord server</span></br></br><span style='color:#565656'>version " + state.version + "</span><br/><br/>";		
 	}
 }
 
@@ -136,6 +148,11 @@ function goJoinDiscord() {
 function goReviewGame() {
 	BridgeCommander.call("requestReview");
 }
+
+function goPlanetLifeBackgrounds() {
+	openExternalUrl("http://christianlaumark.dk/PlanetLifeSwag/");
+}
+
 
 function toggleSounds() {
 	if (!audioSettings.isSFXMuted) {
@@ -181,16 +198,9 @@ function donate(option) {
 function goDonate() {
 	playSound(soundEffect.burger);
 	clearSettingsScene();
-	document.getElementById("settingsHeadline").innerHTML = T(
-		"Donate",
-		"settings.donate.headline"
-	);
+	document.getElementById("settingsHeadline").innerHTML = "Donate";
 	document.getElementById("settingsArt").src="images/handling/burger.gif";
-	document.getElementById("settingsHandling").innerHTML = T(
-		"By donating, you are showing your appreciation for this quirky little game, and by that increasing the chance that we will spend more time on it later.</br></br> You are also being an extremely amazing person",
-		"settings.donate.description"
-	);
-
+	document.getElementById("settingsHandling").innerHTML = "By donating, you are showing your appreciation for this quirky little game, and by that increasing the chance that we will spend more time on it later.</br></br> You are also being an extremely amazing person";
 	document.getElementById("settingsButtons").innerHTML = "<div class=\"loader\" id=\"settings_loader\"></div>";
 
 	var call = BridgeCommander.call("loadProducts");
@@ -202,7 +212,7 @@ function goDonate() {
 		createSettingsIconButton(donations[0].name + " " + donations[0].localPrice,"smallSoftPresent",donate,donations[0].identifier);
 		createSettingsIconButton(donations[1].name + " " + donations[1].localPrice,"mediumHardPresent",donate,donations[1].identifier);
 		createSettingsIconButton(donations[2].name + " " + donations[2].localPrice,"bigMassivePresent",donate,donations[2].identifier);
-		createSettingsButton(T("No thanks","buttons.noThanks"),goSettings);
+		createSettingsButton("No thanks",goSettings);
 	});
 	call.catch(function(error) {
 		alert(error);
@@ -248,13 +258,10 @@ function goImport(file) {
 
 function goStartOver() {
 	clearSettingsScene();
-	document.getElementById("settingsHeadline").innerHTML = T("Start over","settings.startOver.headline");
-	document.getElementById("settingsHandling").innerHTML = T(
-		"Are you sure you want to throw away all that hard work, and begin again as a fresh fresh planet?",
-		"settings.startOver.description"
-	);
-	createSettingsIconButton(T("No","buttons.no"),"planetSad",goSettings);
-	createSettingsIconButton(T("Yes!","buttons.yes!"),"planet",resetProgress,true);
+	document.getElementById("settingsHeadline").innerHTML = "Start over";
+	document.getElementById("settingsHandling").innerHTML = "Are you sure you want to throw away all that hard work, and begin again as a fresh fresh planet?";
+	createSettingsIconButton("No","planetSad",goSettings);
+	createSettingsIconButton("Yes!","planet",resetProgress,true);
 }
 
 function clearSettingsButtons() {

@@ -124,7 +124,11 @@ function playSlots(stake) {
 			if (stake == 2) {
 				changeScene("You are the luckiest planet in the universe! You won a big massive present!","bigMassivePresent","newPresent");
 				newPresent("big massive present","bigMassivePresent");
-				createButton("Open it damnit!",goOpenPresent,yourPresents.length - 1);
+				if (censoredWords) {
+					createButton("Open it now!",goOpenPresent,yourPresents.length - 1);
+				} else {
+					createButton("Open it damnit!",goOpenPresent,yourPresents.length - 1);
+				}
 			} else if (stake == 1) {
 				changeScene("Score! A medium hard present for you","mediumHardPresent","newPresent");
 				newPresent("medium hard present","mediumHardPresent");

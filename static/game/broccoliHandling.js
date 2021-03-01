@@ -9,33 +9,28 @@ function broccoli() {
 	},1500);
 	setTimeout(function() {
 		changeScene(
-			T(
-				"It looks like you have arrived right next to a giant space broccoli. What a marvelous sight!",
-				"h.broccoliFound"
-			),
-			"spaceBroccoli");
-		createGoButton(T("Check it out","buttons.checkItOut"),"spaceBroccoli",checkBroccoli);
+			"It looks like you have arrived right next to a giant space broccoli. What a marvelous sight!",
+			"spaceBroccoli"
+		);
+		createGoButton("Check it out","spaceBroccoli",checkBroccoli);
 	},2000);
 }
 
 function checkBroccoli() {
 	changeScene(
-		T(
-			"Amazing! There is a whole world on the surface of the broccoli. Is that Loch Juice? And over there - a castle made entirely of coco. Oh, and could that be the fabled Tall Blue Forest there in the distance?</br></br>We have to discover this new world!",
-			"h.broccoliClose"
-		),
-		"spaceBroccoliClose");
-	createGoButton(T("Take a closer look","buttons.takeACloserLook"),"spaceBroccoliClose",burgerNervous);
+		"Amazing! There is a whole world on the surface of the broccoli. Is that Loch Juice? And over there - a castle made entirely of coco. Oh, and could that be the fabled Tall Blue Forest there in the distance?</br></br>We have to discover this new world!",
+		"spaceBroccoliClose"
+	);
+	createGoButton("Take a closer look","spaceBroccoliClose",burgerNervous);
 }
 
 function burgerNervous() {
 	changeScene(
-		T(
-			"You can hear Burger chirping nervously. Maybe he is freaking out about this broccoli place.. He tells you that you just left the coco asteroid and Stupid Looking Planet behind. But you can tell that there is also something else nagging him",
-			"h.burgerNervous"
-		),
-		"burger","burgerNervous");
-	createGoButton(T("Don't worry Burger!","buttons.dontWorryBurger!"),"talk",checkPaywall);
+		"You can hear Burger chirping nervously. Maybe he is freaking out about this broccoli place.. He tells you that you just left the coco asteroid and Stupid Looking Planet behind. But you can tell that there is also something else nagging him",
+		"burger",
+		"burgerNervous"
+	);
+	createGoButton("Don't worry Burger!","talk",checkPaywall);
 }
 
 function stoppedByBob() {
@@ -46,32 +41,9 @@ function stoppedByBob() {
 	createGoButton("Ok!","talk",goStartMenu2);
 }
 
-// function checkPaywall() {
-// 	if (hasBridge()) {
-// 		changeScene(
-// 			T(
-// 				"Oh hi there. You must be from outer space.. I assume that since you're a planet and all",
-// 				"h.checkPaywall"
-// 			),
-// 			"broccoliWorker",
-// 			"checkPaywall"
-// 		);
-// 		createGoButton(T("So it seems","buttons.soItSeems"),"talk",goPaywall1);
-// 	} else {
-// 		updateState("broccoliChapter",true);
-// 		burgerCaptured();
-// 	}
-// }
-
 function checkPaywall() {
 
-	// changeScene(
-	// 	"Wait.. Somebody's coming",
-	// 	"invisibleImg"
-	// );
-	// createGoButton("Who's there?","talk",stoppedByBob);
-
-	if (hasBridge()) {
+	if (hasBridge() && state.tGamesCompled < 1) {
 		changeScene(
 			"Wait.. Somebody's coming",
 			"invisibleImg"
@@ -85,13 +57,10 @@ function checkPaywall() {
 
 function goPaywall1() {
 	changeScene(
-		T(
-			"Yeah, so we're having some slight difficulties at the moment.<br/>It seems that the creator of this strange universe wants to make a living from developing games",
-			"h.paywall1"
-		),
+		"Yeah, so we're having some slight difficulties at the moment.<br/>It seems that the creator of this strange universe wants to make a living from developing games",
 		"broccoliWorkerHand"
 	);
-	createGoButton(T("Strange","buttons.strange"),"talk",goPaywall2);
+	createGoButton("Strange","talk",goPaywall2);
 }
 
 function goPaywall2() {
@@ -101,124 +70,38 @@ function goPaywall2() {
 		var unlock = json.filter(p => p.identifier === "broccoliWorldUnlock")[0];
 
 		changeScene(
-			T(
-				"So he put down a tax for planets entering the Broccoli Empire. <br/>It's a mere " + unlock.localPrice + "<br/><br/>But I'm sure he'll buy you a beer if you meet him. So in the end you'll probably earn money on this",
-				"h.paywall2"
-			),
-			"broccoliWorker");
-		createGoButton(T("Seems fair (" + unlock.localPrice + ")","buttons.seemsFair"),"gold", goPay);
-		createGoButton(T("Restore Purchase","buttons.restorePurchases"), "binoculars", goRestore);
-		createGoButton(T("Ehm, this is awkward, but I'm going to pass","buttons.awkwardPass"),"talk",goNotPay);
+			"So he put down a tax for planets entering the Broccoli Empire. <br/>It's a mere " + unlock.localPrice + "<br/><br/>But I'm sure he'll buy you a beer if you meet him. So in the end you'll probably earn money on this",
+			"broccoliWorker"
+		);
+		createGoButton("Seems fair (" + unlock.localPrice + ")","gold", goPay);
+		createGoButton("Restore Purchase","binoculars", goRestore);
+		createGoButton("Ehm, this is awkward, but I'm going to pass","talk",goNotPay);
 	});
 }
 
 function goNotPay() {
 	changeScene(
-		T(
-			"Ah, I see.. Tough times eh?",
-			"h.notPay"
-		),
+		"Ah, I see.. Tough times eh?",
 		"broccoliWorker"
 	);
-	createGoButton(T("...","buttons.3dots"),"planetSad",goNotPay2);
+	createGoButton("...","planetSad",goNotPay2);
 }
 
 function goNotPay2() {
 	changeScene(
-		T(
-			"Well you can always go back and try to beat the endless dungeon",
-			"h.notPay2"
-		),
+		"Well you can always go back and try to beat the endless dungeon",
 		"broccoliWorker"
 	);
-	createGoButton(T("...","buttons.3dots"),"planetSad",goNotPay3);
+	createGoButton("...","planetSad",goNotPay3);
 }
 
 function goNotPay3() {
 	changeScene(
-		T(
-			"In the meantime, here are some of the things you'll be missing out on:",
-			"h.notPay3"
-		),
+		"In the meantime, here are some of the things you'll be missing out on:",
 		"broccoliWorker"
 	);
-	createGoButton(T("...","buttons.3dots"),"planetSad",goNotPay4);
+	createGoButton("...","planetSad",goNotPay4);
 }
-
-// function goNotPay4() {
-// 	changeScene(
-// 		T(
-// 			"A vomitting purple monster",
-// 			"h.notPay4"
-// 		),
-// 		"lochJuiceVomit"
-// 	);
-// 	createGoButton(T("Really?","buttons.really?"),"talk",goNotPay5);
-// }
-
-// function goNotPay5() {
-// 	changeScene(
-// 		T(
-// 			"Something crazy happening to Burger",
-// 			"h.notPay5"
-// 		),
-// 		"burger"
-// 	);
-// 	setTimeout(function() {
-// 		changeScene(
-// 			T(
-// 				"Something crazy happening to Burger",
-// 				"h.notPay5"
-// 			),
-// 			"burg3r"
-// 		);
-// 	},1300);
-// 	setTimeout(function() {
-// 		changeScene(
-// 			T(
-// 				"Something crazy happening to Burger",
-// 				"h.notPay5"
-// 			),
-// 			"burger"
-// 		);
-// 		createGoButton(T("But what is it!?","buttons.butWhatIsIt?"),"talk",goNotPay6);
-// 	},1500);
-// }
-
-// function goNotPay6() {
-// 	changeScene(
-// 		T(
-// 			"And...",
-// 			"h.notPay6"
-// 		),
-// 		"invisibleImg"
-// 	);
-// 	createGoButton(T("And?","buttons.and?"),"talk",goNotPay7);
-// }
-
-// function goNotPay7() {
-// 	changeScene(
-// 		T(
-// 			"THIS PENGUIN!!!",
-// 			"h.notPay7"
-// 		),
-// 		"cocoPenguin"
-// 	);
-// 	createGoButton(T("What, REALLY!?","buttons.whatReally"),"talk",goNotPay8);
-// }
-
-// function goNotPay8() {
-// 	updateState("broccoliChapter",false);
-// 	changeScene(
-// 		T(
-// 			"And that's it. Good luck back in the free solar system",
-// 			"h.notPay8"
-// 		),
-// 		"broccoliWorker"
-// 	);
-// 	createGoButton(T("Ok, you might have convinced me","buttons.maybeConvinced"),"planet",goPaywall2);
-// 	createGoButton(T("Back to the free solar system","buttons.backToFreeSolarSystem"),"planetSad",goRoot);
-// }
 
 function goRestore() {
 	document.getElementById("loading_container").innerHTML = "<div class=\"blocking-loader\"></div>";
@@ -297,6 +180,7 @@ function burgerCaptured() {
 }
 
 function goBroccoli() {
+	changeBackground("BG_Broccoli");
 	changeScene("It smells like farts here, but I don't know what else you would expect from a broccoli world","spaceBroccoliClose",goBroccoli);
 	createGoButton("Back","planet",goRoot);
 	createGoButton("Blue Forest","blueForest",goBlueForest);
@@ -305,6 +189,7 @@ function goBroccoli() {
 }
 
 function goBlueForest() {
+	changeBackground("BG_BlueForest");
 	changeScene(
 		"You wonder if a planet has ever been in a forest before, but you try not to worry too much about it. In the distance is a huge villa, and a small shack",
 		"blueForest",
@@ -404,6 +289,7 @@ function goFineSven() {
 ////////
 
 function goVilla() {
+	changeBackground("BG_BlueForest");
 	if (state.villaKey) {
 		changeScene(
 			"There is a cosy villa in a clearing. You unlock the door and miraculously squeeze your celestial body through the door. You hear beeping noises from the basement",
@@ -439,6 +325,7 @@ function goLockedBasement() {
 }
 
 function goWIFY() {
+	changeBackground("BG_Wify");
 	playSound(soundEffect.wifyHello);
 	changeScene(
 		"In the dank dark cellar you make out the lights of an ominous looking chunk of metal. The beeps inform you that this must be Burgers ex wife, WIFY",
@@ -645,6 +532,7 @@ function goPuzzled() {
 ///////////////
 
 function goCocoCastle() {
+	changeBackground("BG_CocoCastle");
 	changeScene(
 		"You enter the melty halls of the Coco Castle. On the throne sits Empress Cocobar of the Broccoli Empire. You pay a bunch of respect and she asks what's up",
 		"cocobar",
@@ -715,6 +603,7 @@ function goIntroCocoDungeons() {
 }
 
 function goCocoDungeons() {
+	changeBackground("BG_CocoCastle");
 	changeScene(
 		"The entrances to the coco dungeons loom in the dim light. Derek is slightly distracted by the scent of coco, but you know he will focus once jerks are near",
 		"cocoDungeon",
@@ -990,7 +879,7 @@ function goMonsterDungeon() {
 	createGoButton("Back","lochJuice",goLochJuice);
 	createGoButton("DEREK!","derek",goDerekHub);
 	if (state.derekHealth < state.derekMaxHealth) {
-		createSmallBuildButton("Heal Derek (" + (state.derekMaxHealth - state.derekHealth) + " coco)","coco","healDerekBut3",cocoHealDerek,"Monster sungeons");
+		createSmallBuildButton("Heal Derek (" + (state.derekMaxHealth - state.derekHealth) + " coco)","coco","healDerekBut3",cocoHealDerek,"Monster dungeons");
 	}
 	for (var i = 0; i < state.dungeons.length; i++) {
 		if (state.dungeons[i].place == "lochJuice" && !state.dungeons[i].completed) {
@@ -1028,8 +917,20 @@ function goGhostTrade() {
 		"ghost",
 		"buyGhostBut",
 		ghostTransaction,
-		"ghost"
+		"ghost",
+		1
 	);
+	if (state.stardust >= (state.ghostPrice * 2)) {
+		var purchaseCount = Math.floor(state.stardust / state.ghostPrice);
+		createSmallBuildButton(
+			"Buy " + purchaseCount + " ghosts (" + (state.ghostPrice * purchaseCount) + " stardust)",
+			"ghost",
+			"buyMultipleGhostsBut",
+			ghostTransaction,
+			"ghost",
+			purchaseCount
+		);
+	}
 	realSellPrice = state.ghostPrice - 2;
 	if (realSellPrice < 1) {
 		realSellPrice = 1;
@@ -1039,8 +940,19 @@ function goGhostTrade() {
 		"stardust",
 		"sellGhostBut",
 		ghostTransaction,
-		"stardust"
+		"stardust",
+		1
 	);
+	if (state.ghosts > 1) {
+		createSmallBuildButton(
+			"Sell " + state.ghosts + " ghosts (" + (realSellPrice * state.ghosts) + " stardust)",
+			"stardust",
+			"sellMultipleGhostsBut",
+			ghostTransaction,
+			"stardust",
+			state.ghosts
+		);
+	}
 }
 
 function calculateGhostPrice() {
@@ -1082,20 +994,20 @@ function calculateGhostPrice() {
 	}
 }
 
-function ghostTransaction(buy) {
+function ghostTransaction(buy,count) {
 	playSound(soundEffect.ghost);
 	if (buy == "ghost") {
-		updateState("stardust", state.stardust -= state.ghostPrice);
-		updateState("ghosts", state.ghosts += 1);
-		shortUpgradeAnimation("You bought a ghost!","ghost",goGhostTrade);
+		updateState("stardust", state.stardust -= (state.ghostPrice * count));
+		updateState("ghosts", state.ghosts += count);
+		shortUpgradeAnimation("You bought " + count + " ghost(s)!","ghost",goGhostTrade);
 	}
 	if (buy == "stardust") {
 		if (realSellPrice < 1) {
 			realSellPrice = 1;
 		}
-		updateState("ghosts", state.ghosts -= 1);
-		updateState("stardust", state.stardust += realSellPrice);
-		shortUpgradeAnimation("You sold a ghost!","stardust",goGhostTrade);
+		updateState("ghosts", state.ghosts -= count);
+		updateState("stardust", state.stardust += (realSellPrice * count));
+		shortUpgradeAnimation("You sold " + count + " ghost(s)!","stardust",goGhostTrade);
 	}
 }
 
@@ -1111,6 +1023,9 @@ function goRemouladin() {
 		"goRemouladin"
 	);
 	createGoButton("Back","planet",goRoot);
+	if (state.wormCubes > 0) {
+		createGoButton("How many Worm Cubes do I have?","wormCube",goCheckWormCubes,"broccoli");
+	}
 	createGoButton("Talk","talk",goTalkRemouladin);
 	if (state.burgulonCreated) {
 		createGoButton("Go to Burgulon","burgulon",goAboutBurgulon);
@@ -1196,12 +1111,26 @@ function goInterstellarRide() {
 
 function goEnterWormholeAgain() {
 	playSound(soundEffect.wormHole);
+	changeBackground("BG_Universe");
 	changeScene("WOAAH!","wormhole","wormhole");
 	setTimeout(function() {
 		playSound(soundEffect.explosion);
-		checkLastPaywall();
+		if (state.tGamesCompleted > 0) {
+			goFindBurgulonCube();
+		} else {
+			checkLastPaywall();
+		}
 		// goNewBeginning();
 	},5000);
+}
+
+function goFindBurgulonCube() {
+	updateState('wormCubes', state.wormCubes + 1);
+	changeScene(
+		"Ok wow! There was <span style='color:#ff00bb'>a Worm Cube</span> at the end of the wormhole.</br>Let's put it in the Time Terrarium",
+		"wormCube"
+	);
+	createGoButton("Fantastic!","wormCube",goNewBeginning);
 }
 
 /////////////////
@@ -1218,7 +1147,11 @@ function goSpaceDungeon() {
 		);
 		for (var i = 0; i < state.dungeons.length; i++) {
 			if (state.dungeons[i].navn == "Derekulus X") {
-				createGoButton("Hot damn","spaceDungeon",goThisDungeon,i);
+				if (censoredWords) {
+					createGoButton("Amazing!","spaceDungeon",goThisDungeon,i);
+				} else {
+					createGoButton("Hot damn","spaceDungeon",goThisDungeon,i);
+				}
 			}
 		}
 	} else {
@@ -1336,44 +1269,24 @@ function goPlayForReal() {
 function goDerekHub() {
 	playSound(soundEffect.derek);
 	changeScene(
-		"Derek's favourite places to go!",
+		"Derek's breathing heavily",
 		"derek",
 		"goDerekHub"
 	);
-	createGoButton("Space Ben","space_ben",goSpaceBen);
-	if (state.ddsPrice[4]) {
-		createGoButton("Derek's Dungeon School","dungeonSchool",goDDS);
+	createGoButton("Back","newSurface",checkWhat);
+	createGoButton("Equipment","derek",goDerekEquipment);
+	if (calculateEmptyPotionSlots() > 0) {
+		createSmallBuildButton(
+			"Fill potion belt (" + (calculateEmptyPotionSlots() * 25) + " gold)",
+			"derekBelt",
+			"fillPotionBeltBut",
+			fillPotionBelt
+		);
 	}
-	var anyDungeons = false;
-	var anyCocoDungeons = false;
-	var anyMonsterDungeons = false;
-	var anySpaceDungeons = false;
-	for (var i = 0; i < state.dungeons.length; i++) {
-		if (!state.dungeons[i].completed && state.dungeons[i].place == "planet") {
-			anyDungeons = true;
-		}
-		if (!state.dungeons[i].completed && state.dungeons[i].place == "cocoCastle" && state.cocoDungeonsFound) {
-			anyCocoDungeons = true;
-		}
-		if (!state.dungeons[i].completed && state.dungeons[i].place == "lochJuice" && state.monsterDungeons) {
-			anyMonsterDungeons = true;
-		}
-		if (!state.dungeons[i].completed && state.dungeons[i].place == "space" && state.derekulusX) {
-			anySpaceDungeons = true;
-		}
-	}
-	if (anySpaceDungeons) {
-		createGoButton("Derekulus X","spaceDungeon",goSpaceDungeon);
-	}
-	if (anyMonsterDungeons) {
-		createGoButton("Monster Dungeons","monsterDungeon",goMonsterDungeon);
-	}
-	if (anyCocoDungeons) {
-		createGoButton("Coco Dungeons","cocoDungeon",goCocoDungeons);
-	}
-	if (anyDungeons) {
-		createGoButton("Dungeons","dungeon",goPickDungeon);
-	}
+	// createGoButton("Space Ben","space_ben",goSpaceBen);
+	// if (state.ddsPrice[4]) {
+	// 	createGoButton("Derek's Dungeon School","dungeonSchool",goDDS);
+	// }
 	createGoButton("Talk","talk",goDerekTalk);
 }
 
@@ -1418,19 +1331,6 @@ function welcomeBack2() {
 	);
 	createGoButton("Cool!","talk",welcomeBack3);
 }
-
-// function welcomeBack3() {
-// 	changeScene(
-// 		"He tells you that the developer is working on a way to make you play on from your old save.<br/>If you just want to play straight away, you can start over and enjoy the adventure from the beginning.<br/><br/>If you just want to get on with it and see the new chapter, I can totally cheat you there. But you might miss some of the cool new stuff that happened in the first chapter",
-// 		"burger",
-// 		"welcomeBack"
-// 	);
-// 	createGoButton("Start over","planet",resetProgress,false);
-// 	createGoButton("Cheat","spaceBroccoli",goResetAndCheat);
-// 	createGoButton("Keep playing from old save (experimental)","derek",goDontStartOver);
-// }
-
-//Original Welcome back
 
 function welcomeBack3() {
 	changeScene(

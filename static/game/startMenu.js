@@ -1,6 +1,6 @@
 function goStartMenu() {
 
-	if (hasBridge()) {
+	if (hasBridge() && state.tGamesCompleted < 1) {
 		goFirstStartMenu();
 	} else {
 		goStartChapter1();
@@ -315,42 +315,30 @@ function goTeaseGame2() {
 function goNotPay4() {
 	playSound(soundEffect.vomit);
 	changeScene(
-		T(
-			"A vomitting purple monster",
-			"h.notPay4"
-		),
+		"A vomitting purple monster",
 		"lochJuiceVomit"
 	);
-	createGoButton(T("Really?","buttons.really?"),"talk",goNotPay5);
+	createGoButton("Really?","talk",goNotPay5);
 }
 
 function goNotPay5() {
 	playSound(soundEffect.burger);
 	changeScene(
-		T(
-			"Something crazy happening to Burger",
-			"h.notPay5"
-		),
+		"Something crazy happening to Burger",
 		"burger"
 	);
 	setTimeout(function() {
 		changeScene(
-			T(
-				"Something crazy happening to Burger",
-				"h.notPay5"
-			),
+			"Something crazy happening to Burger",
 			"burg3r"
 		);
 	},1300);
 	setTimeout(function() {
 		changeScene(
-			T(
-				"Something crazy happening to Burger",
-				"h.notPay5"
-			),
+			"Something crazy happening to Burger",
 			"burger"
 		);
-		createGoButton(T("But what is it!?","buttons.butWhatIsIt?"),"talk",goTeaseDungeons);
+		createGoButton("But what is it!?","talk",goTeaseDungeons);
 	},1500);
 }
 
@@ -374,24 +362,18 @@ function goTeaseDungeons2() {
 
 function goNotPay6() {
 	changeScene(
-		T(
-			"And...",
-			"h.notPay6"
-		),
+		"And...",
 		"invisibleImg"
 	);
-	createGoButton(T("And?","buttons.and?"),"talk",goNotPay7);
+	createGoButton("And?","talk",goNotPay7);
 }
 
 function goNotPay7() {
 	changeScene(
-		T(
-			"THIS PENGUIN!!!",
-			"h.notPay7"
-		),
+		"THIS PENGUIN!!!",
 		"cocoPenguin"
 	);
-	createGoButton(T("What, REALLY!?","buttons.whatReally"),"talk",goTeaseLastChapter);
+	createGoButton("What, REALLY!?","talk",goTeaseLastChapter);
 }
 
 function goTeaseLastChapter() {
@@ -469,20 +451,6 @@ function goTeaseLastChapter9() {
 		createGoButton("Wow","talk",goStartMenu2);
 	}
 }
-
-
-// function goNotPay8() {
-// 	updateState("broccoliChapter",false);
-// 	changeScene(
-// 		T(
-// 			"And that's it. Good luck back in the free solar system",
-// 			"h.notPay8"
-// 		),
-// 		"broccoliWorker"
-// 	);
-// 	createGoButton(T("Ok, you might have convinced me","buttons.maybeConvinced"),"planet",goPaywall2);
-// 	createGoButton(T("Back to the free solar system","buttons.backToFreeSolarSystem"),"planetSad",goRoot);
-// }
 
 
 function goStartMenu3() {

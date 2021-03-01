@@ -58,7 +58,6 @@ function buyBean(size) {
 	var name = size + " " + color + " Bean";
 
 	var image = "bean" + size + color;
-	//var image = "hammer";
 	console.log(size + " + " + color + " + " + image + " + " + name);
 	var thisBean = new bean(size,color,image,name);
 	var beanArray = state.bMyBeans;

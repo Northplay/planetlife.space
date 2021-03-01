@@ -71,6 +71,7 @@ function loadDerek(index,health) {
 // }
 
 function pickADerek(name,health) {
+	playBattleMusic();
 	var luckyNumber;
 	if (bossBattle == "") {
 		derekArray = allDereks;
@@ -226,13 +227,24 @@ newDerek(
 	50
 );
 
-newDerek(
-	"Homeless Derek",
-	"derekHomeless",
-	"8f8983",
-	"Poor Homeless Derek. Better kick his ass and steal his space rings",
-	60
-);
+if (censoredWords) {
+	newDerek(
+		"Homeless Derek",
+		"derekHomeless",
+		"8f8983",
+		"Poor Homeless Derek. Better kick his butt and steal his space rings",
+		60
+	);
+} else {
+	newDerek(
+		"Homeless Derek",
+		"derekHomeless",
+		"8f8983",
+		"Poor Homeless Derek. Better kick his ass and steal his space rings",
+		60
+	);	
+}
+
 
 newDerek(
 	"Gnomerek",
@@ -346,13 +358,24 @@ newDerek(
 	420
 );
 
-newDerek(
-	"Chefrek",
-	"derekChef",
-	"ff7d7d",
-	"Did somebody order jerkbeef? This Derek is here to cook some ass!",
-	460
-);
+if (censoredWords) {
+	newDerek(
+		"Chefrek",
+		"derekChef",
+		"ff7d7d",
+		"Did somebody order jerkbeef? This Derek is here to cook some butt!",
+		460
+	);
+} else {
+	newDerek(
+		"Chefrek",
+		"derekChef",
+		"ff7d7d",
+		"Did somebody order jerkbeef? This Derek is here to cook some ass!",
+		460
+	);	
+}
+
 
 newDerek(
 	"Cleaning Derek",
@@ -433,7 +456,7 @@ function goStartRadio(nr) {
 	if (nr == 1) {
 		playSound(soundEffect.techno);
 		changeScene(
-			"You meticulously stuff the radio with gold coins. You almost forget what you were doing by the time you finish.</br>But you get rewarded by some stupid Jerk Techno. It's really dumb, but you are able to just enjoy it for what it is.",
+			"You meticulously stuff the radio with gold coins. You almost forget what you were doing by the time you finish.</br>But you get rewarded by some stupid Jerk Techno. It's really dumb, but you are able to just enjoy it for what it is",
 			"bret"
 		);
 		createGoButton("Oh yeah!","talk",goSummonToaster);
@@ -449,7 +472,7 @@ function goStartRadio(nr) {
 	if (nr == 3) {
 		playSound(soundEffect.jazz);
 		changeScene(
-			"It takes you several decades to feed the radio enough coins. But when it finally turns on, it's actually quite annoying. It turns outs to be some of Beanie's Impro Jazz.. You figure that everybody has to have a bad side to them somehow",
+			"It takes you several decades to feed the radio enough coins. But when it finally turns on, it's actually quite annoying. It turns out to be some of Beanie's Improv Jazz.. You figure that everybody has to have a bad side to them somehow",
 			"beanieBean"
 		);
 		createGoButton("Oh well","talk",goSummonDerekulusX);
@@ -477,7 +500,7 @@ function goSummonToaster() {
 function goSummonMotherCow() {
 	updateArrayState('bShipsSummoned', 2, true);
 	changeScene(
-		"Out of nowhere pops a huge space ship. It looks like the Derekulian mother ship - The Mother Cow!</br>They seems furious by your loud metal music.</br>You start to wonder if Derekulians like any kind of music at all",
+		"Out of nowhere pops a huge space ship. It looks like the Derekulian mother ship - The Mother Cow!</br>They seem angered by your loud metal music.</br>You start to wonder if Derekulians like any kind of music at all",
 		"derekulianWarship"
 	);
 	createGoButton("Take a chill pill","talk",loadDerekShip,2);
@@ -577,17 +600,27 @@ function goDefeatFlyingSaucer3() {
 function goDefeatEvilToaster() {
 	changeScene(
 		"Hurray! You showed those Dereks who's boss.</br>You notice that they left something behind",
-		"derekulianWarship"
+		"evilToaster"
 	);	
 	createGoButton("What is it?","talk",goDefeatEvilToaster2);
 }
 
-function goDefeatEvilToaster2() {
-	changeScene(
-		"It's a jerk wise man, floating in space. You quickly get him to safety.</br>Turns out he was a prisoner of the Derekulians. They were trying to get some wisdom on how to battle jerks from him. It turns out he was just being a wise ass, and they never got anything useful out of him. They were probably happy to finally get rid of him",
-		"jerkWiseMan"
-	);
-	createGoButton("You're safe now","talk",goDefeatEvilToaster3);
+if (censoredWords) {
+	function goDefeatEvilToaster2() {
+		changeScene(
+			"It's a jerk wise man, floating in space. You quickly get him to safety.</br>Turns out he was a prisoner of the Derekulians. They were trying to get some wisdom on how to battle jerks from him. It turns out he was just being a know it all, and they never got anything useful out of him. They were probably happy to finally get rid of him",
+			"jerkWiseMan"
+		);
+		createGoButton("You're safe now","talk",goDefeatEvilToaster3);
+	}
+} else {
+	function goDefeatEvilToaster2() {
+		changeScene(
+			"It's a jerk wise man, floating in space. You quickly get him to safety.</br>Turns out he was a prisoner of the Derekulians. They were trying to get some wisdom on how to battle jerks from him. It turns out he was just being a wise ass, and they never got anything useful out of him. They were probably happy to finally get rid of him",
+			"jerkWiseMan"
+		);
+		createGoButton("You're safe now","talk",goDefeatEvilToaster3);
+	}	
 }
 
 function goDefeatEvilToaster3() {
@@ -635,15 +668,46 @@ function goDefeatDerekulusX() {
 }
 
 function goDefeatDerekulusX2() {
-	changeScene(
-		"The only issue is that there is nothing here yet.</br>Now that you have gone through all this trouble to get here, what do you think would be a fitting reward? Send me an email on <span style='color:#00fff7'>christianlaumark@gmail.com</span> to let me know",
-		"ancientDerek"
-	);
-	setTimeout(function(){
+	// changeScene(
+	// 	"The only issue is that there is nothing here yet.</br>Now that you have gone through all this trouble to get here, what do you think would be a fitting reward? Send me an email on <span style='color:#00fff7'>christianlaumark@gmail.com</span> to let me know",
+	// 	"ancientDerek"
+	// );
+	// setTimeout(function(){
+	// 	changeScene(
+	// 		"The only issue is that there is nothing here yet.</br>Now that you have gone through all this trouble to get here, what do you think would be a fitting reward? Send me an email on <span style='color:#00fff7'>christianlaumark@gmail.com</span> to let me know",
+	// 		"ancientDerek"
+	// 	);
+	// 	createGoButton("I see","talk",goNewGalaxy);
+	// },3000);
+	updateState('wormCubes', state.wormCubes + 3);
+	if (state.tTerrariumFound) {
 		changeScene(
-			"The only issue is that there is nothing here yet.</br>Now that you have gone through all this trouble to get here, what do you think would be a fitting reward? Send me an email on <span style='color:#00fff7'>christianlaumark@gmail.com</span> to let me know",
-			"ancientDerek"
+			"Ok wow! There are <span style='color:#ff00bb'>3 Worm Cubes</span> here!</br>Let's put them in the Time Terrarium",
+			"wormCube"
 		);
-		createGoButton("I see","talk",goNewGalaxy);
-	},3000);
+	} else {
+		changeScene(
+			"Ok wow! There are <span style='color:#ff00bb'>3 Worm Cubes</span> here!</br>You don't know what they are, but you have a feeling that you will need them in another life. Better keep them safe",
+			"wormCube"
+		);
+	}
+	createGoButton("Fantastic!","wormCube",goNewGalaxy);	
+}
+
+
+function goFindMillionDerekCube() {
+	updateState('bMillionDerekCubeFound', true);
+	updateState('wormCubes', state.wormCubes + 3);
+	if (state.tTerrariumFound) {
+		changeScene(
+			"Ok wow! There are <span style='color:#ff00bb'>3 Worm Cubes</span> here!</br>Let's put them in the Time Terrarium",
+			"wormCube"
+		);
+	} else {
+		changeScene(
+			"Ok wow! There are <span style='color:#ff00bb'>3 Worm Cubes</span> here!</br>You don't know what they are, but you have a feeling that you will need them in another life. Better keep them safe",
+			"wormCube"
+		);
+	}
+	createGoButton("Fantastic!","wormCube",goNewGalaxy);	
 }

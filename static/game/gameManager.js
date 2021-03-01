@@ -31,6 +31,27 @@ function sekund() {
 		updateState("bCoco", state.bCoco + state.bCocoPS);
 	}
 
+	if (state.tTerrariumFound) {
+		if (state.tWood < state.tWoodCapacity) {
+			updateState('tWood', state.tWood + state.tWoodPS);
+			if (state.tWood > state.tWoodCapacity) {
+				updateState('tWood', state.tWoodCapacity);
+			}
+		}
+		if (state.tGoldPS < state.tGoldCapacity) {
+			updateState('tGold', state.tGold + state.tGoldPS);
+			if (state.tGold > state.tGoldCapacity) {
+				updateState('tGold', state.tGoldCapacity);
+			}
+		}
+		if (state.tCoco < state.tCocoCapacity) {
+			updateState('tCoco', state.tCoco + state.tCocoPS);
+			if (state.tCoco > state.tCocoCapacity) {
+				updateState('tCoco', state.tCocoCapacity);
+			}
+		}
+	}
+
 	if (place == "spaceBen") {
 		for (var i = 0; i < state.shopPrices.length; i++) {
 			if (i == 4 && state.starmapNr < 3) {
@@ -147,7 +168,13 @@ function sekund() {
 
 	if (place == "goGhostTrade") {
 		buttonSmallDisableCheck("ghosts",1,"sellGhostBut");
+		if (state.ghosts > 1) {
+			buttonSmallDisableCheck("ghosts",1,"sellMultipleGhostsBut");	
+		}
 		buttonSmallDisableCheck("stardust",state.ghostPrice,"buyGhostBut");
+		if (state.stardust >= (state.ghostPrice * 2)) {
+			buttonSmallDisableCheck("stardust",state.ghostPrice,"buyMultipleGhostsBut");
+		}
 	}
 
 	//Stanleys Stardust
@@ -171,6 +198,39 @@ function sekund() {
 		updateState('bSpaceBarCoco', state.bSpaceBarCoco - (Math.round(state.bSpaceBarCoco / 500) + 1));
 		// console.log("consumed " + Math.round(state.bSpaceBarCoco / 500) + " coco");
 		spaceBarTick++;
+	}
+
+
+	// Time Terrarium
+	if (place == "goWoodshroom") {
+		timeButtonDisableCheck("Nurture WoodshroomBut",1);
+		timeButtonDisableCheck("Deepen Wood BucketBut",1);
+	}
+
+	if (place == "goGoldFlower") {
+		timeButtonDisableCheck("Nurture Gold FlowerBut",2);
+		timeButtonDisableCheck("Deepen Gold BucketBut",1);
+	}
+
+	if (place == "goCocoPotato") {
+		timeButtonDisableCheck("Nurture Coco PotatoBut",1);
+		timeButtonDisableCheck("Deepen Coco BucketBut",1);
+	}
+
+	if (place == "goTimeClub" && state.tClubSlots < 6) {
+		timeButtonDisableCheck("Additional Jerk SlotBut",state.tClubSlots);
+	}
+
+	if (place == "goTimeCloset" && state.tClosetSlots < 3) {
+		timeButtonDisableCheck("Additional Item SlotBut",(state.tClosetSlots * 4));
+	}
+
+	// Derek buy belt potions
+
+	if (place == "goDerekHub") {
+		if (calculateEmptyPotionSlots() > 0) {
+			buttonSmallDisableCheck("gold",(calculateEmptyPotionSlots() * 25),"fillPotionBeltBut");
+		}
 	}
 
 }
@@ -231,6 +291,36 @@ function draw() {
 		document.getElementById("cocoSec").innerHTML = "+" + state.bCocoPS + "/s";
 		document.getElementById("ghostCounter").style.display = "none";
 	}
+	
+	if (!settingsToggled) {
+		if (place == "goWoodshroom") {
+			document.getElementById("resCounter").innerHTML = "There is <span style='color:#d0ba91'>" + state.tWood + "/" + state.tWoodCapacity + " wood</span> in the bucket";
+		} else if (place == "goGoldFlower") {
+			document.getElementById("resCounter").innerHTML = "There is <span style='color:#ffc800'>" + state.tGold + "/" + state.tGoldCapacity + " gold</span> in the bucket";
+		} else if (place == "goCocoPotato") {
+			document.getElementById("resCounter").innerHTML = "There is <span style='color:#8b5937'>" + state.tCoco + "/" + state.tCocoCapacity + " coco</span> in the bucket";
+		} else if (place == "goTimeTerrarium") {
+			document.getElementById("resCounter").innerHTML = "<span style='color:#d0ba91'>" + state.tWood + "/" + state.tWoodCapacity + " wood</span></br><span style='color:#ffc800'>" + state.tGold + "/" + state.tGoldCapacity + " gold</span></br><span style='color:#8b5937'>" + state.tCoco + "/" + state.tCocoCapacity + " coco</span>";
+	   		if (checkIfFullTerrarium()) {
+	   			document.getElementById("handlingArt").src = "images/handling/timeTerrariumFull.gif";
+	   		} else {
+	   			document.getElementById("handlingArt").src = "images/handling/timeTerrarium.gif";
+	   		}
+	    } else {
+			document.getElementById("resCounter").innerHTML = "";
+		}
+		if (place == "surface") {
+			if (checkIfFullTerrarium()) {
+				document.getElementById("imgTime TerrariumBut").src = "images/handling/timeTerrariumFull.gif";
+			}
+		}
+		if (place == "goBurgulonSurface") {
+			if (checkIfFullTerrarium()) {
+				document.getElementById("imgTime TerrariumBut").src = "images/handling/timeTerrariumFull.gif";
+			}
+		}
+	}
+
 }
 
 function countToKString(count) {
@@ -346,7 +436,20 @@ function changeScene(thisHandling,thisArt,thisPlace) {
 }
 
 function changeArt(curArt) {
+	if (curArt == "derek") {
+		loadDerekEquipmentImages();
+		document.getElementById('derekDiv').style.display = "inline-block";
+	} else {
+		document.getElementById('derekDiv').style.display = "none";
+	}
 	document.getElementById("handlingArt").src = "images/handling/" + curArt + ".gif";
+}
+
+function changeBackground(bgImage) {
+	document.body.style.backgroundImage = "url('images/backgrounds/" + bgImage + ".png')";
+	if (bgImage != "BG_AlmostBlack") {
+		lastBackground = bgImage;	
+	}
 }
 
 function shortUpgradeAnimation(text,art,funct) {
@@ -403,7 +506,14 @@ function buttonDisableCheck(list,id,burgulon) {
 			document.getElementById(id).disabled = true;
 		}
 	}
+}
 
+function timeButtonDisableCheck(id,price) {
+	if (state.wormCubes >= price) {
+		document.getElementById(id).disabled = false;
+	} else {
+		document.getElementById(id).disabled = true;
+	}	
 }
 
 function smallAffordCheck(currency,price) {
@@ -450,14 +560,14 @@ function buttonSmallDisableCheck(currency,price,ID) {
 }
 
 function toggleResIcons() {
-	toggleResInfo();
-	if (resIconsToggled) {
-		document.getElementById("resIconDiv").style.display = "none";
-		resIconsToggled = false;
-	} else {
-		document.getElementById("resIconDiv").style.display = "inline";
-		resIconsToggled = true;
-	}
+	// toggleResInfo();
+	// if (resIconsToggled) {
+	// 	document.getElementById("resIconDiv").style.display = "none";
+	// 	resIconsToggled = false;
+	// } else {
+	// 	document.getElementById("resIconDiv").style.display = "inline";
+	// 	resIconsToggled = true;
+	// }
 }
 
 function toggleResInfo() {
@@ -471,7 +581,7 @@ function toggleResInfo() {
 }
 
 function resetProgress(settingsToggle) {
-	resetState();
+	resetState(false);
 	resetMusic();
 	if (settingsToggle) {
 		toggleSettings();
@@ -688,4 +798,10 @@ function goDerekAntiCheat() {
 		updateState('healthPotions', state.healthPotionCapacity);
 	}
 	updateState("healthPotionHeal", 50 + (state.productStates[16] * 10));
+}
+
+if (scrollEnabled) {
+	document.getElementById('gameDiv').style.overflowY = 'scroll';
+	document.getElementById('gameDiv').style.height = '600px';
+	document.getElementById('resInfoDiv').style.position = 'relative';
 }

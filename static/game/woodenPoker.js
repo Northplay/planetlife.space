@@ -506,6 +506,9 @@ function goContinuePoker() {
 			"You have <span style='color:#d0ba91'>" + yourPokerWood + " wood</span> in your pockets. Do you want to keep on playing?",
 			"pokerTable"
 		);
+		if (yourPokerWood >= 100000 && !state.bPokerCubeFound) {
+			createGoButton("Claim special reward","wormCube",goFindPokerCube);
+		}
 		createGoButton("Leave with <span style='color:#d0ba91'>" + yourPokerWood + " wood</span>","pokerLogs",goLeavePoker);
 		createGoButton("Play another hand","pokerTable",goDealHand);
 	} else {
@@ -526,4 +529,21 @@ function goLeavePoker() {
 	);
 	createGoButton("Oh yeah!","beanieImagination",goCasino);
 	updateState('bWood', state.bWood + yourPokerWood);
+}
+
+function goFindPokerCube() {
+	updateState('bPokerCubeFound', true);
+	updateState('wormCubes', state.wormCubes + 1);
+	if (state.tTerrariumFound) {
+		changeScene(
+			"Ok wow! Your special reward was <span style='color:#ff00bb'>a Worm Cube</span></br>Let's put it in the Time Terrarium",
+			"wormCube"
+		);
+	} else {
+		changeScene(
+			"Ok wow! Your special reward was <span style='color:#ff00bb'>a Worm Cube</span></br>You don't know what it is, but you have a feeling that you will need it in another life. Better keep it safe",
+			"wormCube"
+		);
+	}
+	createGoButton("Fantastic!","wormCube",goContinuePoker);
 }

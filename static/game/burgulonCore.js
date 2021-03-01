@@ -1,6 +1,7 @@
 //C CORE
 
 function goCore() {
+	changeBackground("BG_BurgulonCore");
 	playSound(soundEffect.core);
 	if (state.bAppleProgress < 2) {
 		changeScene(
@@ -18,7 +19,7 @@ function goCore() {
 			"goCore"
 		);
 		createGoButton("Back","burgulonSurface",goBurgulonSurface);
-		if (state.bCoreStardust > 0) {
+		if (state.bCoreStardust > 0 && state.bCoreState != "coreBrown") {
 			createGoButton("Harvest core <span style='color:#00fff7'>(gain " + state.bCoreStardust + " stardust)</span>","stardust",goHarvestCore);
 		}
 		if (state.bAppleProgress >= 2 && !state.bBeanShop && state.bCoreStardust < state.bCoreCapacity) {
@@ -122,7 +123,12 @@ function goUseBean(bean) {
 			newPlace = changeCoreColor
 		}
 	}
-	createGoButton("Cool!",state.bCoreState,newPlace);
+	if (state.impatientMode) {
+		newPlace();
+	} else {
+		createGoButton("Cool!",state.bCoreState,newPlace);
+	}
+	
 }
 
 function changeCoreColor() {

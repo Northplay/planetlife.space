@@ -85,7 +85,7 @@ newQuestion(
 );
 
 newQuestion(
-	"Why's there even a quiz here?",
+	"Who is the reason for this quiz?",
 	["Burger"],
 	WIFYQuestions
 );

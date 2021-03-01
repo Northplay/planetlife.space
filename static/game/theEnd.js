@@ -470,17 +470,32 @@ function goNewNewBeginning3() {
 
 function goNewNewBeginning4() {
 	changeScene(
-		"Yeah!</br>Amazing how the ending of one really annoying life can create the foundation for something new and beatiful",
+		"Yeah!</br>Amazing how the ending of one really annoying life can create the foundation for something new and beautiful",
 		"appleWorm"
 	);
-	createGoButton("Amazing","talk",goNewNewBeginning5);
+	createGoButton("Amazing","talk",goFindTerrarium);
+}
+
+function goFindTerrarium() {
+	changeScene(
+		"Well, now that we are here, what do you want to do?</br>You could choose to start over again as this new planet, that is probably going to experience all the same things that has already happened",
+		"appleWorm"
+	);
+	createGoButton("Oh","talk",goNewNewBeginning5);
 }
 
 function goNewNewBeginning5() {
-	changeScene(
-		"Well, now that we are here, what do you want to do?</br>You could choose to start over again as this new planet, that is probably going to experience all the same things that has already happened. Confusing!</br>Or we could just go back to where we were before",
-		"appleWorm"
-	);
+	if (state.tGamesCompleted > 0) {
+		changeScene(
+			"If you choose to start over, I will grant you these <span style='color:#ff00bb'>3 Worm Cubes.</span></br>You can of course just go back and continue being an awesome robot planet",
+			"appleWorm"
+		);
+	} else {
+		changeScene(
+			"If you choose to start over, I will grant you these <span style='color:#ff00bb'>3 Worm Cubes.</span></br>You will need them in your next life, because I sent a brand new <span style='color:#00fff7'>Time Terrarium</span> with you into the future. It's gonna follow you through all your playthroughs of this game, from now till all of eternity. If you choose to become this new planet that is.</br>You can of course just go back and continue being an awesome robot planet",
+			"appleWorm"
+		);		
+	}
 	createGoButton("Let's go back","burgulon",goBackToTheBurgulon);
 	createGoButton("Let's start over","planet",goStartOverPlanet);
 }
@@ -542,14 +557,77 @@ function goBackToBurgulon2() {
 }
 
 function goStartOverPlanet2() {
-	resetState();
 	changeScene(
-		"Good luck out there",
+		"Good luck out there. Here are your <span style='color:#ff00bb'>3 Worm Cubes</span>",
+		"appleWorm"
+	);
+	createGoButton("Thanks! See you","talk",goStartPlanetOverTT1);
+}
+
+function goStartPlanetOverTT1() {
+	completeGameTerrariumTime = true;
+
+	changeScene(
+		"Oh, and before you go. Let's say you wanted to keep one of Dereks items and one Jerk.</br>Which would you choose?",
+		"appleWorm"
+	);
+	var donePicking = 0;
+	if (state.tClosetSlots > getUsedSlots(state.tClosetSlots,state.tClosetArray) && state.derekItems.length > 0) {
+		createGoButton("Choose item","derek",goCheckStoreDerekItems);
+	} else {
+		donePicking++;
+	}
+	if (state.tClubSlots > getUsedSlots(state.tClubSlots,state.tClubArray) && state.jerkPile.length > 0) {
+		createGoButton("Choose jerk","jerkSquad",goCheckStoreJerk);
+	} else {
+		donePicking++;
+	}
+	if (donePicking == 2) {
+		goStartPlanetOverTT2();
+	}
+
+	// if (state.tGamesCompleted == 0) {
+	// 	changeScene(
+	// 		"Oh, and before you go. Let's say you wanted to keep one of Dereks items and one Jerk.</br>Which would you choose?",
+	// 		"appleWorm"
+	// 	);
+	// 	if (!state.chosenTTItem) {
+	// 		createGoButton("Choose item","derek",goCheckStoreDerekItems);
+	// 	}
+	// 	if (!state.chosenTTJerk) {
+	// 		createGoButton("Choose jerk","jerkSquad",goCheckStoreJerk);
+	// 	} 
+	// 	if (state.chosenTTItem && state.chosenTTJerk) {
+	// 		goStartPlanetOverTT2();
+	// 	}
+	// } else {
+	// 	changeScene(
+	// 		"Oh, and before you go. Do you want to store some of Derek's items in the Time Terrarium? Or perhaps some jerks?",
+	// 		"appleWorm",
+	// 	);
+	// 	createGoButton("Time Terrarium","timeTerrarium",goTimeTerrarium);
+	// 	createGoButton("I'm ready to go!","planet",goStartPlanetOverTT2);
+	// }	
+}
+
+function goStartPlanetOverTT2() {
+	completeGameTerrariumTime = false;
+	changeScene(
+		"Ok, let's go!",
 		"appleWorm"
 	);
 	setTimeout(function(){
-		goRoot();
+		goStartOverPlanet3();
 	},2000);
+}
+
+function goStartOverPlanet3() {
+	updateState('wormCubes', state.wormCubes + 3);
+	updateState('tGamesCompleted', state.tGamesCompleted + 1);
+	setTimeout(function(){
+		console.log("starting game over");
+		resetState(true);
+	},300);
 }
 
 
@@ -585,8 +663,8 @@ function goCredits4() {
 function goCredits45() {
 	playSound(soundEffect.cheer);
 	changeScene(
-		"If you are hearing those sweet space tunes, you have to thank Frederik Boye. Without his tireless work on those crispy beats, space would have been the boring void you would have expected it to be",
-		"derekDj"
+		"If you are hearing those sweet space tunes, you have to thank <span style='color:#ff00bb'>Frederik Boye.</span> Without his tireless work on those crispy beats, space would have been the boring void you would have expected it to be",
+		"derekDJ"
 	);
 	createGoButton("...","talk",goCredits5);
 }
@@ -609,7 +687,7 @@ function goCredits6() {
 
 function goCredits7() {
 	changeScene(
-		"And here's a shoutout to the amazing testers!</br></br><span style='color:#0077ff'>Julian Abela</span></br><span style='color:#04ff00'>Sebastian Ebert</span></br><span style='color:#ffb300'>Lucas Bunk</span></br></br>Who knows what kind of game this would have been without them",
+		"And here's a shoutout to the amazing testers!</br></br><span style='color:#0077ff'>Julian Abela</span></br><span style='color:#04ff00'>Sebastian Ebert</span></br><span style='color:#ffb300'>Lucas Bunk</span></br><span style='color:#ff00bb'>Chry</span></br><span style='color:#ff0000'>SNP</span></br></br>Who knows what kind of game this would have been without them",
 		"beanieSunglasses"
 	);
 	createGoButton("...","talk",goCredits8);
@@ -623,7 +701,3 @@ function goCredits8() {
 	//createGoButton("Fan art!?","burg3r",goFanArt);
 	createGoButton("...","talk",goParty32);
 }
-
-//TODO CaptainSauce thanks
-
-//BLIND PEOPLE THANK YOU!

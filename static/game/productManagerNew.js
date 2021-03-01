@@ -353,13 +353,13 @@ function createEndlessDungeon() {
 	var endlessDungeon = new dungeonType (
 		"Endless Dungeon",
 		"",
-		1,
+		1.5,
 		"dungeon",
 		99,
 		"planet",
 		"dungeonBeating"
 	);
-	yourDungeons.push(endlessDungeon);
+	// yourDungeons.push(endlessDungeon);
 	var newDungeons = state.dungeons;
 	newDungeons.push(endlessDungeon);
 	updateState('dungeons', newDungeons);
@@ -383,13 +383,13 @@ function createEndlessCocoDungeon() {
 	var endlessCocoDungeon = new dungeonType (
 		"Endless Coco Dungeon",
 		"",
-		3,
+		4.5,
 		"cocoDungeon",
 		99,
 		"cocoCastle",
 		"cocoDungeonBeating"
 	);
-	yourDungeons.push(endlessCocoDungeon);
+	// yourDungeons.push(endlessCocoDungeon);
 	var newDungeons = state.dungeons;
 	newDungeons.push(endlessCocoDungeon);
 	updateState('dungeons', newDungeons);
@@ -413,13 +413,13 @@ function createEndlessMonsterDungeon() {
 	var endlessMonsterDungeon = new dungeonType (
 		"Endless Monster Dungeon",
 		"",
-		5,
+		6.5,
 		"monsterDungeon",
 		99,
 		"lochJuice",
 		"monsterDungeonBeating"
 	);
-	yourDungeons.push(endlessMonsterDungeon);
+	// yourDungeons.push(endlessMonsterDungeon);
 	var newDungeons = state.dungeons;
 	newDungeons.push(endlessMonsterDungeon);
 	updateState('dungeons', newDungeons);
@@ -559,7 +559,7 @@ for (var i = 1; i < 99; i++) {
 		i,
 		"Better Science",
 		"woodSynthesizer",
-		"Better science means that the Wood Synthesizer will produce<span style='color:#ff0000'>" + (i + 1) + " wood/sec</span>",
+		"Better science means that the Wood Synthesizer will produce <span style='color:#ff0000'>" + (i + 1) + " wood/sec</span>",
 		[0,Math.floor((i * 20) * (1 + (i/8))),((i * 200) * (1 + (i/8))),0],
 		upgradeWoodSynthesizer,
 		true
@@ -1216,7 +1216,7 @@ newSingleProduct("Hire Tip Toe Tyler (300 stardust)","stardust","bStardust",300,
 newSingleProduct("Friend House Music (200 gold)","crawlerHouse","bGold",200,"goSpaceRadio",goStartRadio,0);
 newSingleProduct("Jerk Techno (800 gold)","bret","bGold",800,"goSpaceRadio",goStartRadio,1);
 newSingleProduct("Gnomish Heavy Metal (2000 gold)","lilGnomey","bGold",2000,"goSpaceRadio",goStartRadio,2);
-newSingleProduct("Beanie's Impro Jazz (10000 gold)","beanieBean","bGold",10000,"goSpaceRadio",goStartRadio,3);
+newSingleProduct("Beanie's Improv Jazz (10000 gold)","beanieBean","bGold",10000,"goSpaceRadio",goStartRadio,3);
 
 
 //DEREK SUMMONING DEVICE
@@ -1249,3 +1249,82 @@ function goBuySpaceRings(amount) {
 }
 
 newSingleProduct("Imagine <span style='color:#ea00ff'>LE</span><span style='color:#ffd900'>GE</span><span style='color:#00ff08'>ND</span><span style='color:#00d9ff'>ARY</span> jerks (25000 space rings)","spaceRing","bSpaceRings",25000,"legendaryJerks",goImagineLegendaryJerks);
+
+
+// SPACE BEN CHESTS
+newSingleProduct(
+	"<span style='color:#8a8a8a'>Scruffy Chest</span> (10 stardust)",
+	"chest",
+	"stardust",
+	10,
+	"goBuyChests",
+	goBuyThisChest,
+	0
+);
+
+newSingleProduct(
+	"<span style='color:#0066ff'>Decent Chest</span> (80 stardust)",
+	"chest",
+	"stardust",
+	80,
+	"goBuyChests",
+	goBuyThisChest,
+	1
+);
+
+newSingleProduct(
+	"<span style='color:#ffa200'>Excellent Chest</span> (200 stardust)",
+	"chest",
+	"stardust",
+	200,
+	"goBuyChests",
+	goBuyThisChest,
+	2
+);
+
+newSingleProduct(
+	"<span style='color:#ff29ff'>Crazy Chest</span> (800 stardust)",
+	"chest",
+	"stardust",
+	800,
+	"goBuyChests",
+	goBuyThisChest,
+	3
+);
+
+function goBuyThisChest(type) {
+	var types = ["scruffy","decent","excellent","crazy"];
+	var prices = [10,80,200,800];
+	var minDifficulty = [1,5,10,15];
+	var maxDifficulty = [5,10,15,20];
+	var chestDelay;
+	var explosionDelay;
+	if (state.impatientMode) {
+		chestDelay = 50;
+		explosionDelay = 5;
+	} else {
+		chestDelay = 1500;
+		explosionDelay = 1000;
+	}
+	setTimeout(function(){
+		playSound(soundEffect.explosion);
+	},explosionDelay);
+	changeScene(
+		"What fantastic treasure could be inside?",
+		"chestOpen"
+	);
+	setTimeout(function(){
+		// updateState('stardust', state.stardust - prices[type]);
+		var difficulty = (Math.random() * (maxDifficulty[type] - minDifficulty[type] + 1) + minDifficulty[type]);
+		console.log("This is the chest difficulty " + difficulty);
+		rollNewItem(difficulty,1);
+		var h = "It's ";
+		var item = state.derekItems.length - 1;
+		h += writeItemName(item,state.derekItems,false) + "</br><span style='color:#a1a1a1'>'" + state.derekItems[item].text + "'</span></br>" + writeItemStats(item,state.derekItems);
+		changeScene(
+			h,
+			state.derekItems[item].itemImage
+		);
+		createGoButton("Cool",state.derekItems[item].itemImage,goBuyChests);
+	},chestDelay);
+}

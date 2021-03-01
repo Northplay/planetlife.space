@@ -138,6 +138,7 @@ function goNewBeginning7() {
 
 function goNewGalaxy() {
 	audioSettings.shouldPlayMusic = true;
+	changeBackground("BG_Universe");
 	playMusic();
 	changeScene(
 		"You are a shiny little mechanical planet, hanging out in a remote solar system",
@@ -314,6 +315,7 @@ function goRecruitJerk() {
 
 function goBurgulonSurface() {
 	//playSound(soundEffect.burgulon);
+	changeBackground("BG_Burgulon");
 	changeScene(
 		"Your fragmented mechanical surface is creaking and clonking. Deep chirps come from within your robot core",
 		"burgulonSurface",
@@ -323,7 +325,10 @@ function goBurgulonSurface() {
 	// if (state.bBeanieProgress >= 8 && !state.bSpaceRadio) {
 	// 	createGoButton("Check your surface","binoculars",goMeetSpaceRadio);
 	// }
-	if (state.bAppleProgress >= 2 && !state.bSpaceRadio) {
+	if (state.tTerrariumFound) {
+		createGoButton("Time Terrarium","timeTerrarium",goTimeTerrarium);
+	}
+	if (state.bAppleProgress >= 2 && !state.bSpaceRadio && state.bJerkStarted) {
 		createGoButton("Check your surface","binoculars",goMeetSpaceRadio);
 	}
 	if (state.bBentProgress > 0 && state.bJackLetters == 0) {
@@ -496,7 +501,7 @@ function goBret() {
 		createGoButton("Extraction time!","coco",goBretCoco);
 	} else {
 		changeScene(
-			"Bret is hard at work prying <span style='color:#ff0000'>" + state.bCocoPS + " coco/sec</span> out of your cracks. He occasionally samples the goods",
+			"Bret is hard at work prying <span style='color:#ff0000'>" + (state.productStates[18] + 1) + " coco/sec</span> out of your cracks. He occasionally samples the goods",
 			"bret",
 			"goBret"
 		);
@@ -505,7 +510,7 @@ function goBret() {
 			createGoButton("What's up?","talk",goBretAncientSecret);
 		}
 		createGoButton("Talk","talk",goBretTalk);
-		if (state.bAncientPlanet && !state.bJerkClub) {
+		if (state.bAppleProgress >= 2 && !state.bJerkClub) {
 			createGoButton("Hear proposition","talk",goHearBusinessPlan);
 		}
 		createProduct("Crowbar Upgrade");
@@ -568,7 +573,7 @@ function goBretCoco() {
 
 function goWoodSynthesizer() {
 	changeScene(
-		"The beautiful machine is popping out <span style='color:#ff0000'>" + state.bWoodPS + " wood/sec</span>. You can't help but make a happy little chirp",
+		"The beautiful machine is popping out <span style='color:#ff0000'>" + (state.productStates[21] + 1) + " wood/sec</span>. You can't help but make a happy little chirp",
 		"woodSynthesizer",
 		"goWoodSynthesizer"
 	);
@@ -940,7 +945,7 @@ function goSpaceRadio() {
 	if (state.bShipsSummoned[3] && state.bDerekShipStates[3] < allDerekShips[3].levels) {
 		createGoButton("Derekulus X","spaceDungeon",loadDerekShip,3);
 	} else if (state.bDerekShipStates[3] < allDerekShips[3].levels && state.bDerekShipStates[2] == allDerekShips[2].levels) {
-		createSingleProduct("Beanie's Impro Jazz (10000 gold)");
+		createSingleProduct("Beanie's Improv Jazz (10000 gold)");
 	}		
 }
 

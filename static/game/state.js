@@ -2,6 +2,7 @@ var initialState = {
 	axeNr: 0,
 	answerPrice: 1,
 	answerStates: [],
+	bAncientCubeFound: false,
 	bAncientPlanet: false,
 	bAppleProgress: 0,
 	bBarCocoPrice: 10,
@@ -53,6 +54,7 @@ var initialState = {
 	bLemonada: false,
 	bLollipops: 0,
 	bMayonadaProgress: 0,
+	bMillionDerekCubeFound: false,
 	bMinionsKilled: 0,
 	bMouladinLollipops: 0,
 	bMouladinProgress: 0,
@@ -61,8 +63,10 @@ var initialState = {
 	bWood: 0,
 	bWoodPS: 0,
 	bPlanetBack: false,
+	bPokerCubeFound: false,
 	bPotato: false,
 	bRemoveJerkPrice: 10,
+	bRouletteCubeFound: false,
 	bShipsSummoned: [false,false,false,false],
 	bSlopnax: false,
 	bSlopnaxProgress: 0,
@@ -91,6 +95,8 @@ var initialState = {
 	burgulonDungeon: [4,4,4],
 	burgulonTime: false,
 	broccoliChapter: false,
+	chosenTTItem: false,
+	chosenTTJerk: false,
 	coco: 0,
 	cocoDungeonsCompleted: false,
 	cocoDungeonsFound: false,
@@ -103,9 +109,11 @@ var initialState = {
 	derekDead: false,
 	derekDefrosted: false,
 	derekHealth: 50,
+	derekItems: [],
 	derekMaxHealth: 50,
 	derekToughness: 50,
 	derekulusX: false,
+	derekulusXCubeFound: false,
 	drillNr: 0,
 	ddsPrice: [300, 20, 0, 0, false],
 	dungeonFound: false,
@@ -167,6 +175,21 @@ var initialState = {
 	stateInitialized: false,
 	svenFound: false,
 	svenWoodPS: 0,
+	tTerrariumFound: false,
+	tClosetArray: [],
+	tClosetSlots: 1,
+	tClubArray: [],
+	tClubSlots: 1,
+	tWoodPS: 1,
+	tWood: 0,
+	tWoodCapacity: 500,
+	tCocoPS: 1,
+	tCoco: 0,
+	tCocoCapacity: 500,
+	tGamesCompleted: 0,
+	tGoldPS: 0,
+	tGold: 0,
+	tGoldCapacity: 100,
 	unlockedFullHeal: false,
 	villaKey: false,
 	villaPortal: false,
@@ -174,11 +197,12 @@ var initialState = {
 	woodPS: 0,
 	workshopDemolished: false,
 	workshopPrice: [20, 0, 0, 0, false],
+	wormCubes: 0,
 	wormFound: false,
 	wormFoundAgain: false,
 	wormholePaid: false,
 	wormOut: false,
-	version: 9,
+	version: 12,
 };
 
 var state = initialState;
@@ -423,6 +447,58 @@ var stateMigrations = [
 		],
 		removed: [],
 		updated: [],
+
+	},
+	{
+		from: 9,
+		to: 10,
+		added: [
+			{ key: 'tTerrariumFound', value: false },
+			{ key: 'tWoodPS', value: 1 },
+			{ key: 'tWoodCapacity', value: 500 },
+			{ key: 'tCocoPS', value: 1 },
+			{ key: 'tCocoCapacity', value: 500 },
+			{ key: 'tGoldPS', value: 0 },
+			{ key: 'tGoldCapacity', value: 100 },
+			{ key: 'tWood', value: 0 },
+			{ key: 'tCoco', value: 0 },
+			{ key: 'tGold', value: 0 },
+			{ key: 'wormCubes', value: 0 },
+			{ key: 'tGamesCompleted', value: 0 },
+			{ key: 'bAncientCubeFound', value: false },
+			{ key: 'derekulusXCubeFound', value: false },
+			{ key: 'bMillionDerekCubeFound', value: false },
+			{ key: 'bPokerCubeFound', value: false },
+			{ key: 'bRouletteCubeFound', value: false },
+		],
+		removed: [],
+		updated: [],
+
+	},
+	{
+		from: 10,
+		to: 11,
+		added: [
+			{ key: 'derekItems', value: [] },
+		],
+		removed: [],
+		updated: [],
+
+	},
+	{
+		from: 11,
+		to: 12,
+		added: [
+			{ key: 'tClosetArray', value: [] },
+			{ key: 'tClosetSlots', value: 1 },
+			{ key: 'tClubArray', value: [] },
+			{ key: 'tClubSlots', value: 1 },
+			{ key: 'chosenTTJerk', value: false },
+			{ key: 'chosenTTItem', value: false },
+		],
+		removed: [],
+		updated: [],
+
 	},
 	// {
 	// 	from: 2,
@@ -511,7 +587,8 @@ function loadFromBridge(onComplete) {
 
 function loadFromLocalStorage(onComplete) {
 	var value = localStorage.getItem('state');
-	console.log("load state: " + value);
+	console.log("load state");
+	// console.log("load state: " + value);
 	parseAndSetState(value);
 	onComplete();
 }

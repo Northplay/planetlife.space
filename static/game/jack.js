@@ -2,6 +2,7 @@ function goSummonJack() {
 	updateState('bBentProgress', 1);
 	updateState('bBeanieProgress', 7);
 	updateState('bCelestialSummonerCharged', false);
+	changeBackground("BG_Universe");
 	playSound(soundEffect.explosion);
 	changeScene(
 		"A violent explosion blasts you back! You are totally blinded",
@@ -329,7 +330,7 @@ function goDefeatSlopnax4() {
 	updateState("bSlopnax", true);
 	updateState("bWoodPS", state.bWoodPS + 3);
 	changeScene(
-		"You decide to give Slopnax a second chance.</br>But to keep him away from bad company you should probably stove him away somewhere safe",
+		"You decide to give Slopnax a second chance.</br>But to keep him away from bad company you should probably stow him away somewhere safe",
 		"slopnax"
 	);
 	createGoButton("Beanies Imagination!","beanieImagination",goBeanieImagination);
@@ -537,14 +538,26 @@ function goMeetJack3() {
 	},500);
 }
 
-function goMeetJack4() {
-	updateState('bJackProgress', 1);
-	changeScene(
-		"You both have a small laugh. But it only lasts a second.. This guy is the final boss. You have plenty of reasons to kick his ass, and your jerks are itching for a fight",
-		"jack"
-	);
-	createGoButton("Die!","talk",goJack);
+if (censoredWords) {
+	function goMeetJack4() {
+		updateState('bJackProgress', 1);
+		changeScene(
+			"You both have a small laugh. But it only lasts a second.. This guy is the final boss. You have plenty of reasons to kick his butt, and your jerks are itching for a fight",
+			"jack"
+		);
+		createGoButton("Die!","talk",goJack);
+	}
+} else {
+	function goMeetJack4() {
+		updateState('bJackProgress', 1);
+		changeScene(
+			"You both have a small laugh. But it only lasts a second.. This guy is the final boss. You have plenty of reasons to kick his ass, and your jerks are itching for a fight",
+			"jack"
+		);
+		createGoButton("Die!","talk",goJack);
+	}	
 }
+
 
 function goJack() {	
 	playSound(soundEffect.jack);
@@ -683,7 +696,7 @@ function goSecondLetter2() {
 
 function goThirdLetter() {
 	changeScene(
-		"Your trusty Intergalactic Mailman is back again. You small talk a little.</br>It looks like he brought anohter letter from that unbearable sun",
+		"Your trusty Intergalactic Mailman is back again. You small talk a little.</br>It looks like he brought another letter from that unbearable sun",
 		"intergalacticMailman"
 	);
 	createGoButton("Read Letter","jackLetter",goThirdLetter2);	

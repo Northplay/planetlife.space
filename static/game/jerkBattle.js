@@ -148,9 +148,6 @@ function manipulateJerk(array,loaded,exhausted,removed) {
 }
 
 function goChooseJerk() {
-	// if (curBurgulonLevel == 1 && jerkActions == 3) {
-	// 	initializeBurgulonDungeon();
-	// }
 	var beatupText = "";
 	if (calculateDefeatedJerks() > 0) {
 		beatupText = "<span style='color:#bf0000'>" + calculateDefeatedJerks() + " jerk(s) are totally beat up.</span></br>";
@@ -184,61 +181,20 @@ function goChooseJerk() {
 			}
 		}
 	}
-	//if (curBurgulonLevel < state.burgulonDungeon.length) {
-	if (state.bCoreStardust > 0) {
-		// if (jerkActions == 0) {
-		// 	//changeScene("No more jerk actions. That means your jerks have no clue what to do, and Derek just beats the crap out of all of them and moves on to the next level","derekStrength");
-		// 	changeScene("No more jerk actions left!","derekStrength");
-		// 	//createGoButton("Yikes!","bullFart",loadBurgulonDungeonLevel);
-		// 	createGoButton("Yikes!","bullFart",goDerekEat);
-		// }
-		if (loadedJerks(state.jerkPile) == 0) {
-			changeScene("You have no jerks left!","doorOfRegret");
-			//createGoButton("Yikes!","bullFart",loadBurgulonDungeonLevel);
-			createGoButton("Yikes!","bullFart",goDerekEat);
-		}
-		if (refresh_pile) {
-			jerkRefreshCost = Math.floor(state.bCoco * 0.20);
-			// changeScene("Looks like your pile of jerks is empty. Feed them <span style='color:#ff0000'>" + jerkRefreshCost + " coco</span> to freshen them up for a new round of beating?","bret");
-			// createGoButton("Feed jerks (" + jerkRefreshCost + " coco)","coco",goRefreshJerks);
-			changeScene(
-				"Your whole jerk pile has been beaten up!</br>But <span style='color:#16fa05'>these jerks never give up!</span> In a flash they are ready to fight for you again!",
-				"jerkSquad"
-			);
-			createGoButton("Go go jerks!","jerkSquad",goRefreshJerks);
-		}
-	} else {
-		//Derek wins
-		drainCore();
-		var j = state.jerkPile;
-		for (var i = 0; i < j.length; i++) {
-			j[i].loaded = false;
-			j[i].exhausted = false;
-		}
-		updateState('jerkPile', j);
-		if (bossBattle == "bent") {
-			goBentWins();
-		} else if (bossBattle == "slopnax") {
-			goSlopnaxWins();
-		} else if (bossBattle == "mayonada") {
-			goMayonadaWins();
-		} else if (bossBattle == "derek") {
-			goDerekWins();
-		} else if (bossBattle == "jack") {
-			if (state.bDerekProgress == 2) {
-				goJackExplodes();
-			} else {
-				goJackWins();
-			}
-		} else {
-			changeScene(
-				"<span style='color:#" + derekArray[curDerekIndex].clr + "'>" + derekArray[curDerekIndex].navn + "</span> sucks the remaining stardust out of your core. He returns to his home planet Derekulus X, victorious!",
-				"blackHole"	
-			);
-			createGoButton("Bummer","bullFart",goNewGalaxy);
-			//drainCore();
-		}
+
+	if (loadedJerks(state.jerkPile) == 0) {
+		changeScene("You have no jerks left!","doorOfRegret");
+		createGoButton("Yikes!","bullFart",goDerekEat);
 	}
+	if (refresh_pile) {
+		jerkRefreshCost = Math.floor(state.bCoco * 0.20);
+		changeScene(
+			"Your whole jerk pile has been beaten up!</br>But <span style='color:#16fa05'>these jerks never give up!</span> In a flash they are ready to fight for you again!",
+			"jerkSquad"
+		);
+		createGoButton("Go go jerks!","jerkSquad",goRefreshJerks);
+	}
+
 }
 
 function goDerekEat() {
@@ -257,7 +213,7 @@ function goDerekEat() {
 				"<span style='color:#" + derekArray[curDerekIndex].clr + "'>" + derekArray[curDerekIndex].navn + "</span> frothingly eats <span style='color:#fca903'>" + muffins + " muffins.</span> But he is still super hungry, so he also eats <span style='color:#ff0000'>" + leftover_hunger + " stardust</span>",
 				"muffin"
 			);
-			updateState('bCoreStardust', state.bCoreStardust - leftover_hunger); 
+			updateState('bCoreStardust', state.bCoreStardust - leftover_hunger);
 		}
 	} else {
 		//Eats the stardust
@@ -269,6 +225,40 @@ function goDerekEat() {
 		updateState('bCoreStardust', state.bCoreStardust - curDerekHunger);
 	}
 	createGoButton("OK!","talk",loadBurgulonDungeonLevel);
+
+	if (state.bCoreStardust <= 0) {
+			//Derek wins
+			playMusic();
+			drainCore();
+			var j = state.jerkPile;
+			for (var i = 0; i < j.length; i++) {
+				j[i].loaded = false;
+				j[i].exhausted = false;
+			}
+			updateState('jerkPile', j);
+			if (bossBattle == "bent") {
+				goBentWins();
+			} else if (bossBattle == "slopnax") {
+				goSlopnaxWins();
+			} else if (bossBattle == "mayonada") {
+				goMayonadaWins();
+			} else if (bossBattle == "derek") {
+				goDerekWins();
+			} else if (bossBattle == "jack") {
+				if (state.bDerekProgress == 2) {
+					goJackExplodes();
+				} else {
+					goJackWins();
+				}
+			} else {
+				changeScene(
+					"<span style='color:#" + derekArray[curDerekIndex].clr + "'>" + derekArray[curDerekIndex].navn + "</span> sucks the remaining stardust out of your core. He returns to his home planet Derekulus X, victorious!",
+					"blackHole"
+				);
+				createGoButton("Bummer","bullFart",goNewGalaxy);
+			}
+		}
+		
 }
 
 function loadBurgulonDungeonLevel() {
@@ -400,6 +390,7 @@ function goLootRes(rings) {
 }
 
 function goLootLollies(rings) {
+	playMusic();
 	var lolliAmount = Math.round(rings/15);
 	updateState('bLollipops', state.bLollipops + lolliAmount);
 	changeScene(
@@ -425,7 +416,11 @@ function goLootLollies(rings) {
 		createGoButton("Alright!","talk",goDefeatOgDerek);
 		//goDefeatOgDerek();
 	} else if (bossBattle == "randomDerek") {
-		createGoButton("Alright!","talk",goDerekSummoningDevice);
+		if (derekulianHealth == 1000000 && !state.bMillionDerekCubeFound) {
+			createGoButton("Alright!","talk",goFindMillionDerekCube);
+		} else {
+			createGoButton("Alright!","talk",goDerekSummoningDevice);
+		}
 	} else if (bossBattle == "jack") {
 		createGoButton("Alright!!","talk",goDefeatJack);
 	}
@@ -454,6 +449,7 @@ function goRunAwaySure() {
 }
 
 function goRunAway() {
+	playMusic();
 	changeScene(
 		"You take all your jerks and get out of there!</br>Better not risk losing more stardust",
 		"jerkSquad"

@@ -1,7 +1,7 @@
 function goMeetBeanie() {
 	changeScene(
 		"There's a small nebula cloud out in the distance. Looks like there's something behind it",
-		"nebuladada"
+		"nebula"
 	);
 	createGoButton("Back","burgulon",goNewGalaxy);
 	createGoButton("Blow the cloud away","nebula",goMeetBeanie2);
@@ -128,6 +128,7 @@ function goBeanieImaginationIntro() {
 //I IMAGINATION
 
 function goBeanieImagination() {
+	changeBackground("BG_BeanieImagination");
 	changeScene(
 		"This is all inside Beanies head. Amazing! There's even a Casino here",
 		"beanieImagination",
@@ -201,7 +202,7 @@ function goBeanieImagineJerks() {
 		squadFullText = "</br><span style='color:#ff0000'>There are 50 jerks in your squad. It's completely packed!! You need to remove some if you want to buy new jerks</span>";
 	}
 	changeScene(
-		"Beanie tells you that she could try to imagine some <span style='color:#ea00ff'>LE</span><span style='color:#ffd900'>GE</span><span style='color:#00ff08'>ND</span><span style='color:#00d9ff'>ARY</span> jerks for you. But she says there's a 50/50 chance of success.</br>She will need some space rings to fuel her imagination.</br>You have <span style='color:#ffc800'>" + state.bSpaceRings + " space rings</span>" + squadFullText,
+		"Beanie tells you that she could try to imagine some <span style='color:#ea00ff'>LE</span><span style='color:#ffd900'>GE</span><span style='color:#00ff08'>ND</span><span style='color:#00d9ff'>ARY</span> jerks for you.</br>She will need some space rings to fuel her imagination.</br>You have <span style='color:#ffc800'>" + state.bSpaceRings + " space rings</span>" + squadFullText,
 		"beanieBean",
 		"legendaryJerks"
 	);
@@ -225,7 +226,6 @@ function goBeanieImagineJerks() {
 }
 
 function goImagineLegendaryJerks() {
-	if (Math.random() >= 0.5) {
 
 		var rarity = 10;
 		playSound(soundEffect.cheer);
@@ -246,17 +246,7 @@ function goImagineLegendaryJerks() {
 		createGoButton("I don't want any of these jerks!","no",goBeanieImagineJerks);
 		createGoButton(openedJerks[0].navn + " <span style='color:#ffea00'>(" + openedJerks[0].actionCost + " actions)</span>" + "</br><span style='color:#8a8a8a'>" + openedJerks[0].description + "</span>",openedJerks[0].image,pickAJerk,openedJerks[0],true);
 		createGoButton(openedJerks[1].navn + " <span style='color:#ffea00'>(" + openedJerks[1].actionCost + " actions)</span>" + "</br><span style='color:#8a8a8a'>" + openedJerks[1].description + "</span>",openedJerks[1].image,pickAJerk,openedJerks[1],true);
-	
-	} else {
 
-		playSound(soundEffect.loose);
-		changeScene(
-			"Looks like Beanie couldn't come up with any <span style='color:#ea00ff'>LE</span><span style='color:#ffd900'>GE</span><span style='color:#00ff08'>ND</span><span style='color:#00d9ff'>ARY</span> jerks",
-			"no"
-		);
-		createGoButton("Pokkers!","talk",goBeanieImagineJerks);
-	
-	}
 }
 
 function goBeanieBeanTalk() {
@@ -342,6 +332,7 @@ function goGiveBeanieGold2() {
 //C CASINO
 
 function goCasino() {
+	changeBackground("BG_CasinoCamp");
 	changeScene(
 		"There's a little camp near the forest. It's apparently a cosy little casino.</br>Maybe you can win something here",
 		"casino"
@@ -426,6 +417,9 @@ function goEvaluateGamblingHabits() {
 		"You now have <span style='color:#fcba03'>" + rouletteBet + " gold</span>. Can you control your gambling, or are you going to be a raging ludomaniac?",
 		"gold"
 	);
+	if (rouletteBet >= 100000 && !state.bRouletteCubeFound) {
+		createGoButton("Claim special reward","wormCube",goFindRouletteCube);
+	}
 	createGoButton("Leave with <span style='color:#fcba03'>" + rouletteBet + " gold</span>","gold",goLeaveRoulette);
 	createGoButton("I'm not done here. More coffee!","coffeeCup",goPlayRoulette,rouletteBet);
 }
@@ -441,6 +435,23 @@ function goLeaveRoulette() {
 	rouletteBet = 0;
 	updateState('bLollipops', state.bLollipops + lolliCount);
 	createGoButton("Phew!","talk",goCasino);
+}
+
+function goFindRouletteCube() {
+	updateState('bRouletteCubeFound', true);
+	updateState('wormCubes', state.wormCubes + 1);
+	if (state.tTerrariumFound) {
+		changeScene(
+			"Ok wow! Your special reward was <span style='color:#ff00bb'>a Worm Cube</span></br>Let's put it in the Time Terrarium",
+			"wormCube"
+		);
+	} else {
+		changeScene(
+			"Ok wow! Your special reward was <span style='color:#ff00bb'>a Worm Cube</span></br>You don't know what it is, but you have a feeling that you will need it in another life. Better keep it safe",
+			"wormCube"
+		);
+	}
+	createGoButton("Fantastic!","wormCube",goEvaluateGamblingHabits);
 }
 
 
@@ -512,6 +523,9 @@ function goMouladin() {
 	}
 	createGoButton("Back","beanieImagination",goBeanieImagination);
 	if (state.bMouladinProgress >= 5) {
+		if (state.wormCubes > 0) {
+			createGoButton("How many Worm Cubes do I have?","wormCube",goCheckWormCubes,"burgulon");
+		}
 		createGoButton("Trade <span style='color:#ff0000'>" + state.bLollipops + " lollipops</span> for <span style='color:#00fff7'>" + (state.bLollipops * 10) + " stardust</span>","stardust",goTradeLollies);	
 	} 
 	if (state.bMouladinUpgradePoints > 0) {
@@ -771,7 +785,7 @@ function goPotato() {
 
 function goPotatoAsk() {
 	changeScene(
-		"It seems to touchy subject for him. He starts wailing again",
+		"It seems to be a touchy subject for him. He starts wailing again",
 		"potatoCrying"
 	);
 	createGoButton("There there","talk",goPotato);
@@ -779,7 +793,7 @@ function goPotatoAsk() {
 
 function goSlopnaxFriend() {
 	changeScene(
-		"Slopnax is trying to meditate. But somehow wooden logs keep popping out of his ears.</br>He is probably doing it wrong, but you are getting 3 wood per second",
+		"Slopnax is trying to meditate. But somehow wooden logs keep popping out of his ears.</br>He is probably doing it wrong, but you are getting <span style='color:#d0ba91'>3 wood</span> per second",
 		"slopnax"
 	);
 	createGoButton("Back","beanieImagination",goBeanieImagination);
@@ -815,7 +829,7 @@ function goSlopnaxFriendTalk() {
 
 function goLemonada() {
 	changeScene(
-		"Lemonada is rolling around in the soft grass. With a relaxed smile he performs a rain dance that makes 6 coco fall from the sky per second",
+		"Lemonada is rolling around in the soft grass. With a relaxed smile he performs a rain dance that makes <span style='color:#8b5937'>6 coco</span> fall from the sky per second",
 		"lemonada"
 	);
 	createGoButton("Back","beanieImagination",goBeanieImagination);
@@ -898,10 +912,17 @@ function goRecruitJerkinson() {
 }
 
 function goSweatson() {
-	changeScene(
-		"Sweatson is making your floor all wet. Good boy!</br>He reminds you of your old planet buddy, and you feel a little sad",
-		"sweatson"
-	);
+	if (!state.bPlanetBack) {
+		changeScene(
+			"Sweatson is making your floor all wet. Good boy!</br>He reminds you of your old planet buddy, and you feel a little sad",
+			"sweatson"
+		);
+	} else {
+		changeScene(
+			"Sweatson is making your floor all wet. Good boy!</br>He reminds you of your planet buddy, and you feel happy that he is close by again",
+			"sweatson"
+		);
+	}
 	createGoButton("Back","beanieImagination",goBeanieImagination);
 	createGoButton("Talk","talk",goSweatsonTalk);
 	createGoButton("Try to remember","planet",goSweatsonPlanet);
@@ -917,6 +938,7 @@ function goSweatsonPlanet() {
 }
 
 function goBackToPlanet() {
+	changeBackground("BG_FriendHouse");
 	updateState('burgulonTime', false);
 	goFriend(state.friends[1]);
 }

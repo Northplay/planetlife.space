@@ -1,5 +1,6 @@
 
 function goJerkClub() {
+	changeBackground("BG_JerkClub");
 	if (state.bJerkStarted) {
 		changeScene(
 			"To be honest, it's not a nice smell in here. But spirits are high, and the jerks are having a blast",
@@ -304,7 +305,7 @@ function goBartenderChat() {
 	var bartenderTalks = [
 		"The bartender leans in and whispers some jerk wisdom to you. Your jerk squad is great for fighting Derekulians and other threats out in space",
 		"Fighting happens in rounds. Every round you need to spend your <span style='color:#ffea00'>jerk actions</span> to use your jerks against the enemy",
-		"Every round you draw 4 random jerks from your pile of jerks. When all of them have been beaten up you need to feed them <span style='color:#8b5937'>coco</span> to get them back on their feet",
+		"Every round you draw 4 random jerks from your pile of jerks",
 		"The <span style='color:#00fff7'>stardust in your core</span> is very important when fighting. Your enemies will try to suck it out of you every round, and when you are all out of stardust, you are done!",
 		"But your enemies are easy to distract. If you make your jerks bake some <span style='color:#fca903'>muffins</span>, they will eat those before they touch your stardust",
 		"When you defeat your enemies you should steal all the <span style='color:#ffc800'>space rings.</span> You can use those to buy new jerk cans",
@@ -337,7 +338,7 @@ function goVisitBananaman() {
 function goTalkBananaman() {
 	var bananaTalks = [
 		"Banana Man offers you a banana, but you are a planet",
-		"You ask him if he has any super powers. He snaps his fingers and pull out a banana from his costume. You wonder where he gets all his bananas from",
+		"You ask him if he has any super powers. He snaps his fingers and pulls out a banana from his costume. You wonder where he gets all his bananas from",
 		"He shows you the banana dance. It must be incredibly hard to perform those moves while in a banana costume, but it seems like second nature to him. This guy has talent after all",
 		"You ask him about his time with the Derekulians. He looks pale.</br>Apparently they would use him to throw at each other as a prank. Sounds pretty mean",
 	];
@@ -357,7 +358,7 @@ function goTalkBananaman() {
 function goVisitWiseman() {
 	changeScene(
 		"The wiseman is taking a dirt nap. Just to give you a picture, that means that he has fallen asleep in an ashtray, and that his snoring is creating little clouds of ash.</br>You have a little giggle. He is going to go back to earning you <span style='color:#8b5937'>3 coco/sec</span> in a little while",
-		"jerkWiseman"
+		"jerkWiseMan"
 	);
 	createGoButton("Back","jerkClub",goJerkClub);
 	createGoButton("Talk","talk",goWisemanTalk);

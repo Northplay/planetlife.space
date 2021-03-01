@@ -132,11 +132,15 @@ for (var i = 1; i < 99; i++) {
 }
 
 function skillBullFart() {
-	if (allSkills[0].curUses == 0) {
+	var chance = 100;
+	if (findCurTierIndexBySkillIndex(0)) {
+		chance = allSkillTiers[findCurTierIndexBySkillIndex(0)].chance;
+	}
+	if (allSkills[0].curUses + allDerekStats["extra Bull Fart uses"] == 0) {
 		outOfUses();
 	} else {
 		allSkills[0].curUses--;
-		if ((Math.random() * 100) <= allSkillTiers[findCurTierIndexBySkillIndex(0)].chance) {
+		if ((Math.random() * 100) <= chance) {
 			playSound(soundEffect.fart);
 			changeScene("Derek farts. It stinks! All the jerks died instantly..",allSkills[0].image,"skillBullFart");
 			createGoButton("Cool! But also smelly","dungeon",summary,false);
@@ -152,23 +156,41 @@ function skillBullFart() {
 	}
 }
 
-function skillThirsty() {
+function skillThirsty(byEquipment,nr) {
+	console.log("THIRSTY!");
+	var chance = 100;
+	if (findCurTierIndexBySkillIndex(1)) {
+		chance = allSkillTiers[findCurTierIndexBySkillIndex(1)].chance;
+	}
 	playSound(soundEffect.thirsty);
-	if (allSkills[1].curUses == 0) {
+	if (allSkills[1].curUses + allDerekStats["extra Thirsty uses"] <= 0 && !byEquipment) {
 		outOfUses();
 	} else {
-		allSkills[1].curUses--;
-		if ((Math.random() * 100) <= allSkillTiers[findCurTierIndexBySkillIndex(1)].chance) {
+		if (!byEquipment) {
+			allSkills[1].curUses--;
+		}
+		if ((Math.random() * 100) <= chance || byEquipment) {
 			var s = state.skillStates[1];
+			if (byEquipment && state.skillStates[1] < 1) {
+				s = 1;
+			}
 			var healValues = [(5 * s),(10 * s),(25 * s),(50 * s),(75 * s),(80 * s),(100 * s)];
-			var poolSizes = ["tiny","small","reasonable sized","slightly big","large","big ass","enormous"];
+			var poolSizes = ["tiny","small","reasonable sized","slightly big","large","enormous","gigantic"];
 			var roll = Math.floor(Math.random() * healValues.length);
-			changeScene("It seems like Derek found a " + poolSizes[roll] + " pool of healing fluids and healed <span style='color:#ff0000'>" + healValues[roll] + "</span> health. Drinking from the ground.. ewww. But he seems to feel better, so that's good","fullHeal","skillThirsty");
+			if (byEquipment) {
+				changeScene("<span style='color:#0088ff'>Chance of Thirsty</span> was succesful and Derek found a " + poolSizes[roll] + " pool of healing fluids and healed <span style='color:#ff0000'>" + healValues[roll] + "</span> health. Drinking from the ground.. ewww. But he seems to feel better, so that's good","fullHeal","skillThirsty");
+			} else {
+				changeScene("It seems like Derek found a " + poolSizes[roll] + " pool of healing fluids and healed <span style='color:#ff0000'>" + healValues[roll] + "</span> health. Drinking from the ground.. ewww. But he seems to feel better, so that's good","fullHeal","skillThirsty");	
+			}
 			updateState("derekHealth",state.derekHealth + healValues[roll]);
 			if (state.derekHealth > state.derekMaxHealth) {
 				updateState('derekHealth', state.derekMaxHealth);
 			}
-			createGoButton("Hooray!","dungeon",goEnterDoor);
+			if (byEquipment) {
+				createGoButton("Hooray!","dungeon",goCheckDoor,nr);
+			} else {
+				createGoButton("Hooray!","dungeon",goEnterDoor);
+			}
 		} else {
 			changeScene("Despite Dereks huge thirst, he didn't find anything tasty to drink. A dry mouth can be fatal!","thirsty","skillThirsty");
 			createGoButton("Scary news",state.dungeons[dNr].image,goEnterDoor);
@@ -178,7 +200,7 @@ function skillThirsty() {
 
 function skillDoorOfRegret() {
 	playSound(soundEffect.doorOfRegret);
-	if (allSkills[2].curUses == 0) {
+	if (allSkills[2].curUses + allDerekStats["extra Door of Regret uses"] == 0) {
 		outOfUses();
 	} else {
 		allSkills[2].curUses--;
@@ -189,7 +211,7 @@ function skillDoorOfRegret() {
 
 function skillFullHeal() {
 	playSound(soundEffect.heal);
-	if (allSkills[3].curUses == 0) {
+	if (allSkills[3].curUses + allDerekStats["extra Full Heal uses"] == 0) {
 		outOfUses();
 	} else {
 		allSkills[3].curUses--;
@@ -254,10 +276,11 @@ function upgradeSkill(navn) {
 }
 
 function goDDS() {
+	changeBackground("BG_SchoolOfDerek");
 	derekCheatCount = 0;
 	changeScene("Welcome to the School of Derek! That bull might look primitive, but you can teach him a few odd tricks","dungeonSchool","DDS");
 	createGoButton("Back","newSurface",checkWhat);
-	createGoButton("DEREK!","derek",goDerekHub);
+	// createGoButton("DEREK!","derek",goDerekHub);
 	createGoButton("Classroom","classroom",goClassroom);
 	createGoButton("Gym","gym",goGym);
 }
@@ -276,7 +299,15 @@ function goClassroom() {
 
 function goGym() {
 	playSound(soundEffect.derek);
-	var h = "Hey man! Am I pumped or what!?</br>My health is like <span style='color:#ff0000'>" + state.derekHealth + "/" + state.derekMaxHealth + "</span></br> And I'm pretty tough! I have <span style='color:#ff0000'>" + state.derekToughness + "</span> strength </br>";
+	var strengthH = "";
+	if (allDerekStats["strength"] > 0) {
+		strengthH = " + " + allDerekStats["strength"];
+	}
+	var healthH = "";
+	if (allDerekStats["health"] > 0) {
+		healthH = " + " + allDerekStats["health"];
+	}
+	var h = "Hey man! Am I pumped or what!?</br>My health is like <span style='color:#ff0000'>" + state.derekMaxHealth + healthH + "</span></br> And I'm pretty tough! I have <span style='color:#ff0000'>" + state.derekToughness + strengthH + "</span> strength </br>";
 	if (state.healthPotions > 0) {
 		h += "Look! I'm carrying <span style='color:#ff0000'>" + state.healthPotions + "/" + state.healthPotionCapacity + " health potions!</span>";
 	} else {
@@ -316,7 +347,7 @@ function showSkill(skillIndex) {
 	}
 	if (skillIndex === derekCheatSequence[derekCheatCount]) {
 		derekCheatCount++;
-		if (derekCheatCount === derekCheatSequence.length) {
+		if (derekCheatCount === derekCheatSequence.length && state.tGamesCompleted < 1) {
 			goDerekCheckCheat();
 			derekCheatCount = 0;
 		}

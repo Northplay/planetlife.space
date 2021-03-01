@@ -1,4 +1,5 @@
 function goFriendHouse() {
+	changeBackground("BG_FriendHouse");
 	
 	if (hasAnyFriends()) {
 		var friendsText;
@@ -42,11 +43,13 @@ function goFriend(friend) {
 
 	//Sweatson cheat
 	if (friend == state.friends[1]) {
-		sweatsonCheatCount++;
+		if (state.tGamesCompleted < 1) {
+			sweatsonCheatCount++;
+		}
 	} else {
 		sweatsonCheatCount = 0;
 	}
-	if (sweatsonCheatCount >= 5) {
+	if (sweatsonCheatCount >= 5 && state.tGamesCompleted < 1) {
 		changeScene(
 			"Sweatson is sweating bullets. He asks you if you really want to just skip a lot of this epic story to reach the last chapter?</br>I would do it if I was you",
 			"sweatson"
@@ -77,6 +80,7 @@ function goRememberBurgulon() {
 }
 
 function goBackToBurgulon() {
+	changeBackground("BG_BeanieImagination");
 	updateState('burgulonTime', true);
 	goSweatson();
 }
@@ -208,7 +212,8 @@ var kimCumber = {
 		"He tells you something amazing about himself, without even bragging. He's so cool!",
 		"OMG OMG OMG!",
 		"You make a fool of yourself.",
-		"He shows you a bruise he got from a fight. He tells you that the other guy also got a bruise.. A way bigger bruise."
+		"He shows you a bruise he got from a fight. He tells you that the other guy also got a bruise.. A way bigger bruise.",
+		"He tells you that you need to follow @3DCrede on twitter if you want to be as cool as him.",
 	],
 	outroText: "<br/>Kim peels some skin off for his G&T"
 }
@@ -254,7 +259,7 @@ var broccula = {
 		"She tells you about the button crisis before the opening of the Broccoli world. Apparently Kevin swooped in and fixed the ancient problem with two lines of code. You look at her T-shirt, and conclude that she's obviously a big fan.",
 		"She looks at the time, but immediately looks away again.",
 		"She tells you about all the state issues that haunted the debugging progress.. It led to a flood of false bug reports. She stares grimly in to space, recalling the horrors.",
-		"She shows you an ugly picture of the game you're playing. She tells you that it used to look pretty crappy, but Michael had some unrealistic standards of beauty that he helped push on the project.",
+		"She shows you an ugly picture of the game you're playing. She tells you that it used to look pretty shabby, but Michael had some unrealistic standards of beauty that he helped push on the project.",
 		"She's fixing her hair, but gives up when she realizes that it's broccoli and not hair.",
 		"She shows you a photograph of an exhausted man. She tells you that this game never would have made it to your device if it wasn't for Kristian.",
 		"She hands you a pile of papers. It's full of great reviews and heart warming comments. You suddenly understand that the only reason you exist is because if them, and you get a little confused by the metaness of it all."

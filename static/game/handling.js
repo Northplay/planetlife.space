@@ -15,6 +15,7 @@ function checkWhat() {
 
 	burgerCheatCount = 0;
 
+	changeBackground("BG_Planet");
 	place = "surface";
 	clearButtons();
 	curArt = "newSurface";
@@ -29,6 +30,12 @@ function checkWhat() {
 		newHandling(curEnvironment + robotInh);
 	}
 	createGoButton("Space","planet",goRoot);
+	if (state.tTerrariumFound) {
+		createGoButton("Time Terrarium","timeTerrarium",goTimeTerrarium);
+	}
+	if (state.derekDefrosted) {
+		createGoButton("Derek","derek",goDerekHub);
+	}
 	if (state.dungeonFound) {
 		createGoButton("Dungeons","dungeon",goPickDungeon);
 	}
@@ -39,13 +46,15 @@ function checkWhat() {
 		createGoButton("Talk to Burger","burger",talkBurger);
 	}
 	if (!state.workshopPrice[4]) {
-		createBuildButton("Workshop","workshop","Shack you need to build before you can build everything else",buildWorkshop,"workshopBut","Build",state.workshopPrice)
-		if (!affordCheck(state.slotmachinePrice)) {
-			document.getElementById("workshopBut").disabled = true;
+		if (state.pickedRobot) {
+			createBuildButton("Workshop","workshop","Shack you need to build before you can build everything else",buildWorkshop,"workshopBut","Build",state.workshopPrice)
+			if (!affordCheck(state.slotmachinePrice)) {
+				document.getElementById("workshopBut").disabled = true;
+			}		
 		}
 	} else {
 		if (!state.workshopDemolished) {
-			createGoButton("Workshop","workshop",goWorkshop);	
+			createGoButton("Workshop","workshop",goWorkshop);
 		}
 	}
 	if (state.slotmachinePrice[4]) {
@@ -73,15 +82,24 @@ function goContinue() {
 	}
 	if (state.didPlayOriginal) {
 		changeScene("","burger","continue");
-		createButton("Continue",welcomeBack);
+		createButton("Continue",() => {
+			audioSettings.meiThresholdComplete = true;
+			welcomeBack();
+		});
 	} else if (state.burgulonTime) {
 		changeScene("","burgulon","continue");
-		createButton("Continue",goNewGalaxy);
+		createButton("Continue",() => {
+			audioSettings.meiThresholdComplete = true;
+			goNewGalaxy()
+		});
 	} else {
 		changeScene("","planet","continue");
-		createButton("Continue",goRoot);		
+		createButton("Continue",() => {
+			audioSettings.meiThresholdComplete = true;
+			goRoot()
+		});
 	}
-	
+
 	//Impatient mode
 
 	if (state.impatientMode) {
@@ -110,6 +128,9 @@ function goContinue() {
 	//Remove used jerks and beans
 	removeUsedBeans();
 	// cleanUpRemovedJerks();
+
+	// Derek items
+	calculateDerekStats();
 
 }
 
@@ -143,11 +164,12 @@ function cleanUpRemovedJerks() {
 function goRoot() {
 	audioSettings.shouldPlayMusic = true;
 	playMusic();
+	changeBackground("BG_Universe");
 	changeScene(H_Handling1,"planet","root");
 	if (!state.broccoliChapter) {
 		createGoButton("Your surface","newSurface",checkWhat);
 		if (state.shopFound) {
-			createGoButton("Shop","space_ben",goSpaceBen);		
+			createGoButton("Shop","space_ben",goSpaceBen);
 		}
 		if (state.planetudFound) {
 			createGoButton("Stupid looking planet","planetud",goPlanetud);
@@ -166,10 +188,10 @@ function goRoot() {
 		}
 		if (state.workshopPrice[4] && !state.shopFound) {
 			createGoButton("Explore","binoculars",findShop);
-		}	
+		}
 	} else {
-		createGoButton("Broccoli Empire","spaceBroccoli",goBroccoli);
 		createGoButton("Your surface","newSurface",checkWhat);
+		createGoButton("Broccoli Empire","spaceBroccoli",goBroccoli);
 		if (state.cocoDungeonsFound) {
 			createGoButton("Space Ben","space_ben",goSpaceBen);
 		}
@@ -189,7 +211,7 @@ function goRoot() {
 				createGoButton("Derekulus X","spaceDungeon",goSpaceDungeon);
 			}
 		}
-	} 
+	}
 	if (state.burgulonTime) {
 		goBurgulonSurface();
 	}
@@ -231,7 +253,7 @@ function talkBurger() {
 		createGoButton("Dig for gold </br>(" + (state.goldChance * 100) + "% chance/sec)","drill",burgerDoGold);
 	}
 	if (hasBridge() && state.dungeons[0].completed && !state.burgerReview) {
-		createGoButton(T("Hear request","buttons.hearRequest"),"talk",burgerReview);
+		createGoButton("Hear request","talk",burgerReview);
 	}
 	if (state.burgerLost) {
 		changeScene(
@@ -271,12 +293,14 @@ function burgerDoGold() {
 	updateState('goldPS', state.goldPS + state.burgerGoldPS);
 	updateState('burgerDoing', "gold");
 	createGoButton("Ok!","burger",talkBurger);
-	burgerCheckCheat();
+	if (state.tGamesCompleted < 1) {
+		burgerCheckCheat();
+	}
 }
 
 function burgerCheckCheat() {
 	burgerCheatCount++;
-	if (burgerCheatCount == 6) {
+	if (burgerCheatCount == 6 && state.tGamesCompleted < 1) {
 		burgerCheat = true;
 		changeScene("Burger is chirping something about The Fartening, and The Settings Menu","burg3r","burgerCheckCheat");
 		setTimeout(function() {
@@ -317,27 +341,21 @@ function burgerGetStardust() {
 
 function burgerReview() {
 	changeScene(
-		T(
-			"Burger is beating around the bush. You tell him to stop beating your bushes, and get to the point instead",
-			"h.burgerReview"
-		),
+		"Burger is beating around the bush. You tell him to stop beating your bushes, and get to the point instead",
 		"burger",
 		"burgerReview"
 	);
-	createGoButton(T("What's up Burger?","buttons.whatsUpBurger"),"talk",burgerReview2);
+	createGoButton("What's up Burger?","talk",burgerReview2);
 }
 
 function burgerReview2() {
 	changeScene(
-		T(
-			"Burger finally gets to the point.</br>He notices that you had a great time beating up those jerks in the dungeon before, and he asks you if you could spare a moment to give the game a rating.</br>Maybe even leave a review if you feel super special today",
-			"h.burgerReview2"
-		),
+		"Burger finally gets to the point.</br>He notices that you had a great time beating up those jerks in the dungeon before, and he asks you if you could spare a moment to give the game a rating.</br>Maybe even leave a review if you feel super special today",
 		"burger"
 	);
-	createGoButton(T("For sure!","buttons.forSure"),"planet",burgerGoReview);
-	createGoButton(T("Maybe later","buttons.maybeLater"),"burger",talkBurger);
-	createGoButton(T("Nope","buttons.nope"),"talk",burgerDontReview);
+	createGoButton("For sure!","planet",burgerGoReview);
+	createGoButton("Maybe later","burger",talkBurger);
+	createGoButton("Nope","talk",burgerDontReview);
 }
 
 function burgerDontReview() {
@@ -367,6 +385,7 @@ function nitte() {
 
 function goWorkshop() {
 	var H_Workshop = "In this workshop you can build anything! As long as it's one of the few options below";
+	changeBackground("BG_Workshop");
 	changeScene(H_Workshop,"workshop","workshop");
 	createGoButton("Back","newSurface",checkWhat);
 	var worthless = true;
@@ -423,11 +442,19 @@ function goWorkshop() {
 }
 
 function goUselessWorkshop() {
-	changeScene(
-		"The wonderful workshop that once brought so much joy to your life, now feels old and empty. This was where your journey started, and all your dreams came true.. Now it's just a worthless pile of crap.<br/><br/>Do you want to demolish it?",
-		"workshop",
-		"goUselessWorkshop"
-	);
+	if (censoredWords) {
+		changeScene(
+			"The wonderful workshop that once brought so much joy to your life, now feels old and empty. This was where your journey started, and all your dreams came true.. Now it's just a worthless pile of garbage.<br/><br/>Do you want to demolish it?",
+			"workshop",
+			"goUselessWorkshop"
+		);
+	} else {
+		changeScene(
+			"The wonderful workshop that once brought so much joy to your life, now feels old and empty. This was where your journey started, and all your dreams came true.. Now it's just a worthless pile of crap.<br/><br/>Do you want to demolish it?",
+			"workshop",
+			"goUselessWorkshop"
+		);		
+	}
 	createGoButton("No","workshop",goWorkshop);
 	createGoButton("Demolish workshop","explosion",goDemolishWorkshop);
 }
@@ -463,11 +490,12 @@ function goSpaceBen() {
 	if (state.ghosts > 0) {
 		h += " You have <span style='color:#38b200'>" + state.ghosts + "</span> ghosts";
 	}
+	changeBackground("BG_Universe");
 	changeScene(h,"space_ben","spaceBen");
 	createGoButton("Back","planet",goRoot);
-	if (state.derekDefrosted) {
-		createGoButton("DEREK!","derek",goDerekHub);
-	}
+	// if (state.derekDefrosted) {
+	// 	createGoButton("DEREK!","derek",goDerekHub);
+	// }
 	if (state.villaPortal) {
 		createGoButton("Villa","villaPortal",goVilla);
 	}
@@ -476,7 +504,10 @@ function goSpaceBen() {
 	}
 	if (state.shopPrices[0][5]) {
 		createBuildButton("Health potion","healthPotion","It heals like <span style='color:#ff0000'>" + state.healthPotionHeal + " health</span>.. You have <span style='color:#ff0000'>" + state.healthPotions + "/" + state.healthPotionCapacity + " potions</span>",buyHealthPotion,"buyHealthPotionBut","Buy",state.shopPrices[0]);
-	}	
+	}
+	if (state.derekDefrosted) {
+		createGoButton("Buy Chests","chest",goBuyChests);
+	}
 	if (state.derekDefrosted) {
 		createProduct("Potion Research");
 	}
@@ -509,6 +540,19 @@ function goSpaceBen() {
 			createGoButton("Buy answers","answerCard",goSpaceBenAnswers);
 		}
 	}
+}
+
+function goBuyChests() {
+	changeScene(
+		"Where did Space Ben get all these chests from? You probably shouldn't ask",
+		"chest",
+		"goBuyChests"
+	);
+	createGoButton("Back","space_ben",goSpaceBen);
+	createSingleProduct("<span style='color:#8a8a8a'>Scruffy Chest</span> (10 stardust)");
+	createSingleProduct("<span style='color:#0066ff'>Decent Chest</span> (80 stardust)");
+	createSingleProduct("<span style='color:#ffa200'>Excellent Chest</span> (200 stardust)");
+	createSingleProduct("<span style='color:#ff29ff'>Crazy Chest</span> (800 stardust)");	
 }
 
 function goSpaceBenAnswers() {
@@ -585,6 +629,9 @@ function goRevealWorm3() {
 function goAppleWorm() {
 	playSound(soundEffect.worm);
 	changeScene("Aah, planet. How's the socializing going? Did you get 6 friends yet?","appleWorm","apple");
+	if (state.wormCubes > 0) {
+		createGoButton("How many Worm Cubes do I have?","wormCube",goCheckWormCubes,"startolar");
+	}
 	if (getNumberOfFriends() >= 6) {
 		createGoButton("I have 6 friends!","crawlerHouse",bePopular);
 	} else {
@@ -620,8 +667,21 @@ function enterWormhole() {
 	playSound(soundEffect.wormHole);
 	changeScene("WOAAH!","wormhole","wormhole");
 	setTimeout(function() {
-		broccoli();
+		if (state.tGamesCompleted < 1) {
+			broccoli();
+		} else {
+			goFindBroccoliCube();
+		}
 	},5000);
+}
+
+function goFindBroccoliCube() {
+	updateState('wormCubes', state.wormCubes + 1);
+	changeScene(
+		"Ok wow! There was <span style='color:#ff00bb'>a Worm Cube</span> at the end of the wormhole.</br>Let's put it in the Time Terrarium",
+		"wormCube"
+	);
+	createGoButton("Fantastic!","wormCube",broccoli);
 }
 
 
@@ -667,7 +727,7 @@ function enterWormhole() {
 // 	createGoButton("I can imagine","talk",goBroccula4);
 // }
 
-// function goBroccula4() {
+	// function goBroccula4() {
 // 	changeScene("Of course they will be more likely to spend time on it, if somebody would show their appreciation for this strange little game, by donating some money","broccoliWorker");
 // 	createGoButton("That makes sense","talk",goNotDonate);
 // }

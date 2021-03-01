@@ -4,7 +4,12 @@ var movedInButton = false;
 function createIconButton(headline,image,thisID,buttonText,clr,disabled,buttonsDiv,fnct,parameter1,parameter2,parameter3) {
 	var fullDiv = document.createElement('div');
 	fullDiv.className = "fullWidth";
-	fullDiv.id = "full" + thisID;
+	if (document.getElementById("full" + thisID)) {
+		// ATTENTION! This solution is highly irresponsible and might cause problems in the future!!!
+		fullDiv.id = "full" + thisID + Math.random();
+	} else {
+		fullDiv.id = "full" + thisID;
+	}
 	if (buttonsDiv == "buttons") {
 		fullDiv.style.display = "none"; 
 	} else {
@@ -88,6 +93,10 @@ function createGoButton(headline,image,fnct,parameter,parameter2) {
 function createSettingsIconButton(headline,image,fnct,parameter) {
 	var id = headline.split(' ').join('_') + 'But';
 	createIconButton(headline,"images/handling/" + image + ".gif",id,"go here","#FFFFFF",false,"settingsButtons",fnct,parameter);
+}
+
+function createSettingsButton(text,fnct,parameter) {
+	createSmallIconButton(text,"",text + "But",false,"settings",fnct,parameter);
 }
 
 function createSettingsImportButton(headline,image,fnct,parameter) {
@@ -212,6 +221,115 @@ function createBuildButton(headline,image,text,fnct,thisID,buttonText,price,para
 	document.getElementById("buttons").appendChild(br2);
 }
 
+function createTimeBuildButton(headline,image,text,fnct,thisID,buttonText,price,parameter1,parameter2) {
+	var fullDiv = document.createElement('div');
+	fullDiv.className = "fullWidth";
+	fullDiv.id = "full" + thisID;
+	fullDiv.style.display = "none";
+	curButtons.push(fullDiv.id);
+	fullDiv.style.marginBottom = "10px";
+	var img = document.createElement('img');
+	img.src = "images/handling/" + image + ".gif";
+	img.className = "buildButtonImage";
+	img.style.marginRight = "20px";
+	var head = document.createElement('h1');
+	head.innerHTML = headline;
+	head.className = "buildButtonHeadline";
+	var iconDiv = document.createElement('div');
+	iconDiv.className = "resIconDiv";
+	iconDiv.style.display = "inline-block";
+	iconDiv.id = "icon" + thisID;
+	iconDiv.style.marginLeft = "10px";
+	iconDiv.style.width = "100%";
+	var fullDiv2 = document.createElement('div');
+	fullDiv2.className = "fullWidth";
+	fullDiv2.id =  "full2" + thisID;
+	fullDiv2.style.marginLeft = "10px";
+	var description = document.createElement('p');
+	description.className = "buildButtonText";
+	description.id = thisID + "-buildButtonDescription";
+	description.innerHTML = text;
+	description.style.marginRight = "20px";
+	var but = document.createElement('button');
+	but.id = thisID;
+	but.className = "buildButton";
+	but.innerHTML = buttonText;
+	but.disabled = true;
+	var clicked = false;
+	// fullDiv.addEventListener("touchstart",down);
+	// fullDiv.addEventListener("mousedown",down);
+	// fullDiv.addEventListener("touchend",up);
+	// fullDiv.addEventListener("mouseup",up);
+	// fullDiv.addEventListener("touchmove",move);
+	// fullDiv.addEventListener("mouseleave",move);
+	fullDiv.addEventListener("click",up);
+	function down(e) {
+		//e.preventDefault();
+		if (!but.disabled) {
+			but.className = "buildButtonActive";
+			clicked = true;
+		} 
+		playSound(soundEffect.click);
+	 	movedInButton = false;
+	}
+	function up(e) {
+		e.preventDefault();
+		if (!movedInButton) {
+			if (!but.disabled) {
+				fnct(parameter1,parameter2);	
+			}	
+		}
+		resetButton();
+	}
+	function move(e) {
+		//e.preventDefault();
+		movedInButton = true;
+		if (clicked) {
+			resetButton();
+		}
+	}
+	function resetButton() {
+		if (!but.disabled) {
+			but.className = "buildButton";
+			clicked = false;
+		}
+	}
+	
+	function showResource(name, amount) {
+		var img = document.createElement('img');
+		img.src = "images/icons/" + name + ".gif";
+		img.className = "resIcon";
+		img.style.display = (amount == 0 ? "none" : "inline-block");
+		
+		var p = document.createElement('p');
+		p.className = "buildButtonText";
+		p.style.display = (amount == 0 ? "none" : "inline-block");
+		
+		p.innerHTML = amount.toLocaleString();
+		
+		document.getElementById("icon" + thisID).appendChild(img);
+		document.getElementById("icon" + thisID).appendChild(p);
+	}
+	
+	var backgroundDiv = document.createElement('div');
+	backgroundDiv.className = "buildBackground";
+	var br = document.createElement("br");
+	var br2 = document.createElement("br");
+	document.getElementById("buttons").appendChild(fullDiv);
+	document.getElementById("full" + thisID).appendChild(img);
+	document.getElementById("full" + thisID).appendChild(head);
+	document.getElementById("full" + thisID).appendChild(iconDiv);
+	document.getElementById("full" + thisID).appendChild(fullDiv2);
+	document.getElementById("full" + thisID).appendChild(backgroundDiv);
+	document.getElementById("full2" + thisID).appendChild(description);
+	document.getElementById("icon" + thisID).appendChild(but);
+	
+	showResource("wormCube", price[0]);
+	
+	document.getElementById("buttons").appendChild(br);
+	document.getElementById("buttons").appendChild(br2);
+}
+
 function createMenuButton(headline,image,text,fnct,thisID,buttonText,parameter1) {
 	var fullDiv = document.createElement('div');
 	fullDiv.className = "fullWidth";
@@ -318,7 +436,7 @@ function createMenuButton(headline,image,text,fnct,thisID,buttonText,parameter1)
 	document.getElementById("buttons").appendChild(br2);
 }
 
-function createSmallBuildButton(text,image,thisID,fnct,parameter) {
+function createSmallBuildButton(text,image,thisID,fnct,parameter,parameter2) {
 	var but = document.createElement('button');
 	but.id = thisID;
 	curButtons.push(but.id);
@@ -357,7 +475,7 @@ function createSmallBuildButton(text,image,thisID,fnct,parameter) {
 		//e.preventDefault();
 		if (!but.disabled) {
 			if (!movedInButton) {
-				fnct(parameter);
+				fnct(parameter,parameter2);
 			}
 			resetButton();
 		}
@@ -462,10 +580,6 @@ function createSmallIconButton(headline,image,thisID,disabled,buttonsDiv,fnct,pa
 
 function createButton(text,fnct,parameter) {
 	createSmallIconButton(text,"",text + "But",false,"buttons",fnct,parameter);
-}
-
-function createSettingsButton(text,fnct,parameter) {
-	createSmallIconButton(text,"",text + "But",false,"settings",fnct,parameter);
 }
 
 function createTextButton(headline,image,text,fnct,thisID,buttonText,parameter1) {

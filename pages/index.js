@@ -193,8 +193,7 @@ const Index = () => {
 					<span>Download for your Android</span>
 				</Button>
 				<div className="links">
-					<Link href="/play">
-						<a href="/play" className="play">
+						<a href="/static/game/index.html" className="play">
 							<img
 								src="/static/gifs/playinbrowser.gif"
 								alt="Arcade"
@@ -203,7 +202,6 @@ const Index = () => {
 							/>
 							<span>Play In Browser!</span>
 						</a>
-					</Link>
 					<a
 						href="https://www.youtube.com/watch?v=M64h79ruqgM"
 						className="watch"

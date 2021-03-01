@@ -1,7 +1,7 @@
 function goMeetBeanie() {
 	changeScene(
 		"There's a small nebula cloud out in the distance. Looks like there's something behind it",
-		"nebula"
+		"nebuladada"
 	);
 	createGoButton("Back","burgulon",goNewGalaxy);
 	createGoButton("Blow the cloud away","nebula",goMeetBeanie2);

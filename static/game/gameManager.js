@@ -416,16 +416,16 @@ function drawHandling() {
 		} else {
 			showButtons();
 		}
-		playSound(soundEffect.text);
+		// playSound(soundEffect.text);
 	},delay);
 }
 
 function changeScene(thisHandling,thisArt,thisPlace) {
 	document.getElementById("loading_container").innerHTML = "";
 
-	if (hasBridge()) {
-		window.scrollTo(0, 30);
-	}
+	// if (hasBridge()) {
+	// 	window.scrollTo(0, 30);
+	// }
 	clearButtons();
 	newHandling(thisHandling);
 	curArt = thisArt;
@@ -446,7 +446,7 @@ function changeArt(curArt) {
 }
 
 function changeBackground(bgImage) {
-	document.body.style.backgroundImage = "url('images/backgrounds/" + bgImage + ".png')";
+	document.getElementById("backgroundDiv").style.backgroundImage = "url('images/backgrounds/" + bgImage + ".png')";
 	if (bgImage != "BG_AlmostBlack") {
 		lastBackground = bgImage;	
 	}
@@ -805,3 +805,13 @@ if (scrollEnabled) {
 	document.getElementById('gameDiv').style.height = '600px';
 	document.getElementById('resInfoDiv').style.position = 'relative';
 }
+
+window.addEventListener('scroll', function() {
+  if (window.pageYOffset.toFixed() > 0) {
+      console.log("Absolute");
+      document.getElementById("resInfoDiv").style.position = "absolute";
+  } else {
+      console.log("Fixed");
+      document.getElementById("resInfoDiv").style.position = "fixed";
+  }
+})

@@ -304,7 +304,9 @@ function goBurgerAdvice() {
 
 function goThisDungeon(nr) {
 	changeBackground("BG_Dungeon");
+
 	playBattleMusic();
+
 	dNr = nr;
 	if (state.dungeons[dNr].image == "cocoDungeon") {
 		changeBackground("BG_CocoDungeon");
@@ -558,34 +560,42 @@ function goFight() {
 				playSound(soundEffect.punch1);
 				newHandling("UF!");
 			},100);
-			setTimeout(function() {
-				playSound(soundEffect.punch2);
-				newHandling("%#!*@");
-			},200);
+			if (!mobile) {
+				setTimeout(function() {
+					playSound(soundEffect.punch2);
+					newHandling("%#!*@");
+				},200);				
+			}
 			setTimeout(function() {
 				playSound(soundEffect.punch4);
 				newHandling("HELP!");
 			},300);
-			setTimeout(function() {
-				playSound(soundEffect.punch3);
-				newHandling("!!!");
-			},400);
+			if (!mobile) {
+				setTimeout(function() {
+					playSound(soundEffect.punch3);
+					newHandling("!!!");
+				},400);				
+			}
 			setTimeout(function() {
 				playSound(soundEffect.punch2);
 				newHandling("WHAT!?");
 			},500);
-			setTimeout(function() {
-				playSound(soundEffect.punch1);
-				newHandling("OH NO!");
-			},600);
+			if (!mobile) {
+				setTimeout(function() {
+					playSound(soundEffect.punch1);
+					newHandling("OH NO!");
+				},600);				
+			}
 			setTimeout(function() {
 				playSound(soundEffect.punch4);
 				newHandling("URGH!");
 			},700);
-			setTimeout(function() {
-				playSound(soundEffect.punch3);
-				changeScene("...",state.dungeons[dNr].image);
-			},800);
+			if (!mobile) {
+				setTimeout(function() {
+					playSound(soundEffect.punch3);
+					changeScene("...",state.dungeons[dNr].image);
+				},800);				
+			}
 			setTimeout(function() {
 				changeScene("...",state.dungeons[dNr].image);
 				createGoButton("Derek?","derek",levelSummary);

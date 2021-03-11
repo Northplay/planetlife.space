@@ -452,7 +452,7 @@ function timeJerkToSquad(index) {
 }
 
 function goCheckStoreJerk() {
-	if (state.jerkPile.length > 0) {
+	if (state.jerkPile.length > 0 && countJerksInPile() != 10) {
 		changeScene(
 			"Which one of these jerks do you want to bring to your Time Club?",
 			"jerkSquad",
@@ -477,6 +477,13 @@ function goCheckStoreJerk() {
 				createGoButton(x + "x " + allJerks[i].navn, allJerks[i].image, goInspectStoreJerk, ji);
 			}
 		}
+	} else if (countJerksInPile() == 10) {
+		changeScene(
+			"You only have 10 jerks in your jerk squad. <span style='color:#ff0000'>That's the bare minimum!</span></br>None of them are willing to go to your Time Club",
+			"jerkSquad",
+			"goCheckStoreJerk"
+		);
+		createGoButton("Back","timeClub",goTimeClub);
 	} else {
 		changeScene(
 			"You don't have any jerks yet. Maybe that's for the best",

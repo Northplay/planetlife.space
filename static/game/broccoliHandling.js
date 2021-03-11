@@ -43,7 +43,7 @@ function stoppedByBob() {
 
 function checkPaywall() {
 
-	if (hasBridge() && state.tGamesCompled < 1) {
+	if (hasBridge()) {
 		changeScene(
 			"Wait.. Somebody's coming",
 			"invisibleImg"

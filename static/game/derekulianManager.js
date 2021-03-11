@@ -71,7 +71,9 @@ function loadDerek(index,health) {
 // }
 
 function pickADerek(name,health) {
+
 	playBattleMusic();
+
 	var luckyNumber;
 	if (bossBattle == "") {
 		derekArray = allDereks;

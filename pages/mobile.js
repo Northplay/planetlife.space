@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
+import Modal from 'react-responsive-modal';
 
 import Page from 'components/root/Page';
 import Button from 'components/shared/Button';
@@ -23,25 +24,15 @@ const Content = styled.div`
 		margin: var(--site-content-vertical-margin) 0;
 	}
 
-    p {
-        margin: 50px 0;
-    }
-
 	.links {
 		margin: 40px 0;
 		display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
 
 		a {
-            flex: 0 0 auto;
 			display: flex;
 			align-items: center;
 			margin: 0 20px;
 			line-height: 3rem;
-            margin-bottom: 20px;
 
 			&:hover {
 				color: #fff;
@@ -83,6 +74,12 @@ const Content = styled.div`
 
 		a img {
 			max-width: 100%;
+		}
+	}
+
+	@media (max-width: 644px) {
+		.links a:first-child {
+			display: none;
 		}
 	}
 
@@ -163,62 +160,108 @@ const Index = () => {
 		<Page>
 			<Content>
 				<header>
-					<img src="/static/super-planetlife.gif" alt="Super Planet Life" />
+					<img src="/static/gifs/header.gif" alt="Planet Life" />
 					<h1>
 						A game about friendship,
 						<br />
 						adventure and being a planet
 					</h1>
 				</header>
-                <div className='video-embed'>
-                <div className='video-container'>
-                    <iframe
-                        width="800"
-                        height="400"
-                        src="https://www.youtube.com/embed/sOjbIFYA8UQ?autoplay=1"
-                        frameBorder="0"
-                        allowFullScreen
-                        title="Youtube Embed Video"
-                    />
-                </div>
-                </div>
-                                <p>
-						The definitive edition of the cult classic is
-						<br />
-						coming to real computers and a real console.
-                        <br />
-                        This december.
-					</p>
+				<Button
+					isLink
+					href="https://itunes.apple.com/us/app/planet-life/id1389159829?ls=1&mt=8&at=1010lwVg&ct=planetlife-site"
+				>
+					<img
+						src="/static/gifs/apple.gif"
+						alt="Telephone"
+						width="90"
+						height="90"
+					/>
+					<span>Download for your iPhone</span>
+				</Button>
+				<br />
+				<Button
+					isLink
+					href="https://play.google.com/store/apps/details?id=co.northplay.planetlife"
+				>
+					<img
+						src="/static/gifs/burger.gif"
+						alt="Telephone"
+						width="90"
+						height="90"
+					/>
+					<span>Download for your Android</span>
+				</Button>
 				<div className="links">
-						<a href="" className="play">
-							<img
-								src="/static/steam.png"
-								alt="Arcade"
-								width="40"
-								height="40"
-							/>
-							<span>Coming to Steam</span>
-						</a>
-                        <a href="" className="play">
-							<img
-								src="/static/switch.png"
-								alt="Arcade"
-								width="40"
-								height="40"
-							/>
-							<span>Coming to Switch</span>
-						</a>
-                        <a href="/mobile" className="play">
+						<a href="/static/game/index.html" className="play">
 							<img
 								src="/static/gifs/playinbrowser.gif"
 								alt="Arcade"
-								width="40"
-								height="40"
+								width="60"
+								height="60"
 							/>
-							<span>Don&lsquo;t you guys have phones?</span>
+							<span>Play In Browser!</span>
 						</a>
+					<a
+						href="https://www.youtube.com/watch?v=M64h79ruqgM"
+						className="watch"
+						target="_blank"
+						rel="noopener noreferrer"
+						onClick={e => {
+							e.preventDefault();
+
+							const content = (
+								<div className="video-wrapper">
+									<div className="video-container">
+										<iframe
+											width="853"
+											height="400"
+											src="https://www.youtube.com/embed/M64h79ruqgM?autoplay=1"
+											frameBorder="0"
+											allowFullScreen
+											title="Youtube Embed Video"
+										/>
+									</div>
+								</div>
+							);
+
+							openModal(content);
+						}}
+					>
+						<img
+							src="/static/gifs/playtrailer.gif"
+							alt="Arcade"
+							width="60"
+							height="60"
+						/>
+						<span>Watch Trailer</span>
+					</a>
+				</div>
+				<div className="behold">
+					<img
+						src="/static/gifs/remuladin.gif"
+						alt="Remuladin"
+						width="120"
+						height="120"
+					/>
+					<p>Behold this actual in-game footage</p>
+				</div>
+				<div className="screenshots">
+					<Screenshot index={1} title="Play as a newborn planet!" />
+					<Screenshot index={2} title="Build cool stuff on your surface!" />
+					<Screenshot index={3} title="Train your Derek!" />
+					<Screenshot index={4} title="Beat tons of jerks in the dungeons!" />
+					<Screenshot index={5} title="Smell the Space Broccoli!" />
+					<Screenshot index={6} title="Find new friends in weird dungeons!" />
 				</div>
 			</Content>
+			<Modal
+				open={isModalOpen}
+				onClose={() => setModalIsOpen(false)}
+				classNames={{ modal: 'modal' }}
+			>
+				{modalContent}
+			</Modal>
 		</Page>
 	);
 };

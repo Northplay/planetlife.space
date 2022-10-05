@@ -1,24 +1,14 @@
 /* eslint-disable react/no-danger */
 import React from 'react';
-import NextDocument, { Head, Main, NextScript } from 'next/document';
+import NextDocument, { Html, Head, Main, NextScript } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
 
 import { isProduction } from 'lib/env';
 
 export default class Document extends NextDocument {
-	static getInitialProps({ renderPage }) {
-		const sheet = new ServerStyleSheet();
-		const page = renderPage(App => props =>
-			sheet.collectStyles(<App {...props} />)
-		);
-		const styleTags = sheet.getStyleElement();
-
-		return { ...page, styleTags };
-	}
-
 	render() {
 		return (
-			<html lang="en">
+			<Html lang="en">
 				<Head>
 					<meta charSet="utf-8" />
 					<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -74,7 +64,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe>`,
 					<Main />
 					<NextScript />
 				</body>
-			</html>
+			</Html>
 		);
 	}
 }

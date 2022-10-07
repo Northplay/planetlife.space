@@ -52,8 +52,18 @@ const Content = styled.div`
 			}
 		}
 
-		.play {
-			color: var(--color-pink);
+		.steam {
+			color: #00ABFF;
+		}
+
+		.switch {
+			color: #FF0000;
+			cursor: default;
+			pointer-events: none;
+		}
+
+		.phones {
+			color: #FF0063;
 		}
 
 		.watch {
@@ -190,7 +200,7 @@ const Index = () => {
                         This december.
 					</p>
 				<div className="links">
-						<a href="" className="play">
+						<a href="https://store.steampowered.com/app/2177260/Super_Planet_Life" className="steam">
 							<img
 								src="/static/steam.png"
 								alt="Arcade"
@@ -199,16 +209,16 @@ const Index = () => {
 							/>
 							<span>Coming to Steam</span>
 						</a>
-                        <a href="" className="play">
+                        <a href="#" className="switch">
 							<img
 								src="/static/switch.png"
 								alt="Arcade"
 								width="40"
 								height="40"
 							/>
-							<span>Coming to Switch</span>
+							<span>Coming to Switch (soon)</span>
 						</a>
-                        <a href="/mobile" className="play">
+                        <a href="/mobile" className="phones">
 							<img
 								src="/static/gifs/playinbrowser.gif"
 								alt="Arcade"

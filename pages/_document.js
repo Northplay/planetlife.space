@@ -15,7 +15,7 @@ export default class Document extends NextDocument {
 					<meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
 					<meta
 						name="application-name"
-						content="Planet Life ~ A game about friendship and being a planet"
+						content="Super Planet Life ~ A game about friendship and being a planet"
 					/>
 					<script
 						dangerouslySetInnerHTML={{

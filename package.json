@@ -6,6 +6,9 @@
 	"author": "Kristian Andersen <kristian@northplay.co>",
 	"license": "ISC",
 	"private": true,
+	"engines": {
+		"node": "18.8.0"
+	},
 	"scripts": {
 		"dev": "next",
 		"build": "yarn css:minify && next build",
